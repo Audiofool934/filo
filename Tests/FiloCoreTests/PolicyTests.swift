@@ -39,4 +39,21 @@ final class PolicyTests: XCTestCase {
         XCTAssertNil(policy.observe(SourceFormat(rate: 192000, evidence: .decoder, observedAt: now), now: now))
         XCTAssertNil(policy.current)
     }
+    func testDecoderCanPrecedeTrackNotificationButNotByAnOldTrackDuration() {
+        var policy = FormatPolicy()
+        let now = Date()
+        XCTAssertNil(policy.observe(SourceFormat(rate: 96000, evidence: .decoder, observedAt: now), now: now))
+        policy.trackChanged(id: "A", playing: true, now: now.addingTimeInterval(0.2))
+        XCTAssertEqual(policy.current?.rate, 96000)
+        policy.trackChanged(id: "B", playing: true, now: now.addingTimeInterval(30))
+        XCTAssertNil(policy.current)
+    }
+    func testResumeUnknownOpensANewDetectionWindow() {
+        var policy = FormatPolicy()
+        let now = Date()
+        policy.trackChanged(id: "A", playing: false, now: now)
+        policy.trackChanged(id: "A", playing: true, now: now.addingTimeInterval(60))
+        let event = SourceFormat(rate: 48000, evidence: .decoder, observedAt: now.addingTimeInterval(60.1))
+        XCTAssertEqual(policy.observe(event, now: now.addingTimeInterval(60.2))?.rate, 48000)
+    }
 }

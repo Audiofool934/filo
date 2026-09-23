@@ -121,6 +121,9 @@ public final class ConnectionController {
         policy.trackChanged(id: state.trackID, playing: state.playing)
         if source == .appleMusic, manualRate == nil {
             snapshot.sourceFormat = policy.current
+            if let detected = policy.current {
+                do { try apply(detected) } catch { fail(error.localizedDescription); return }
+            }
             if let rate = state.localRate, state.playing {
                 let format = SourceFormat(rate: rate, evidence: .localFile)
                 policy.useLocal(format)

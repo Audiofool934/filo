@@ -52,21 +52,22 @@ public struct FormatPolicy {
     public init() {}
 
     public mutating func trackChanged(id: String?, playing: Bool, now: Date = Date()) {
+        let resumedUnknown = playing && !self.playing && current == nil
         self.playing = playing
-        guard id != trackID else { return }
+        guard id != trackID || resumedUnknown else { return }
         trackID = id; trackStarted = now; current = nil
-        // Do not apply buffered decoder events from before the track notification:
-        // they cannot be tied to the new track through a public track identifier.
-        recent.removeAll()
+        // Decoder startup can precede the player's notification. Keep a bounded
+        // transition window, with explicit decoder provenance rather than a PCM guarantee.
+        recent.removeAll { now.timeIntervalSince($0.observedAt) > 2 || $0.observedAt > now }
+        if playing, id != nil, Set(recent.map(\.rate)).count == 1 { current = recent.last }
     }
     public mutating func observe(_ format: SourceFormat, now: Date = Date()) -> SourceFormat? {
-        guard playing, trackID != nil,
-              format.observedAt >= trackStarted,
-              now.timeIntervalSince(format.observedAt) >= -0.1,
-              now.timeIntervalSince(format.observedAt) <= 3,
-              now.timeIntervalSince(trackStarted) <= 8 else { return nil }
+        guard now.timeIntervalSince(format.observedAt) >= -0.1,
+              now.timeIntervalSince(format.observedAt) <= 3 else { return nil }
         recent.append(format)
         recent.removeAll { now.timeIntervalSince($0.observedAt) > 3 }
+        guard playing, trackID != nil, format.observedAt >= trackStarted,
+              now.timeIntervalSince(trackStarted) <= 8 else { return nil }
         // Conflicting decoder rates in one transition can be prefetch. Wait for an unambiguous observation.
         guard Set(recent.map(\.rate)).count == 1 else { current = nil; return nil }
         current = format

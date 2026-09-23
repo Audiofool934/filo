@@ -28,10 +28,13 @@ public enum PlayerHelper {
                 if s is "stopped" then return {s, "", "", 0, sound volume, ""}
                 set t to current track
                 set p to ""
+                set trackIdentifier to ""
                 try
-                    set p to POSIX path of (location of t)
+                    set trackIdentifier to persistent ID of t
+                on error
+                    set trackIdentifier to (name of t) & "|" & (artist of t)
                 end try
-                return {s, persistent ID of t, name of t, sample rate of t, sound volume, p}
+                return {s, trackIdentifier, name of t, 0, sound volume, p}
             end tell
         end timeout
         """
@@ -46,13 +49,26 @@ public enum PlayerHelper {
         end timeout
         """
         let script = NSAppleScript(source: source == .appleMusic ? music : spotify)
+        let fileScript = NSAppleScript(source: """
+        with timeout of 2 seconds
+            tell application id "com.apple.Music"
+                try
+                    return POSIX path of (location of current track)
+                on error
+                    return ""
+                end try
+            end tell
+        end timeout
+        """)
+        var inspectedTrack: String?
+        var cachedLocalRate: Double?
         while readLine() != nil {
-            let state: PlayerState = autoreleasepool {
+            var state: PlayerState = autoreleasepool {
                 guard !NSRunningApplication.runningApplications(withBundleIdentifier: source.bundleID).isEmpty else { return PlayerState() }
                 var error: NSDictionary?
                 guard let descriptor = script?.executeAndReturnError(&error), error == nil else {
                     let code = error?[NSAppleScript.errorNumber] as? Int
-                    return PlayerState(error: code == -1743 ? "Allow filo to read \(source.name) in System Settings > Privacy & Security > Automation." : "\(source.name) did not provide playback information. Try playing a track.")
+                    return PlayerState(error: code == -1743 ? "Allow filo to read \(source.name) in System Settings > Privacy & Security > Automation." : "\(source.name) did not provide playback information (\(code ?? 0)). Try playing a track.")
                 }
                 let playing = descriptor.atIndex(1)?.stringValue == "playing"
                 let id = descriptor.atIndex(2)?.stringValue ?? ""
@@ -65,8 +81,19 @@ public enum PlayerHelper {
                 return PlayerState(playing: playing, trackID: id.isEmpty ? nil : id, title: title,
                                    volume: Int(descriptor.atIndex(5)?.int32Value ?? 0), localRate: localRate)
             }
+            if state.trackID == inspectedTrack { state.localRate = cachedLocalRate }
             if let data = try? JSONEncoder().encode(state) {
                 FileHandle.standardOutput.write(data); FileHandle.standardOutput.write(Data([10]))
+            }
+            // A cloud track's file-location lookup can time out in Music.
+            // Never put it on the critical playback-state path or repeat it every poll.
+            if source == .appleMusic, let track = state.trackID, track != inspectedTrack {
+                inspectedTrack = track; cachedLocalRate = nil
+                var error: NSDictionary?
+                if let path = fileScript?.executeAndReturnError(&error).stringValue, error == nil, !path.isEmpty,
+                   let file = try? AVAudioFile(forReading: URL(fileURLWithPath: path)) {
+                    cachedLocalRate = file.fileFormat.sampleRate
+                }
             }
         }
     }
