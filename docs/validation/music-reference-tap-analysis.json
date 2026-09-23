@@ -1,0 +1,611 @@
+{
+  "inputs": {
+    "reference": "work/filo-reference-44100-24.wav",
+    "capture": "work/known-reference-http-tap.f32",
+    "reference_sha256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "capture_sha256": "f767dcb570c15ffc12d838bcfe53127c692b20d9fdc423c72edacd454fab8cd6"
+  },
+  "scope": "Offline original synthetic fixture; Apple Music process tap before filo relay and physical DAC",
+  "sample_rate": 44100,
+  "reference_frames": 220500,
+  "captured_frames": 1033728,
+  "first_active_capture_frame": 7168,
+  "last_active_capture_frame": 227668,
+  "active_frame_span": 220501,
+  "nonzero_stereo_frames": 220501,
+  "nonzero_individual_samples": 440972,
+  "channel_alignment": [
+    {
+      "channel": 0,
+      "capture_offset_frames": 7169,
+      "peak_over_largest_competitor_outside_64_frames": 92.67711041290238
+    },
+    {
+      "channel": 1,
+      "capture_offset_frames": 7169,
+      "peak_over_largest_competitor_outside_64_frames": 115.56189893407246
+    }
+  ],
+  "aligned_capture_offset_frames": 7169,
+  "nonzero_samples_before_aligned_reference": 2,
+  "nonzero_samples_after_aligned_reference": 0,
+  "windows": [
+    {
+      "start_frame": 0,
+      "end_frame_exclusive": 2048,
+      "frames": 2048,
+      "gain_left_right": [
+        0.7326161421065075,
+        0.7365005617835122
+      ],
+      "error_rms_lsb24": 2461.435034116134,
+      "error_max_abs_lsb24": 12021.0693359375,
+      "gain_fitted_residual_rms_lsb24": 2110.3264739327815,
+      "exact_float_samples": 6,
+      "samples": 4096,
+      "off_24_bit_grid_samples": 4090,
+      "nearest_24_bit_mismatched_samples": 3782
+    },
+    {
+      "start_frame": 2048,
+      "end_frame_exclusive": 44100,
+      "frames": 42052,
+      "gain_left_right": [
+        0.9999999665125795,
+        0.9999999666230157
+      ],
+      "error_rms_lsb24": 0.00037377048107662043,
+      "error_max_abs_lsb24": 0.001953125,
+      "gain_fitted_residual_rms_lsb24": 0.00033872900479407385,
+      "exact_float_samples": 30738,
+      "samples": 84104,
+      "off_24_bit_grid_samples": 53366,
+      "nearest_24_bit_mismatched_samples": 0
+    },
+    {
+      "start_frame": 44100,
+      "end_frame_exclusive": 88200,
+      "frames": 44100,
+      "gain_left_right": [
+        0.999999967133181,
+        0.9999999676807455
+      ],
+      "error_rms_lsb24": 0.00037581526285893074,
+      "error_max_abs_lsb24": 0.001953125,
+      "gain_fitted_residual_rms_lsb24": 0.0003427322573771301,
+      "exact_float_samples": 32036,
+      "samples": 88200,
+      "off_24_bit_grid_samples": 56164,
+      "nearest_24_bit_mismatched_samples": 0
+    },
+    {
+      "start_frame": 88200,
+      "end_frame_exclusive": 132300,
+      "frames": 44100,
+      "gain_left_right": [
+        0.9999999666395499,
+        0.9999999662583186
+      ],
+      "error_rms_lsb24": 0.0003749889519358486,
+      "error_max_abs_lsb24": 0.001953125,
+      "gain_fitted_residual_rms_lsb24": 0.00033975729221521453,
+      "exact_float_samples": 31887,
+      "samples": 88200,
+      "off_24_bit_grid_samples": 56313,
+      "nearest_24_bit_mismatched_samples": 0
+    },
+    {
+      "start_frame": 132300,
+      "end_frame_exclusive": 176400,
+      "frames": 44100,
+      "gain_left_right": [
+        0.9999999668303543,
+        0.9999999672256344
+      ],
+      "error_rms_lsb24": 0.0003748285511426958,
+      "error_max_abs_lsb24": 0.001953125,
+      "gain_fitted_residual_rms_lsb24": 0.0003408637869852794,
+      "exact_float_samples": 32050,
+      "samples": 88200,
+      "off_24_bit_grid_samples": 56150,
+      "nearest_24_bit_mismatched_samples": 0
+    },
+    {
+      "start_frame": 176400,
+      "end_frame_exclusive": 220500,
+      "frames": 44100,
+      "gain_left_right": [
+        0.9999999672567534,
+        0.9999999667713166
+      ],
+      "error_rms_lsb24": 0.0003726941366435388,
+      "error_max_abs_lsb24": 0.00244140625,
+      "gain_fitted_residual_rms_lsb24": 0.0003386555075399363,
+      "exact_float_samples": 31959,
+      "samples": 88200,
+      "off_24_bit_grid_samples": 56241,
+      "nearest_24_bit_mismatched_samples": 0
+    },
+    {
+      "start_frame": 219476,
+      "end_frame_exclusive": 220500,
+      "frames": 1024,
+      "gain_left_right": [
+        0.9999999684451919,
+        0.9999999664828613
+      ],
+      "error_rms_lsb24": 0.00037189608641854076,
+      "error_max_abs_lsb24": 0.00146484375,
+      "gain_fitted_residual_rms_lsb24": 0.00033879759192308433,
+      "exact_float_samples": 773,
+      "samples": 2048,
+      "off_24_bit_grid_samples": 1275,
+      "nearest_24_bit_mismatched_samples": 0
+    },
+    {
+      "start_frame": 2048,
+      "end_frame_exclusive": 220500,
+      "frames": 218452,
+      "gain_left_right": [
+        0.9999999668776575,
+        0.9999999669142461
+      ],
+      "error_rms_lsb24": 0.0003744271295443947,
+      "error_max_abs_lsb24": 0.00244140625,
+      "gain_fitted_residual_rms_lsb24": 0.0003401696137392175,
+      "exact_float_samples": 158670,
+      "samples": 436904,
+      "off_24_bit_grid_samples": 278234,
+      "nearest_24_bit_mismatched_samples": 0
+    }
+  ],
+  "threshold_extents": [
+    {
+      "threshold_lsb24": 0.003,
+      "frames_above_threshold": 2037,
+      "last_frame_above_threshold": 2036
+    },
+    {
+      "threshold_lsb24": 0.01,
+      "frames_above_threshold": 2028,
+      "last_frame_above_threshold": 2027
+    },
+    {
+      "threshold_lsb24": 0.1,
+      "frames_above_threshold": 1979,
+      "last_frame_above_threshold": 1990
+    },
+    {
+      "threshold_lsb24": 0.5,
+      "frames_above_threshold": 1916,
+      "last_frame_above_threshold": 1943
+    },
+    {
+      "threshold_lsb24": 1,
+      "frames_above_threshold": 1893,
+      "last_frame_above_threshold": 1914
+    },
+    {
+      "threshold_lsb24": 100,
+      "frames_above_threshold": 1518,
+      "last_frame_above_threshold": 1619
+    }
+  ],
+  "steady_local_lags": [
+    {
+      "reference_start_frame": 2048,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 10240,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999976
+    },
+    {
+      "reference_start_frame": 18432,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999976
+    },
+    {
+      "reference_start_frame": 26624,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 34816,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 43008,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 51200,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 59392,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 67584,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 75776,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 83968,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 92160,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 100352,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 108544,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999977
+    },
+    {
+      "reference_start_frame": 116736,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999977
+    },
+    {
+      "reference_start_frame": 124928,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 133120,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 141312,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 149504,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 157696,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999972
+    },
+    {
+      "reference_start_frame": 165888,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 174080,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999976
+    },
+    {
+      "reference_start_frame": 182272,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999977
+    },
+    {
+      "reference_start_frame": 190464,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999974
+    },
+    {
+      "reference_start_frame": 198656,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    },
+    {
+      "reference_start_frame": 206848,
+      "best_additional_lag": 0,
+      "cosine_similarity": 0.9999999999999973
+    }
+  ],
+  "steady_mixing_rows_input_L_input_R_DC_columns_output_L_output_R": [
+    [
+      0.9999999668793667,
+      8.111687318045404e-11
+    ],
+    [
+      3.209371833288719e-10,
+      0.999999966914959
+    ],
+    [
+      4.841005557281441e-07,
+      -7.974848925072521e-07
+    ]
+  ],
+  "steady_mixing_residual_rms_lsb24": 0.0003401671766989286,
+  "onset_kernels": [
+    {
+      "start_frame": 8,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        0.0018311322306422296,
+        -0.0011590199755649171,
+        0.0014813760717025855,
+        -0.0005696438649737844,
+        0.18879654346248909,
+        -0.0006053313817365398,
+        0.6668491224143014,
+        -0.0005914857838260579,
+        0.0013604147372439212
+      ],
+      "residual_rms_lsb24": 55.901125072440614
+    },
+    {
+      "start_frame": 128,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        3.211208391669267e-05,
+        0.00018334848098200152,
+        0.0020722190907109896,
+        0.0005047287792401919,
+        0.2584105814881688,
+        0.00022336439203869297,
+        0.6472886735138201,
+        0.00012069487419534138,
+        -0.0011568765512316886
+      ],
+      "residual_rms_lsb24": 64.26717978427635
+    },
+    {
+      "start_frame": 512,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        0.0007097223466001284,
+        0.000888328984083449,
+        0.0011353555616717395,
+        0.0013626976693969543,
+        0.5214345864628466,
+        0.0007423240221595721,
+        0.46617638562747243,
+        0.00011164599127498146,
+        -0.0025507566735478294
+      ],
+      "residual_rms_lsb24": 74.42641553739632
+    },
+    {
+      "start_frame": 1024,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        -0.00026258396648682513,
+        -0.001293036891186502,
+        -0.00010583884587002489,
+        0.0010789468455291908,
+        0.8495368991704291,
+        3.570566628979784e-05,
+        0.15024457607398883,
+        -0.0006759703881882468,
+        0.0004987441946496285
+      ],
+      "residual_rms_lsb24": 63.95418919177128
+    },
+    {
+      "start_frame": 1536,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        0.00034346949948987096,
+        0.00017482853348726036,
+        -5.253859744615834e-05,
+        -0.0004903385141265815,
+        0.9893558521878602,
+        -0.0002293313534152472,
+        0.010834455859603766,
+        7.761793757836832e-05,
+        0.0002903483653126036
+      ],
+      "residual_rms_lsb24": 12.41296853458313
+    },
+    {
+      "start_frame": 1856,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        -1.3720028954988762e-05,
+        1.2065193662286374e-06,
+        8.237326707090878e-06,
+        -3.5224556207678757e-06,
+        0.999857396720817,
+        -1.0010228881959625e-05,
+        0.00016104071549868432,
+        -4.881416756640956e-06,
+        2.882600924785919e-06
+      ],
+      "residual_rms_lsb24": 0.6990554907796706
+    },
+    {
+      "start_frame": 2048,
+      "frames": 64,
+      "reference_shifts": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "weights": [
+        3.887033825322442e-09,
+        6.48822312252384e-09,
+        -5.7384213559527045e-09,
+        1.0376497707303635e-09,
+        0.9999999692685142,
+        -3.116346273357202e-09,
+        -2.313727174706621e-09,
+        -1.4870269073687321e-09,
+        5.465792837678648e-09
+      ],
+      "residual_rms_lsb24": 0.00029399410661385756
+    }
+  ],
+  "onset_two_delay_model": {
+    "model": "y[n,c] = a(n) x[n,c] + b(n) x[n+2,c]; shared degree-7 Chebyshev curves",
+    "training": "even reference frames from 8 through 2045, both channels",
+    "validation": "odd reference frames from 8 through 2045, both channels",
+    "held_out_residual_rms_lsb24": 20.01417665390678,
+    "held_out_max_abs_error_lsb24": 65.4543406930843,
+    "qualification": "Descriptive fit, not proof of a particular component or algorithm"
+  },
+  "resource_path_comparison": {
+    "runs": [
+      {
+        "resource_path": "http_resource",
+        "capture_file": "work/known-reference-http-tap.f32",
+        "capture_sha256": "f767dcb570c15ffc12d838bcfe53127c692b20d9fdc423c72edacd454fab8cd6",
+        "captured_frames": 1033728,
+        "first_active_frame": 7168,
+        "last_active_frame": 227668,
+        "active_span_frames": 220501,
+        "active_span_bytes": 1764008,
+        "active_span_sha256": "3aa0a6aab2d9bb85dcd9f70f45cf089e00fd9aceeb031694ffa301e0b72caffd",
+        "nonzero_individual_samples": 440972,
+        "off24_bit_grid_samples": 282326,
+        "invalid_buffers": 0,
+        "restoration_errors": [],
+        "reference_alac_sha256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022"
+      },
+      {
+        "resource_path": "imported_local_file",
+        "capture_file": "work/known-reference-tap.f32",
+        "capture_sha256": "f5cb25a1171168e4e1cad56aab5c24ff65e34bc9f039151dba57722d2e85fbef",
+        "captured_frames": 585728,
+        "first_active_frame": 9728,
+        "last_active_frame": 230228,
+        "active_span_frames": 220501,
+        "active_span_bytes": 1764008,
+        "active_span_sha256": "3aa0a6aab2d9bb85dcd9f70f45cf089e00fd9aceeb031694ffa301e0b72caffd",
+        "nonzero_individual_samples": 440972,
+        "off24_bit_grid_samples": 282326,
+        "invalid_buffers": 0,
+        "restoration_errors": [],
+        "reference_alac_sha256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022"
+      }
+    ],
+    "alignment": "Remove only silence outside each complete nonzero stereo-frame span; preserve all bytes inside each span",
+    "active_span_lengths_equal": true,
+    "active_spans_byte_identical": true,
+    "differing_float32_words": 0,
+    "scope": "Same original ALAC fixture through one HTTP-resource run and one imported-local-file run; not a general claim about subscription or other media paths"
+  },
+  "environment": {
+    "analysis_time_utc": "2026-09-23T15:33:21.858620+00:00",
+    "music_version": "1.6.6",
+    "music_build": "1.6.6",
+    "macos_version": "26.6.2",
+    "macos_build": "25G83",
+    "architecture": "arm64",
+    "capture_source": "Apple Music process tap pinned to BlackHole 2ch",
+    "reference_transport": "Two captures of the same synthetic ALAC: local HTTP range-capable server, then local-file import and playback in Music.",
+    "operator_verified_settings": {
+      "AutoMix": "Off",
+      "Dolby Atmos": "Off",
+      "Sound Check": "Off",
+      "Sound Enhancer": "Off",
+      "Music volume": 1.0,
+      "BlackHole volume": "Unity"
+    },
+    "settings_provenance": "Verified by the supervising agent during the capture session; the offline analysis did not change or independently query these controls.",
+    "alac_reference_sha256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+    "independent_reference_check": "Capture helper decoded the fixed ALAC and checked every sample against the generated synthetic pattern before capture.",
+    "capture_invalid_buffers": 0,
+    "capture_restoration_errors": [],
+    "physical_dac_observed": false,
+    "production_relay_used": false,
+    "http_capture_callback_frames": 1033728,
+    "local_capture_callback_frames": 585728,
+    "local_import_provenance": "The same local ALAC was imported through Music Open, then its five-second song row was played.",
+    "local_launch_provenance": "The supervising agent launched Music fresh after setting the BlackHole source route to 44.1 kHz."
+  },
+  "analysis_basis": "Detailed alignment and fitted-window numbers use the renamed HTTP capture; all 220501 active stereo frames, including onset and ending, are byte-identical in the local-file capture."
+}

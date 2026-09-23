@@ -120,7 +120,7 @@ public final class ExclusiveRelaySession {
             throw AudioFailure("The virtual source device or sample rate changed.")
         }
         let m = metrics, now = ProcessInfo.processInfo.systemUptime
-        guard m.fault == 0 else { throw AudioFailure("The integer relay stopped preserving the sample sequence (fault \(m.fault)).") }
+        guard m.fault == 0 else { throw AudioFailure(Self.failureDescription(m.fault)) }
         if m.inputCallbacks != lastInputCount { inputProgress = now; lastInputCount = m.inputCallbacks }
         if m.outputCallbacks != lastOutputCount { outputProgress = now; lastOutputCount = m.outputCallbacks }
         guard (m.inputCallbacks == 0 || now - inputProgress < 3), now - outputProgress < 3 else { throw AudioFailure("An exclusive relay callback stalled.") }
@@ -141,6 +141,17 @@ public final class ExclusiveRelaySession {
             }
         }
         lastTick = now
+    }
+
+    static func failureDescription(_ fault: UInt32) -> String {
+        switch fault {
+        case 1, 2: return "The audio buffer layout changed or is unsupported. Exclusive preview stopped."
+        case 3: return "The source filled the audio buffer faster than the DAC could consume it. Exclusive preview stopped."
+        case 4: return "The DAC ran out of queued audio samples. Exclusive preview stopped."
+        case 5: return "The captured samples cannot be represented exactly in the selected integer format. Exclusive preview stopped."
+        case 6: return "The audio callback timeline changed unexpectedly. Exclusive preview stopped."
+        default: return "The relay could not preserve the sample sequence (fault \(fault)). Exclusive preview stopped."
+        }
     }
 
     /// Stop callbacks before taking the final segment evidence; do not free the bridge yet.

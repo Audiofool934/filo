@@ -2,7 +2,7 @@
 
 ## 1.1.0-beta.1 implementation record
 
-The next version implements a separate-source exclusive output path and strengthens reference verification and recovery.
+This beta implements a separate-source exclusive output path and strengthens reference verification and recovery.
 Its measured achievement is deterministic sample preservation through the WALKMAN's physical-device output callback in the recorded synthetic experiments.
 End-to-end bit-perfect playback through Apple Music or Spotify to the USB receiver remains an unmet validation goal.
 The native mode is therefore presented as Exclusive preview, with source processing and continuity uncertainty visible to the user.
@@ -41,10 +41,22 @@ It does not reuse the realtime serializer to generate its expected byte stream.
 `verify-reference` combines finite-reference coverage with this byte comparison; merely reading an ASBD or observing a clean callback counter cannot produce a whole-reference pass.
 
 The synthetic exclusive matrix and long run passed at the physical callback boundary.
-The current Apple Music known-ALAC-over-HTTP attempt failed a pre-relay 24-bit-grid check, so no real-player whole-track success or USB-receiver proof has been achieved.
+A finite test emitter also delivered the complete five-second reference, including its opening and ending, with 220,500 frames and 1,764,000 output bytes matching exactly.
+That complete-fixture result uses a synthetic source and does not replace the independent Music check.
+The known ALAC fixture produced byte-identical transformed active PCM when played through Apple Music as a local HTTP resource and as an imported local file.
+Both captures differed from the original reference, including the same altered opening and off-24-bit-grid samples, before the exclusive relay or physical DAC was involved.
+This reproduces a source-path failure across both tested resource paths without identifying the responsible Music or CoreAudio component.
+See the [Music reference observation](research/music-reference-observation.md) and [numeric analysis](validation/music-reference-tap-analysis.json) for the measured scope.
+No real-player whole-track success, subscription-master comparison, or USB-receiver proof has been achieved.
 See [VALIDATION.md](VALIDATION.md) for the separate measured, failed, and pending results.
 
 ### Source assessment and lifecycle
+
+`PlayerReader` separates essential playback observations from optional Music processing and file-location lookups using independent helpers.
+Essential requests have a three-second response deadline; supplemental requests have a ten-second deadline, and request generations prevent obsolete callbacks from reviving failed or stopped readers.
+The primary observation timestamp records when its successful read began and is never refreshed by optional evidence.
+Application controls require observations no older than three seconds, while track controls require the same current track, fresh primary state, and observations no older than seven seconds.
+Track controls are retried on track changes or at a bounded five-second cadence, with failed reads becoming unknown.
 
 `SourceProcessingAssessment` reports readable player volume, mute, equalizer, and track adjustment evidence with freshness and track association checks.
 A known active alteration blocks Exclusive preview; missing or stale controls remain unverified rather than becoming a clean-processing claim.
@@ -54,7 +66,13 @@ Format observations and a player's lossless label do not authenticate its decode
 `ConnectionController` serializes segment changes and stops the current callbacks before rearming after a pause, source change, or format transition.
 It preserves the distinction between a measured relay segment and continuity from the first source sample through a complete track.
 The existing format-matching and shared relay paths remain separate modes.
-The beta's final native UI and player lifecycle checks are pending in this implementation record.
+`AppModel` preflights microphone authorization on the main queue only for Exclusive preview, before calling the controller to change the route or acquire the DAC.
+If permission is undecided, the app displays a waiting state and a bounded 60-second connection intent; denial or restriction reports an actionable settings message without connecting.
+Timeout, cancellation, sleep, and quit invalidate that intent, and the authorization callback rechecks the connection options and available devices before connecting.
+Switching to Format matching or Direct relay clears the Exclusive permission state and does not request this permission.
+
+At commit `ff6be7c`, native packaged-app checks verified unchanged hardware while waiting for permission, subsequent Armed state at manual 44.1 kHz, and disconnection with complete restoration after the generated reference triggered representation fault `5`.
+That confirms the tested permission, arming, and failure paths rather than successful whole-track playback.
 
 ### Coupled recovery journal
 
@@ -74,10 +92,16 @@ Atomic replacement covers process interruption; per-adjustment `fsync` and power
 The real synthetic-session SIGKILL experiment restored the rate, both formats, clock selector, and default route and cleared the records.
 Fake-hardware cases exercise narrower write/confirmation failure windows and external changes, but do not replace physical hotplug or cross-application testing.
 
-### Remaining beta gates
+### Completed checks and remaining evidence
 
-- A successful CI result for the corrected 1.1.0-beta.1 code is pending.
-- Final packaged universal-app and native UI evidence is pending.
+[CI run 35882419650](https://github.com/Audiofool934/filo/actions/runs/35882419650) passed for commit `ff6be7c`, including 79 XCTest tests, strict compilation, and universal app packaging.
+The corresponding native packaged-app checks are recorded in [VALIDATION.md](VALIDATION.md).
+These results apply to that revision and do not certify later code changes.
+
+The final package was rebuilt after the error-description changes, its two architectures and signature were checked, and its native window was visually inspected.
+Its packaged laboratory executable passed a separate physical-output check with full restoration; executable and archive hashes are in the [package receipt](validation/exclusive-packaged-beta-44100-24.json).
+The revised representation-failure wording was confirmed in the executable, while the native fault-and-restoration experiment above applies to the earlier wording.
+
 - Whole-track known-reference verification through a real music player remains open.
 - Independent USB payload or DAC-receiver measurement remains open with the available NW-ZX706 hardware.
 - Broader device, OS, physical Intel, hotplug, and sleep/wake validation remains open.

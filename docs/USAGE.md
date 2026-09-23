@@ -47,6 +47,8 @@ It requires a compatible stereo DAC advertising non-mixable integer formats.
 Select a known rate and connect before playback to arm the fixed-rate path; automatic Music detection can still miss the opening of a track.
 Known non-unity volume, mute, EQ, or per-track gain prevents the preview from starting.
 Unknown settings remain unverified, and there is no end-to-end certification indicator.
+The tested Music path changed a known reference before the relay, so this preview currently stops on that path's unrepresentable samples even with the inspected effects disabled.
+Use Format matching for ordinary listening while this [source-path issue](research/music-reference-observation.md) remains unresolved.
 Read [the preview guide](VERIFIED-OUTPUT.md) for dependencies, verification boundaries, and recovery.
 
 ## Automatic format limits
@@ -106,6 +108,7 @@ Do not edit the record during an active connection.
 | No audio callbacks | Review audio-capture permission, start playback, or try Format matching. |
 | Output changed outside filo | Your change was preserved; reconnect to resume management. |
 | Unsupported format | Use a device exposing one stereo stream; relay requires matching Float32 capture/output. |
+| Captured samples cannot be represented exactly | Exclusive preview stopped because packing the incoming values would require rounding; use Format matching for ordinary listening. |
 | Brief gap during a rate change | This can occur while the DAC changes its hardware rate. |
 
 Copy diagnostics in Connection details gives version, selected source/mode, format observations, and callback counters.

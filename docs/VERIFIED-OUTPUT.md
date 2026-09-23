@@ -80,6 +80,12 @@ Apple Music does not expose supported exact per-track PCM metadata for every sub
 Spotify's 44.1 kHz option is a policy, not a measurement of the current master.
 A passing local reference cannot certify another subscription track, player version, DSP setting, or rate transition.
 
+The tested Apple Music 1.6.6 path did not pass the known-reference check on macOS 26.6.2.
+HTTP-resource and imported local-file playback produced byte-identical changed samples at the process tap, before the exclusive bridge.
+The opening was altered and later samples contained much smaller floating-point differences despite essentially unity gain.
+The strict bridge rejected those values instead of silently rounding them.
+This preview therefore cannot provide uninterrupted exact playback through that tested Music path; see the [source observation](research/music-reference-observation.md) for the measurements and limits.
+
 ## Reproduce laboratory measurements
 
 Build with a licensed compatible Xcode or an available Command Line Tools toolchain.
@@ -95,6 +101,16 @@ swift build
 
 The synthetic relay test measures a segment of the emitter's deterministic sequence.
 Its reported source offset is not a whole-track proof.
+For a complete synthetic fixture with a prearmed relay, one-time start handshake, and silent postroll, run the optional repository harness:
+
+```sh
+mkdir -p work
+bash scripts/verify-finite-reference.sh --output WALKMAN --receipt work/whole-reference.json
+```
+
+It accepts only filo's original quiet five-second 44.1 kHz / 24-bit fixture and never overwrites the receipt.
+The [published harness reproduction](validation/exclusive-finite-reference-reproduction.json) passed complete raw-byte comparison on the WALKMAN.
+Its source is a synthetic emitter; use the separate `verify-reference` player command to investigate Music itself.
 The reference command first prepares the virtual source rate and route, allows a closed player to be launched, then prints when capture is armed.
 Play the exact known reference from its beginning within the capture window.
 Use only reference material you own; do not use the command to record subscription audio.

@@ -1,0 +1,168 @@
+{
+  "architecture": "arm64",
+  "buildScope": "Published wrapper built development core and helper from scratch in a temporary directory",
+  "command": [
+    "scripts/verify-finite-reference.sh",
+    "--output",
+    "WALKMAN",
+    "--receipt",
+    "result.json",
+    "--reference",
+    "filo-reference-44100-24.wav"
+  ],
+  "macOS": "26.6.2",
+  "observedAtUTC": "2026-09-23T15:58:31.036033+00:00",
+  "postRunHardware": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "rate": 44100
+    }
+  },
+  "restoredKnownBaseline": true,
+  "result": {
+    "boundary": "Complete original fixture through actual physical-device signed32 output callback; USB receiver and player decoding unmeasured",
+    "cleanupErrors": [],
+    "comparison": {
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "actualCaptureSHA256": "4b58746f1a3313ade3115e13970271afa5f4b0dd4598fc65c9aaae3fe6f553b9",
+      "bytesPerPacket": 8,
+      "captureWellFormed": true,
+      "capturedFrames": 408064,
+      "comparedBytes": 1764000,
+      "comparedFrames": 220500,
+      "containerBits": 32,
+      "exactReferencePrecision": true,
+      "expectedAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "expectedReferenceSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "framesPerPacket": 1,
+      "mismatchedBytes": 0,
+      "mismatchedFrames": 0,
+      "mismatchedSampleWords": 0,
+      "nonzeroLeadingBytes": 0,
+      "nonzeroPaddingBytes": 0,
+      "nonzeroTrailingBytes": 0,
+      "outputFormat": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 76,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "paddingBits": 0,
+      "passed": true,
+      "precisionHandling": "Exact integer widening from 24 to 32 valid bits; 0 container padding bits must be zero.",
+      "rateMatches": true,
+      "referenceBits": 24,
+      "referenceFrames": 220500,
+      "sampleComparison": {
+        "aligned": true,
+        "alignmentAmbiguous": false,
+        "anchorFrames": 32,
+        "captureStartFrame": 53248,
+        "capturedFrames": 408064,
+        "comparedFrames": 220500,
+        "fullReferenceExact": true,
+        "leadingCaptureFrames": 53248,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "referenceFrames": 220500,
+        "referenceStartFrame": 0,
+        "trailingCaptureFrames": 134316,
+        "windowExact": true
+      },
+      "totalOutputBytes": 3264512,
+      "validFormat": true
+    },
+    "emitterMetrics": {
+      "callbacks": 1067,
+      "completed": true,
+      "emittedFrames": 220500,
+      "fault": false,
+      "firstFixtureOutputFrame": 73216,
+      "outputFrames": 546304,
+      "started": true,
+      "timestampDiscontinuities": 0,
+      "timestampMissing": 0
+    },
+    "handshake": "Child continuously emits zero, parent primes and captures, one GO emits the fixture once, then three seconds of postroll",
+    "metrics": {
+      "capturedFrames": 430592,
+      "deliveredFrames": 408064,
+      "fault": 0,
+      "initialQueuedFrames": 22016,
+      "inputCallbacks": 841,
+      "inputTimestampDiscontinuities": 0,
+      "inputTimestampMissing": 0,
+      "invalidBuffers": 0,
+      "outputCallbacks": 797,
+      "outputTimestampDiscontinuities": 0,
+      "outputTimestampMissing": 0,
+      "overflows": 0,
+      "queuedFrames": 22528,
+      "renderedCaptureFrames": 408064,
+      "representationFailures": 0,
+      "started": true,
+      "startupSilenceFrames": 0,
+      "underflows": 0
+    },
+    "outputFormat": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 76,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "outputName": "WALKMAN",
+    "passed": true,
+    "physicalFormat": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 76,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "referenceBits": 24,
+    "referenceFile": "filo-reference-44100-24.wav",
+    "referenceFrames": 220500,
+    "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "sampleRate": 44100
+  },
+  "sourceSHA256": {
+    "scripts/lab/finite-reference.c": "be6d387c5c210f3d08b1a24a50d89a3eda6ab8c5b09d737e9658ee047a900852",
+    "scripts/lab/finite-reference.h": "79a311b82cfc438cebd2c5f5679b99913ecbc859f3685f0ba6c60cd16e1bba12",
+    "scripts/lab/finite-reference.swift": "6c6e0650eba76d6dcdef95c5f43df1fef415d674a7c5a8fc355f42bf6d215fe1",
+    "scripts/verify-finite-reference.sh": "7b1da2f5f881b72dff4e336e64b0a570c1424ed7f9ef80de946bd727b66f926d"
+  }
+}

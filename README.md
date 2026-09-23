@@ -55,7 +55,8 @@ See the [setup and troubleshooting guide](docs/USAGE.md).
 
 ## What the evidence means
 
-The [validation record](docs/VALIDATION.md) includes deterministic 16-bit and 24-bit tests at 44.1, 48, 96, and 192 kHz, a 60-second run, a Sony WALKMAN test, and an actual Apple Music 192 → 44.1 kHz queued transition.
+The [validation record](docs/VALIDATION.md) includes exclusive 16-bit and 24-bit tests at 44.1, 48, 96, and 192 kHz, a 120-second run, complete synthetic-reference output-byte equality, and actual process-crash recovery on a Sony WALKMAN.
+The historical 1.0 record separately includes an actual Apple Music 192 → 44.1 kHz queued transition.
 The software measurements compare known synthetic PCM against captured samples with no gain normalization or resampling allowed in the comparison.
 
 These results do **not** certify subscription masters, every macOS/player version, or the final USB/DAC input.
@@ -72,6 +73,8 @@ The 1.1 beta introduces a separate-source exclusive topology that avoids the cal
 Its C bridge does no resampling, gain, clipping, dithering, or deliberate frame insertion/removal.
 A slow controller adjusts BlackHole’s virtual clock cadence to follow the physical DAC.
 Invalid representation, buffer exhaustion, or timestamp discontinuity stops the session.
+The tested Apple Music path altered a known reference before filo's bridge, even with the inspected effects disabled, so Exclusive preview stopped instead of passing it as exact PCM.
+Both HTTP and imported local-file playback produced the same changed samples; see the [reference investigation](docs/research/music-reference-observation.md).
 Read the [exclusive output and verification guide](docs/VERIFIED-OUTPUT.md) before using the preview.
 
 ## Build
@@ -126,6 +129,8 @@ See [architecture and verification boundaries](docs/ARCHITECTURE.md) before inte
 filo has no telemetry, accounts, or audio uploads.
 Automation permission lets it read playback metadata.
 Direct relay and Exclusive preview need macOS system-audio capture permission.
+Exclusive preview also checks Microphone permission before opening BlackHole's virtual input or changing the output route.
+That OS permission is broad, although filo selects BlackHole rather than a physical microphone.
 Only the selected process and output stream are tapped; physical input streams on an aggregate are disabled.
 Player titles and source diagnostics stay in memory.
 Small local recovery records contain device identifiers and previously owned settings.

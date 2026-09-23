@@ -178,7 +178,7 @@ public final class ConnectionController {
         snapshot.segmentNote = reason
         guard errors.isEmpty else { throw AudioFailure(errors.joined(separator: " ")) }
         if let fault = finalMetrics?.fault, fault != 0 {
-            throw AudioFailure("The previous relay segment failed its sample-preservation checks (fault \(fault)). Reconnect to start a new segment.")
+            throw AudioFailure(ExclusiveRelaySession.failureDescription(fault))
         }
         snapshot.exclusiveMetrics = nil
     }

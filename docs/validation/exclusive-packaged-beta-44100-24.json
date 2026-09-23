@@ -1,0 +1,146 @@
+{
+  "after": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "rate": 44100
+    }
+  },
+  "appExecutableSHA256": "d1c9773d3a257673ed0e08d53ffc459764ffd8e113ea05b1d45486e04b7fcbc1",
+  "architecture": "arm64",
+  "archiveSHA256": "1053c50b23422f7294152181e47f7a5a8d085d25e066ce9b003600744c610c1a",
+  "before": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "rate": 44100
+    }
+  },
+  "command": [
+    "filo-lab",
+    "verify-exclusive",
+    "--device",
+    "WALKMAN",
+    "--source",
+    "BlackHole 2ch",
+    "--bits",
+    "24",
+    "--seconds",
+    "8"
+  ],
+  "exitCode": 0,
+  "labExecutableSHA256": "1d08a3a7b61777e395b8b28b975db3283b923f9f546c826e25c99444685004eb",
+  "macOS": "26.6.2",
+  "observedAtUTC": "2026-09-23T15:51:03.850622+00:00",
+  "restorationVerified": true,
+  "result": {
+    "bits": 24,
+    "cleanupErrors": [],
+    "clockPitch": 0.5046643,
+    "clockTargetFrames": 20480,
+    "comparison": {
+      "aligned": true,
+      "comparedFrames": 354816,
+      "leadingCaptureFrames": 0,
+      "maxIntegerError": 0,
+      "mismatchedSamples": 0,
+      "sourceFrameOffset": 19968
+    },
+    "input": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 9,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "measurementBoundary": "Actual integer words in the exclusive physical device IOProc, decoded for reference comparison; USB receiver unmeasured",
+    "metrics": {
+      "capturedFrames": 375808,
+      "deliveredFrames": 354816,
+      "fault": 0,
+      "initialQueuedFrames": 20480,
+      "inputCallbacks": 734,
+      "inputTimestampDiscontinuities": 0,
+      "inputTimestampMissing": 0,
+      "invalidBuffers": 0,
+      "outputCallbacks": 693,
+      "outputTimestampDiscontinuities": 0,
+      "outputTimestampMissing": 0,
+      "overflows": 0,
+      "queuedFrames": 20992,
+      "renderedCaptureFrames": 354816,
+      "representationFailures": 0,
+      "started": true,
+      "startupSilenceFrames": 0,
+      "underflows": 0
+    },
+    "output": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 76,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "passed": true,
+    "physical": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 76,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "rate": 44100
+  },
+  "version": "1.1.0-beta.1"
+}
