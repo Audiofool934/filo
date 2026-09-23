@@ -19,6 +19,6 @@ jobs:
         run: |
           plutil -lint dist/filo.app/Contents/Info.plist
           codesign --verify --deep --strict dist/filo.app
-          lipo -verify_arch arm64 x86_64 dist/filo.app/Contents/MacOS/filo
-          lipo -verify_arch arm64 x86_64 dist/filo.app/Contents/MacOS/filo-lab
+          lipo dist/filo.app/Contents/MacOS/filo -verify_arch arm64 x86_64
+          lipo dist/filo.app/Contents/MacOS/filo-lab -verify_arch arm64 x86_64
           dist/filo.app/Contents/MacOS/filo-lab help
