@@ -1,0 +1,865 @@
+{
+  "scope": "Original synthetic fixture only, process-tap boundary before filo exclusive bridge and DAC",
+  "reference": {
+    "file": "filo-reference-44100-24.wav",
+    "sha256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "sampleRate": 44100,
+    "frames": 220500,
+    "bits": 24,
+    "channels": 2
+  },
+  "selfTests": {
+    "exactPaddedReference": true,
+    "missingOnset": false,
+    "missingTail": false,
+    "missingOnsetReplacedWithSilence": false,
+    "missingTailReplacedWithSilence": false,
+    "oneFrameEarlyNonzeroOnset": false,
+    "extraNonzeroTail": false,
+    "internalDroppedFrame": false
+  },
+  "method": "Independent stereo FFT alignment, then one fixed offset; exact original values and complete first-to-last coverage, without rounding, gain fitting, or resampling",
+  "music": {
+    "file": "known-reference-tap.f32",
+    "sha256": "f5cb25a1171168e4e1cad56aab5c24ff65e34bc9f039151dba57722d2e85fbef",
+    "metadataFile": "known-reference-tap.json",
+    "metadataSHA256": "b5d20c6eb300748d8c023eaa5668fd1aba49a48ef1303f91e466f94ab46eb2e1",
+    "metadataObservations": {
+      "firstNonzeroFrame": 9728,
+      "off24BitGridSamples": 282326,
+      "sampleRate": 44100
+    },
+    "capturedFrames": 585728,
+    "referenceFrames": 220500,
+    "activeSpan": {
+      "firstFrame": 9728,
+      "lastFrameInclusive": 230228,
+      "frames": 220501,
+      "nonzeroStereoFrames": 220501,
+      "nonzeroIndividualSamples": 440972,
+      "sha256": "3aa0a6aab2d9bb85dcd9f70f45cf089e00fd9aceeb031694ffa301e0b72caffd"
+    },
+    "off24BitGridSamples": 282326,
+    "outOfRangeSamples": 0,
+    "alignment": {
+      "channels": [
+        {
+          "channel": 0,
+          "captureOffsetFrames": 9729,
+          "overlapFrames": 220500,
+          "signedCosineSimilarity": 0.9987142108839606,
+          "peakOverNextLag": 92.67711041290237,
+          "confident": true
+        },
+        {
+          "channel": 1,
+          "captureOffsetFrames": 9729,
+          "overlapFrames": 220500,
+          "signedCosineSimilarity": 0.9987656584797084,
+          "peakOverNextLag": 115.56189893407243,
+          "confident": true
+        }
+      ],
+      "channelsAgree": true,
+      "confident": true,
+      "captureOffsetFrames": 9729
+    },
+    "fullReferenceExact": false,
+    "fullReferenceFloat32WordsExact": false,
+    "boundary": "Observed player process-tap PCM; no exclusive relay or USB receiver measurement",
+    "referenceStartFrame": 0,
+    "referenceEndFrameExclusive": 220500,
+    "captureStartFrame": 9729,
+    "captureEndFrameExclusive": 230229,
+    "missingPrefixFrames": 0,
+    "missingSuffixFrames": 0,
+    "alignedWindowFitsCapture": true,
+    "nonzeroSamplesBeforeAlignedReference": 2,
+    "nonzeroSamplesAfterAlignedReference": 0,
+    "activeStartRelativeToAlignedReference": -1,
+    "firstReferenceFrameInCapture": true,
+    "lastReferenceFrameInCapture": true,
+    "firstReferenceFrameExact": false,
+    "lastReferenceFrameExact": false,
+    "wholeReference": {
+      "requestedStartFrame": 0,
+      "requestedEndFrameExclusive": 220500,
+      "comparedStartFrame": 0,
+      "comparedFrames": 220500,
+      "missingFrames": 0,
+      "mismatchedSamples": 282324,
+      "mismatchedFrames": 186500,
+      "float32WordMismatches": 282324,
+      "rmsErrorLSB24": 237.2187739535497,
+      "maxAbsoluteErrorLSB24": 12021.0693359375,
+      "nearest24BitMismatchedSamplesDiagnosticOnly": 3782,
+      "exactExpectedSamples": false
+    },
+    "opening2048": {
+      "requestedStartFrame": 0,
+      "requestedEndFrameExclusive": 2048,
+      "comparedStartFrame": 0,
+      "comparedFrames": 2048,
+      "missingFrames": 0,
+      "mismatchedSamples": 4090,
+      "mismatchedFrames": 2047,
+      "float32WordMismatches": 4090,
+      "rmsErrorLSB24": 2461.435034116134,
+      "maxAbsoluteErrorLSB24": 12021.0693359375,
+      "nearest24BitMismatchedSamplesDiagnosticOnly": 3782,
+      "exactExpectedSamples": false
+    },
+    "steadyAfter2048": {
+      "requestedStartFrame": 2048,
+      "requestedEndFrameExclusive": 220500,
+      "comparedStartFrame": 2048,
+      "comparedFrames": 218452,
+      "missingFrames": 0,
+      "mismatchedSamples": 278234,
+      "mismatchedFrames": 184453,
+      "float32WordMismatches": 278234,
+      "rmsErrorLSB24": 0.0003744271295443947,
+      "maxAbsoluteErrorLSB24": 0.00244140625,
+      "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+      "exactExpectedSamples": false
+    },
+    "final1024": {
+      "requestedStartFrame": 219476,
+      "requestedEndFrameExclusive": 220500,
+      "comparedStartFrame": 219476,
+      "comparedFrames": 1024,
+      "missingFrames": 0,
+      "mismatchedSamples": 1275,
+      "mismatchedFrames": 839,
+      "float32WordMismatches": 1275,
+      "rmsErrorLSB24": 0.00037189608641854076,
+      "maxAbsoluteErrorLSB24": 0.00146484375,
+      "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+      "exactExpectedSamples": false
+    },
+    "steadyLocalLagChecks": [
+      {
+        "referenceStartFrame": 2048,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 10240,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999976
+      },
+      {
+        "referenceStartFrame": 18432,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999976
+      },
+      {
+        "referenceStartFrame": 26624,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 34816,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 43008,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 51200,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 59392,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 67584,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 75776,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 83968,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 92160,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 100352,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 108544,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999977
+      },
+      {
+        "referenceStartFrame": 116736,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999977
+      },
+      {
+        "referenceStartFrame": 124928,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 133120,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 141312,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 149504,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 157696,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999972
+      },
+      {
+        "referenceStartFrame": 165888,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 174080,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999976
+      },
+      {
+        "referenceStartFrame": 182272,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999977
+      },
+      {
+        "referenceStartFrame": 190464,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999974
+      },
+      {
+        "referenceStartFrame": 198656,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      },
+      {
+        "referenceStartFrame": 206848,
+        "bestAdditionalLag": 0,
+        "signedCosineSimilarity": 0.9999999999999973
+      }
+    ],
+    "failureReason": "Requires confident fixed alignment, every original reference frame unchanged, and no extra nonzero prefix/tail; no rounding or fitted gain is permitted"
+  },
+  "apiCaptures": [
+    {
+      "file": "avplayer-alac-tap.f32",
+      "sha256": "60237779e0986ecae92185d22b84ba24bedb8d996d168648fa1526006044e58a",
+      "metadataFile": "avplayer-alac-tap.json",
+      "metadataSHA256": "f06487ac0144840fac04263a684f44852d257c21cc28dcb7845f864d2208780e",
+      "metadataObservations": {
+        "firstNonzeroFrame": 29184,
+        "off24BitGridSamples": 0
+      },
+      "capturedFrames": 342016,
+      "referenceFrames": 220500,
+      "activeSpan": {
+        "firstFrame": 29184,
+        "lastFrameInclusive": 249683,
+        "frames": 220500,
+        "nonzeroStereoFrames": 220500,
+        "nonzeroIndividualSamples": 440970,
+        "sha256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      },
+      "off24BitGridSamples": 0,
+      "outOfRangeSamples": 0,
+      "alignment": {
+        "channels": [
+          {
+            "channel": 0,
+            "captureOffsetFrames": 29184,
+            "overlapFrames": 220500,
+            "signedCosineSimilarity": 1.0,
+            "peakOverNextLag": 92.9132056670898,
+            "confident": true
+          },
+          {
+            "channel": 1,
+            "captureOffsetFrames": 29184,
+            "overlapFrames": 220500,
+            "signedCosineSimilarity": 1.0,
+            "peakOverNextLag": 115.84992124296296,
+            "confident": true
+          }
+        ],
+        "channelsAgree": true,
+        "confident": true,
+        "captureOffsetFrames": 29184
+      },
+      "fullReferenceExact": true,
+      "fullReferenceFloat32WordsExact": true,
+      "boundary": "Observed player process-tap PCM; no exclusive relay or USB receiver measurement",
+      "referenceStartFrame": 0,
+      "referenceEndFrameExclusive": 220500,
+      "captureStartFrame": 29184,
+      "captureEndFrameExclusive": 249684,
+      "missingPrefixFrames": 0,
+      "missingSuffixFrames": 0,
+      "alignedWindowFitsCapture": true,
+      "nonzeroSamplesBeforeAlignedReference": 0,
+      "nonzeroSamplesAfterAlignedReference": 0,
+      "activeStartRelativeToAlignedReference": 0,
+      "firstReferenceFrameInCapture": true,
+      "lastReferenceFrameInCapture": true,
+      "firstReferenceFrameExact": true,
+      "lastReferenceFrameExact": true,
+      "wholeReference": {
+        "requestedStartFrame": 0,
+        "requestedEndFrameExclusive": 220500,
+        "comparedStartFrame": 0,
+        "comparedFrames": 220500,
+        "missingFrames": 0,
+        "mismatchedSamples": 0,
+        "mismatchedFrames": 0,
+        "float32WordMismatches": 0,
+        "rmsErrorLSB24": 0.0,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": true
+      },
+      "opening2048": {
+        "requestedStartFrame": 0,
+        "requestedEndFrameExclusive": 2048,
+        "comparedStartFrame": 0,
+        "comparedFrames": 2048,
+        "missingFrames": 0,
+        "mismatchedSamples": 0,
+        "mismatchedFrames": 0,
+        "float32WordMismatches": 0,
+        "rmsErrorLSB24": 0.0,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": true
+      },
+      "steadyAfter2048": {
+        "requestedStartFrame": 2048,
+        "requestedEndFrameExclusive": 220500,
+        "comparedStartFrame": 2048,
+        "comparedFrames": 218452,
+        "missingFrames": 0,
+        "mismatchedSamples": 0,
+        "mismatchedFrames": 0,
+        "float32WordMismatches": 0,
+        "rmsErrorLSB24": 0.0,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": true
+      },
+      "final1024": {
+        "requestedStartFrame": 219476,
+        "requestedEndFrameExclusive": 220500,
+        "comparedStartFrame": 219476,
+        "comparedFrames": 1024,
+        "missingFrames": 0,
+        "mismatchedSamples": 0,
+        "mismatchedFrames": 0,
+        "float32WordMismatches": 0,
+        "rmsErrorLSB24": 0.0,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": true
+      },
+      "steadyLocalLagChecks": [
+        {
+          "referenceStartFrame": 2048,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 10240,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 18432,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 26624,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 34816,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 43008,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 51200,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 59392,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 67584,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 75776,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 83968,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 92160,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 100352,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 108544,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 116736,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 124928,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 133120,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 141312,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 149504,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 157696,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 165888,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 174080,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 182272,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 190464,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 198656,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        },
+        {
+          "referenceStartFrame": 206848,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 1.0
+        }
+      ],
+      "comparisonToMusicActiveSpan": {
+        "firstSpan": {
+          "firstFrame": 29184,
+          "lastFrameInclusive": 249683,
+          "frames": 220500,
+          "nonzeroStereoFrames": 220500,
+          "nonzeroIndividualSamples": 440970,
+          "sha256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+        },
+        "secondSpan": {
+          "firstFrame": 9728,
+          "lastFrameInclusive": 230228,
+          "frames": 220501,
+          "nonzeroStereoFrames": 220501,
+          "nonzeroIndividualSamples": 440972,
+          "sha256": "3aa0a6aab2d9bb85dcd9f70f45cf089e00fd9aceeb031694ffa301e0b72caffd"
+        },
+        "sameLength": false,
+        "byteIdentical": false,
+        "differingFloat32Words": null,
+        "method": "Remove only outer silence; preserve every stereo frame and individual zero sample inside the active span"
+      },
+      "comparisonToMusicAtReferenceAlignment": {
+        "available": true,
+        "method": "Compare both captures at their independently found fixed original-reference offsets; no gain fit or realignment",
+        "windows": [
+          {
+            "section": "opening2048",
+            "referenceStartFrame": 0,
+            "frames": 2048,
+            "differingSamples": 4090,
+            "rmsDifferenceLSB24": 2461.435034116134,
+            "maxAbsoluteDifferenceLSB24": 12021.0693359375
+          },
+          {
+            "section": "steadyAfter2048",
+            "referenceStartFrame": 2048,
+            "frames": 218452,
+            "differingSamples": 278234,
+            "rmsDifferenceLSB24": 0.0003744271295443947,
+            "maxAbsoluteDifferenceLSB24": 0.00244140625
+          }
+        ]
+      }
+    },
+    {
+      "file": "avplayer-alac-rate-enabled-tap.f32",
+      "sha256": "4730bd9ab9adc6fef106829d88c825ec698df0410869f0da38d94c90c3f75ea0",
+      "metadataFile": "avplayer-alac-rate-enabled-tap.json",
+      "metadataSHA256": "dc879a057949b7ef2af8760bc908e1f1a174713057a471ad164585ed41032f7a",
+      "metadataObservations": {
+        "firstNonzeroFrame": 29184,
+        "off24BitGridSamples": 49924
+      },
+      "capturedFrames": 343040,
+      "referenceFrames": 220500,
+      "activeSpan": {
+        "firstFrame": 29184,
+        "lastFrameInclusive": 249683,
+        "frames": 220500,
+        "nonzeroStereoFrames": 220500,
+        "nonzeroIndividualSamples": 440970,
+        "sha256": "8b94a98365792759e003945a4d8cfddfc6eb4298229a92234702dccc854d4918"
+      },
+      "off24BitGridSamples": 49924,
+      "outOfRangeSamples": 0,
+      "alignment": {
+        "channels": [
+          {
+            "channel": 0,
+            "captureOffsetFrames": 29184,
+            "overlapFrames": 220500,
+            "signedCosineSimilarity": 0.9999999999999998,
+            "peakOverNextLag": 92.91320541262043,
+            "confident": true
+          },
+          {
+            "channel": 1,
+            "captureOffsetFrames": 29184,
+            "overlapFrames": 220500,
+            "signedCosineSimilarity": 0.9999999999999998,
+            "peakOverNextLag": 115.84992205149901,
+            "confident": true
+          }
+        ],
+        "channelsAgree": true,
+        "confident": true,
+        "captureOffsetFrames": 29184
+      },
+      "fullReferenceExact": false,
+      "fullReferenceFloat32WordsExact": false,
+      "boundary": "Observed player process-tap PCM; no exclusive relay or USB receiver measurement",
+      "referenceStartFrame": 0,
+      "referenceEndFrameExclusive": 220500,
+      "captureStartFrame": 29184,
+      "captureEndFrameExclusive": 249684,
+      "missingPrefixFrames": 0,
+      "missingSuffixFrames": 0,
+      "alignedWindowFitsCapture": true,
+      "nonzeroSamplesBeforeAlignedReference": 0,
+      "nonzeroSamplesAfterAlignedReference": 0,
+      "activeStartRelativeToAlignedReference": 0,
+      "firstReferenceFrameInCapture": true,
+      "lastReferenceFrameInCapture": true,
+      "firstReferenceFrameExact": true,
+      "lastReferenceFrameExact": true,
+      "wholeReference": {
+        "requestedStartFrame": 0,
+        "requestedEndFrameExclusive": 220500,
+        "comparedStartFrame": 0,
+        "comparedFrames": 220500,
+        "missingFrames": 0,
+        "mismatchedSamples": 49924,
+        "mismatchedFrames": 42535,
+        "float32WordMismatches": 49924,
+        "rmsErrorLSB24": 0.00012367941626615487,
+        "maxAbsoluteErrorLSB24": 0.00048828125,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": false
+      },
+      "opening2048": {
+        "requestedStartFrame": 0,
+        "requestedEndFrameExclusive": 2048,
+        "comparedStartFrame": 0,
+        "comparedFrames": 2048,
+        "missingFrames": 0,
+        "mismatchedSamples": 467,
+        "mismatchedFrames": 403,
+        "float32WordMismatches": 467,
+        "rmsErrorLSB24": 0.00012569021969732955,
+        "maxAbsoluteErrorLSB24": 0.00048828125,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": false
+      },
+      "steadyAfter2048": {
+        "requestedStartFrame": 2048,
+        "requestedEndFrameExclusive": 220500,
+        "comparedStartFrame": 2048,
+        "comparedFrames": 218452,
+        "missingFrames": 0,
+        "mismatchedSamples": 49457,
+        "mismatchedFrames": 42132,
+        "float32WordMismatches": 49457,
+        "rmsErrorLSB24": 0.0001236604101637743,
+        "maxAbsoluteErrorLSB24": 0.00048828125,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": false
+      },
+      "final1024": {
+        "requestedStartFrame": 219476,
+        "requestedEndFrameExclusive": 220500,
+        "comparedStartFrame": 219476,
+        "comparedFrames": 1024,
+        "missingFrames": 0,
+        "mismatchedSamples": 233,
+        "mismatchedFrames": 200,
+        "float32WordMismatches": 233,
+        "rmsErrorLSB24": 0.00011980254848520665,
+        "maxAbsoluteErrorLSB24": 0.00048828125,
+        "nearest24BitMismatchedSamplesDiagnosticOnly": 0,
+        "exactExpectedSamples": false
+      },
+      "steadyLocalLagChecks": [
+        {
+          "referenceStartFrame": 2048,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999998
+        },
+        {
+          "referenceStartFrame": 10240,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 18432,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 26624,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 34816,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 43008,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 51200,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999998
+        },
+        {
+          "referenceStartFrame": 59392,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999999
+        },
+        {
+          "referenceStartFrame": 67584,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999999
+        },
+        {
+          "referenceStartFrame": 75776,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 83968,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 92160,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 100352,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999998
+        },
+        {
+          "referenceStartFrame": 108544,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 116736,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 124928,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999994
+        },
+        {
+          "referenceStartFrame": 133120,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 141312,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 149504,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 157696,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 165888,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 174080,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 182272,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        },
+        {
+          "referenceStartFrame": 190464,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999994
+        },
+        {
+          "referenceStartFrame": 198656,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999998
+        },
+        {
+          "referenceStartFrame": 206848,
+          "bestAdditionalLag": 0,
+          "signedCosineSimilarity": 0.9999999999999997
+        }
+      ],
+      "failureReason": "Requires confident fixed alignment, every original reference frame unchanged, and no extra nonzero prefix/tail; no rounding or fitted gain is permitted",
+      "comparisonToMusicActiveSpan": {
+        "firstSpan": {
+          "firstFrame": 29184,
+          "lastFrameInclusive": 249683,
+          "frames": 220500,
+          "nonzeroStereoFrames": 220500,
+          "nonzeroIndividualSamples": 440970,
+          "sha256": "8b94a98365792759e003945a4d8cfddfc6eb4298229a92234702dccc854d4918"
+        },
+        "secondSpan": {
+          "firstFrame": 9728,
+          "lastFrameInclusive": 230228,
+          "frames": 220501,
+          "nonzeroStereoFrames": 220501,
+          "nonzeroIndividualSamples": 440972,
+          "sha256": "3aa0a6aab2d9bb85dcd9f70f45cf089e00fd9aceeb031694ffa301e0b72caffd"
+        },
+        "sameLength": false,
+        "byteIdentical": false,
+        "differingFloat32Words": null,
+        "method": "Remove only outer silence; preserve every stereo frame and individual zero sample inside the active span"
+      },
+      "comparisonToMusicAtReferenceAlignment": {
+        "available": true,
+        "method": "Compare both captures at their independently found fixed original-reference offsets; no gain fit or realignment",
+        "windows": [
+          {
+            "section": "opening2048",
+            "referenceStartFrame": 0,
+            "frames": 2048,
+            "differingSamples": 4091,
+            "rmsDifferenceLSB24": 2461.435036383012,
+            "maxAbsoluteDifferenceLSB24": 12021.0693359375
+          },
+          {
+            "section": "steadyAfter2048",
+            "referenceStartFrame": 2048,
+            "frames": 218452,
+            "differingSamples": 284479,
+            "rmsDifferenceLSB24": 0.00039335103130911075,
+            "maxAbsoluteDifferenceLSB24": 0.00244140625
+          }
+        ]
+      }
+    }
+  ]
+}

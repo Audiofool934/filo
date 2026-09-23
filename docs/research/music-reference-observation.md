@@ -115,6 +115,10 @@ This evidence does not support an end-to-end bit-perfect claim for the tested Mu
 The local-file versus HTTP comparison is now complete for this fixture and produced identical active PCM.
 Further localization requires controlled comparisons against a direct synthetic emitter or an independent player, and repeated runs with one route or launch-history factor changed at a time.
 
+A subsequent [independent AVAudioPlayer comparison](player-api-reference-observation.md) reproduced the complete same ALAC exactly with rate adjustment disabled at the BlackHole process tap.
+Enabling its rate adjustment at normal speed changed samples, illustrating a configurable processing boundary without identifying Music's implementation.
+The Music failure is therefore not an unavoidable result of every ALAC playback path through this tap.
+
 ## Measured complete-fixture relay test
 
 A separate finite synthetic-source experiment passed first-to-last verification at the connected WALKMAN's actual signed32 output callback.

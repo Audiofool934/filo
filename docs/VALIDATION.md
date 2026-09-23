@@ -1,5 +1,18 @@
 # filo validation record
 
+## Post-beta.2 player API comparison
+
+The same complete ALAC reference passed an independent AVAudioPlayer-to-BlackHole process-tap test with rate adjustment disabled.
+All 220,500 stereo frames matched exactly, with silent prefix and tail and no samples outside the 24-bit grid.
+Enabling rate adjustment while retaining `rate = 1` changed samples and failed the strict reference comparison.
+Both runs completed and restored the independently observed device, format, and clock baseline.
+A third run connected the neutral ALAC player through filo's exclusive bridge to the actual WALKMAN software output callback.
+Its [receipt](validation/avplayer-exclusive-reference.json) records all 220,500 reference frames and 1,764,000 signed32 bytes exactly, with zero byte, buffer, timestamp, or cleanup errors and verified restoration.
+This measures the combined decoder-to-output chain in one run; it does not infer that result from separate segment tests.
+This localizes the previous Music failure without identifying its internal cause, and does not add a DAC-receiver or subscription-master guarantee.
+See the [player API comparison](research/player-api-reference-observation.md) for controls, receipts, and evidence boundaries.
+The shipped beta.2 application is unchanged.
+
 ## 1.1.0-beta.2 recovery correction
 
 Beta.2 corrects the `verify-reference` laboratory command's cleanup ordering on an operating-system failure to release an exclusive callback or restore its settings.
