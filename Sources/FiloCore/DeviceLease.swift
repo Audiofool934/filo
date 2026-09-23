@@ -25,25 +25,70 @@ public final class SystemDeviceAccess: DeviceAccess {
 /// Hardware IDs are resolved from persistent UIDs each time, including after reconnect.
 public final class DeviceLease {
     private let access: DeviceAccess
+    private let journalURL: URL?
+    private struct Record: Codable {
+        var ownerPID: Int32
+        var outputUID: String
+        var originalDefaultUID: String?
+        var originalRate: Double?
+        var lastRate: Double?
+        var changedDefault: Bool
+    }
+    public static var defaultJournalURL: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("filo", isDirectory: true).appendingPathComponent("connection.json")
+    }
     public private(set) var outputUID: String?
     private var originalDefaultUID: String?
     private var originalRate: Double?
     private var lastRate: Double?
     private var changedDefault = false
-    public init(access: DeviceAccess = SystemDeviceAccess()) { self.access = access }
+    public init(access: DeviceAccess = SystemDeviceAccess(), journalURL: URL? = nil) {
+        self.access = access; self.journalURL = journalURL
+    }
+
+    private func persist(ownerPID: Int32 = getpid()) throws {
+        guard let journalURL, let outputUID else { return }
+        let record = Record(ownerPID: ownerPID, outputUID: outputUID, originalDefaultUID: originalDefaultUID,
+                            originalRate: originalRate, lastRate: lastRate, changedDefault: changedDefault)
+        try FileManager.default.createDirectory(at: journalURL.deletingLastPathComponent(), withIntermediateDirectories: true,
+                                                attributes: [.posixPermissions: 0o700])
+        try JSONEncoder().encode(record).write(to: journalURL, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: journalURL.path)
+    }
+
+    /// After a crash, recover only a dead owner's changes that still match actual hardware state.
+    @discardableResult public func recoverOrphaned() -> [String] {
+        guard outputUID == nil, let journalURL, FileManager.default.fileExists(atPath: journalURL.path) else { return [] }
+        do {
+            let record = try JSONDecoder().decode(Record.self, from: Data(contentsOf: journalURL))
+            if record.ownerPID > 0, kill(record.ownerPID, 0) == 0 { return ["Another filo connection is active. Quit it before connecting here."] }
+            guard record.originalRate.map({ $0.isFinite && $0 > 0 && $0 <= 768000 }) ?? true,
+                  record.lastRate.map({ $0.isFinite && $0 > 0 && $0 <= 768000 }) ?? true else {
+                return ["The saved output recovery record is invalid."]
+            }
+            outputUID = record.outputUID; originalDefaultUID = record.originalDefaultUID
+            originalRate = record.originalRate; lastRate = record.lastRate; changedDefault = record.changedDefault
+            return restore()
+        } catch { return ["Could not read the previous connection's recovery record: \(error.localizedDescription)"] }
+    }
 
     public func begin(output: OutputDevice) throws {
         guard outputUID == nil else { throw AudioFailure("An output is already connected.") }
+        let recoveryErrors = recoverOrphaned()
+        guard recoveryErrors.isEmpty else { throw AudioFailure(recoveryErrors.joined(separator: " ")) }
         let devices = try access.devices()
         originalDefaultUID = devices.first { $0.id == (try? access.defaultOutput()) }?.uid
         originalRate = try access.rate(output.id)
         outputUID = output.uid
         do {
             if try access.defaultOutput() != output.id {
-                try access.setDefaultOutput(output.id)
                 changedDefault = true
+                try persist()
+                try access.setDefaultOutput(output.id)
             }
-        } catch { outputUID = nil; throw error }
+            try persist()
+        } catch { _ = restore(); throw error }
     }
     public func apply(rate: Double) throws {
         guard let uid = outputUID, let device = try access.devices().first(where: { $0.uid == uid }) else {
@@ -57,12 +102,30 @@ public final class DeviceLease {
             throw AudioFailure("The output rate was changed outside filo. Reconnect to continue.")
         }
         guard abs(before - rate) > 0.01 else { return }
-        try access.setRate(device.id, rate)
+        let previousOwnedRate = lastRate
         lastRate = rate
+        do { try persist() } catch { lastRate = previousOwnedRate; throw error }
+        do { try access.setRate(device.id, rate) }
+        catch {
+            // A failed write may have changed the hardware before readback failed.
+            // Keep the new recovery target only if it may actually have taken effect.
+            if let actual = try? access.rate(device.id), abs(actual - before) < 0.01 {
+                lastRate = previousOwnedRate
+                try? persist()
+            }
+            throw error
+        }
     }
     @discardableResult public func restore() -> [String] {
-        defer { outputUID = nil; originalDefaultUID = nil; originalRate = nil; lastRate = nil; changedDefault = false }
         var errors: [String] = []
+        let ownsJournal = outputUID != nil
+        defer {
+            if ownsJournal, let journalURL {
+                if errors.isEmpty { try? FileManager.default.removeItem(at: journalURL) }
+                else { try? persist(ownerPID: 0) }
+            }
+            outputUID = nil; originalDefaultUID = nil; originalRate = nil; lastRate = nil; changedDefault = false
+        }
         do {
             let devices = try access.devices()
             guard let device = devices.first(where: { $0.uid == outputUID }) else { return errors }

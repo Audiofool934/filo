@@ -12,6 +12,8 @@ cp "$bin_dir/filo" "$app_dir/Contents/MacOS/filo"
 cp "$bin_dir/filo-lab" "$app_dir/Contents/MacOS/filo-lab"
 cp Resources/Info.plist "$app_dir/Contents/Info.plist"
 cp LICENSE "$app_dir/Contents/Resources/LICENSE"
+swift scripts/icon.swift dist/filo.iconset
+iconutil -c icns dist/filo.iconset -o "$app_dir/Contents/Resources/filo.icns"
 codesign --force --sign "${SIGNING_IDENTITY:--}" --options runtime --entitlements Resources/filo.entitlements "$app_dir"
 codesign --verify --strict "$app_dir"
 echo "Built $app_dir"

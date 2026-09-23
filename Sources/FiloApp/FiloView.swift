@@ -13,6 +13,8 @@ struct FiloView: View {
             VStack(alignment: .leading, spacing: 22) {
                 header
                 configuration
+                Text("This becomes your Mac’s output while connected.")
+                    .font(.system(size: 10)).foregroundStyle(.secondary)
                 signalPath
                 status
                 Button(action: model.toggleConnection) {
@@ -34,6 +36,10 @@ struct FiloView: View {
         }
         .frame(width: 440, height: 650)
         .background(Color(nsColor: .windowBackgroundColor))
+        .onChange(of: model.outputUID) { _, _ in
+            if model.rate != 0, !(model.selectedOutput?.supportedRates.contains(model.rate) ?? false) { model.rate = 0 }
+        }
+        .onChange(of: model.source) { _, _ in model.rate = 0 }
     }
     private var header: some View {
         HStack(alignment: .top) {
@@ -119,9 +125,9 @@ struct FiloView: View {
     private var details: some View {
         VStack(alignment: .leading, spacing: 12) {
             Picker("Audio path", selection: $model.mode) {
-                ForEach(ConnectionMode.allCases) { Text($0.name).tag($0) }
+                ForEach([ConnectionMode.format, .relay]) { Text($0.name).tag($0) }
             }.disabled(state.connected)
-            Text("Format matching lets your player output normally. Direct relay forwards only the chosen app without DSP. Exclusive relay is an experiment and may be unavailable on your device.")
+            Text("Format matching lets your player output normally. Direct relay forwards the chosen app without DSP. The output remains shared with other apps.")
                 .fixedSize(horizontal: false, vertical: true)
             if model.source == .spotify {
                 Text("Spotify uses a fixed 44.1 kHz music profile. filo cannot verify individual Spotify tracks, podcasts, or ads.")

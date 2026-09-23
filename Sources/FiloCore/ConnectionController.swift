@@ -31,7 +31,7 @@ public struct ConnectionSnapshot {
 /// One serial queue owns all hardware changes and source events.
 public final class ConnectionController {
     public let queue = DispatchQueue(label: "filo.connection", qos: .userInitiated)
-    private let lease = DeviceLease()
+    private let lease = DeviceLease(journalURL: DeviceLease.defaultJournalURL)
     private let audio = AudioSession()
     private var monitor: DecoderMonitor!
     private var reader: PlayerReader!
@@ -44,7 +44,8 @@ public final class ConnectionController {
     private var snapshot = ConnectionSnapshot()
     private var lastProcesses: [UInt32] = []
     private var relayStarted = Date.distantPast
-    private var relayAttempts = 0
+    private var lastCallbackCount: UInt64 = 0
+    private var lastCallbackProgress = Date.distantPast
     private var lastRate: Double?
     public var onSnapshot: ((ConnectionSnapshot) -> Void)?
 
@@ -60,7 +61,14 @@ public final class ConnectionController {
         let timer = DispatchSource.makeTimerSource(queue: queue)
         timer.schedule(deadline: .now(), repeating: 1, leeway: .milliseconds(150))
         timer.setEventHandler { [weak self] in self?.poll() }
-        self.timer = timer; timer.resume()
+        self.timer = timer
+        queue.async { [weak self] in
+            guard let self else { return }
+            let errors = self.lease.recoverOrphaned()
+            if !errors.isEmpty { self.snapshot.error = errors.joined(separator: " ") }
+            self.publish()
+        }
+        timer.resume()
     }
     private func publish() {
         let value = snapshot
@@ -80,7 +88,7 @@ public final class ConnectionController {
                 try self.lease.begin(output: output)
                 self.snapshot.connected = true
                 self.snapshot.output = output
-                self.policy.reset(); self.lastRate = output.rate; self.relayAttempts = 0
+                self.policy.reset(); self.lastRate = output.rate
                 if source == .appleMusic && manualRate == nil { try self.monitor.start() }
                 try self.reader.start(source: source, executable: executable)
                 if let manualRate {
@@ -108,7 +116,7 @@ public final class ConnectionController {
         snapshot.sourceFormat = nil; snapshot.metrics = nil; snapshot.player = PlayerState()
         snapshot.title = "Ready when you are"; snapshot.detail = "Choose your music app and output, then connect."
         snapshot.error = restorationErrors.isEmpty ? nil : restorationErrors.joined(separator: " ")
-        policy.reset(); lastProcesses = []; lastRate = nil; relayAttempts = 0
+        policy.reset(); lastProcesses = []; lastRate = nil; lastCallbackCount = 0
     }
     private func fail(_ message: String) {
         stopConnection(); snapshot.error = message; snapshot.title = "Connection stopped"
@@ -117,7 +125,13 @@ public final class ConnectionController {
     private func received(_ state: PlayerState) {
         guard snapshot.connected else { return }
         snapshot.player = state
-        if let error = state.error { snapshot.detail = error; publish(); return }
+        if let error = state.error {
+            if source == .appleMusic, manualRate == nil {
+                policy.trackChanged(id: nil, playing: false)
+                snapshot.sourceFormat = nil
+            }
+            snapshot.title = "Playback access needed"; snapshot.detail = error; publish(); return
+        }
         policy.trackChanged(id: state.trackID, playing: state.playing)
         if source == .appleMusic, manualRate == nil {
             snapshot.sourceFormat = policy.current
@@ -144,7 +158,7 @@ public final class ConnectionController {
         guard snapshot.connected else { return }
         if let output = snapshot.output, abs(try HAL.rate(output.id) - format.rate) > 0.01 {
             snapshot.title = "Matching output"; snapshot.busy = true; publish()
-            audio.stop(); snapshot.relayRunning = false; lastProcesses = []; relayAttempts = 0
+            audio.stop(); snapshot.relayRunning = false; lastProcesses = []
             try lease.apply(rate: format.rate)
             lastRate = format.rate
         }
@@ -168,18 +182,25 @@ public final class ConnectionController {
             let processes = try HAL.processes().filter { $0.bundleID == source.bundleID && kill($0.pid, 0) == 0 }.map(\.id).sorted()
             if mode != .format {
                 if processes.isEmpty {
-                    audio.stop(); snapshot.relayRunning = false; lastProcesses = []; relayAttempts = 0
+                    audio.stop(); snapshot.relayRunning = false; lastProcesses = []
                 } else if !audio.running || processes != lastProcesses {
                     audio.stop()
                     try audio.startCapture(processIDs: processes, output: output, relay: true, exclusive: mode == .exclusive)
-                    relayStarted = Date(); lastProcesses = processes; relayAttempts += 1
+                    relayStarted = Date(); lastProcesses = processes
+                    lastCallbackCount = 0; lastCallbackProgress = relayStarted
                     snapshot.relayRunning = true
                 }
                 if audio.running {
                     let metrics = audio.metrics; snapshot.metrics = metrics
+                    if metrics.callbacks != lastCallbackCount {
+                        lastCallbackCount = metrics.callbacks; lastCallbackProgress = Date()
+                    }
                     if metrics.invalidBuffers > 0 { fail("The audio buffer layout changed. The relay stopped to avoid altering samples."); return }
                     if metrics.callbacks == 0 && Date().timeIntervalSince(relayStarted) > 3 {
                         fail(mode == .exclusive ? "This output did not deliver audio in exclusive mode. Use Format matching or Direct relay." : "No audio callbacks arrived. Check System Audio Recording permission, then reconnect."); return
+                    }
+                    if Date().timeIntervalSince(lastCallbackProgress) > 3 {
+                        fail("The audio device stopped delivering callbacks. The relay was released; reconnect to try again."); return
                     }
                 }
             }

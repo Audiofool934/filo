@@ -37,11 +37,13 @@ report = {
 }
 report_path = pathlib.Path(args.report)
 report_path.parent.mkdir(parents=True, exist_ok=True)
+last_set_rate = device["rate"]
 try:
     for rate in [44100, 48000, 96000, 192000]:
         result = call("rate", "--device", args.device, "--hz", rate)
         if result.returncode:
             raise RuntimeError(result.stderr)
+        last_set_rate = rate
         for bits in [16, 24]:
             result = call("verify", "--device", args.device, "--bits", bits, "--seconds", args.seconds, "--relay")
             try:
@@ -54,8 +56,14 @@ try:
             report["cases"].append(case)
             print(f"{rate} Hz / {bits} bit: {'PASS' if case.get('passed') else 'FAIL'}", flush=True)
 finally:
-    restoration = call("rate", "--device", args.device, "--hz", device["rate"])
-    report["restored"] = restoration.returncode == 0
+    current_devices = json.loads(call("devices").stdout)
+    current_device = next((d for d in current_devices if d["uid"] == device["uid"]), None)
+    if current_device and current_device["rate"] == last_set_rate:
+        restoration = call("rate", "--device", args.device, "--hz", device["rate"])
+        report["restored"] = restoration.returncode == 0
+    else:
+        report["restored"] = False
+        report["restorationNote"] = "Output disappeared or its rate changed externally; preserved the new state."
     report_path.write_text(json.dumps(report, indent=2) + "\n")
 
 raise SystemExit(0 if report["restored"] and len(report["cases"]) == 8 and all(c.get("passed") for c in report["cases"]) else 1)

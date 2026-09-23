@@ -22,6 +22,22 @@ private final class FakeDevices: DeviceAccess {
 }
 
 final class LeaseTests: XCTestCase {
+    func testCrashRecoveryRestoresOnlyOrphanedOwnedChanges() throws {
+        let devices = FakeDevices()
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let journal = folder.appendingPathComponent("connection.json")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let lease = DeviceLease(access: devices, journalURL: journal)
+        try lease.begin(output: devices.outputs[1]); try lease.apply(rate: 44100)
+        XCTAssertFalse(DeviceLease(access: devices, journalURL: journal).recoverOrphaned().isEmpty)
+        var record = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: journal)) as? [String: Any])
+        record["ownerPID"] = 0
+        try JSONSerialization.data(withJSONObject: record).write(to: journal)
+        XCTAssertTrue(DeviceLease(access: devices, journalURL: journal).recoverOrphaned().isEmpty)
+        XCTAssertEqual(try devices.rate(2), 192000)
+        XCTAssertEqual(devices.current, 1)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: journal.path))
+    }
     func testRestoresOwnedRateAndDefault() throws {
         let devices = FakeDevices()
         let owned = DeviceLease(access: devices)
@@ -52,6 +68,16 @@ final class LeaseTests: XCTestCase {
         XCTAssertTrue(lease.restore().isEmpty)
         XCTAssertTrue(devices.writes.isEmpty)
         XCTAssertEqual(devices.current, 1)
+    }
+    func testFailedSecondSwitchStillRestoresFirstOwnedRate() throws {
+        let devices = FakeDevices()
+        let lease = DeviceLease(access: devices)
+        try lease.begin(output: devices.outputs[1]); try lease.apply(rate: 44100)
+        devices.failRate = true
+        XCTAssertThrowsError(try lease.apply(rate: 48000))
+        devices.failRate = false
+        XCTAssertTrue(lease.restore().isEmpty)
+        XCTAssertEqual(try devices.rate(2), 192000)
     }
     func testDisconnectAndIdReuseCannotChangeDifferentDevice() throws {
         let devices = FakeDevices()

@@ -34,6 +34,9 @@ public enum PlayerHelper {
                 on error
                     set trackIdentifier to (name of t) & "|" & (artist of t)
                 end try
+                if trackIdentifier is "" or trackIdentifier is "0000000000000000" then
+                    set trackIdentifier to (name of t) & "|" & (artist of t) & "|" & (album of t)
+                end if
                 return {s, trackIdentifier, name of t, 0, sound volume, p}
             end tell
         end timeout
