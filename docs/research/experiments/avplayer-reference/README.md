@@ -30,7 +30,7 @@ Those local raw synthetic captures are not bundled in this source archive, so th
 
 ## Exact baseline-to-control change
 
-The [complete unified diff](baseline-to-rate-enabled.diff) includes every changed line in both helper pairs.
+The [complete zero-context unified diff](baseline-to-rate-enabled.diff) includes every changed line in both helper pairs.
 The source hashes differ because the second experiment added an optional command-line control instead of mutating the baseline file's hardcoded setting.
 
 The child's initializer gained an `enableRate` argument and the assignment `reference.enableRate = enableRate` immediately before preparation.

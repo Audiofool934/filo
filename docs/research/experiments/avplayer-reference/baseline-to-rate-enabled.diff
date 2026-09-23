@@ -1,41 +1,20 @@
 --- av-reference-player-baseline.swift
 +++ av-reference-player.swift
-@@ -43,7 +43,7 @@
-     var stopped = false
-     var failed = false
- 
+@@ -46 +46 @@
 -    init(mode: String, startedAt: TimeInterval) throws {
 +    init(mode: String, enableRate: Bool, startedAt: TimeInterval) throws {
-         self.mode = mode; self.startedAt = startedAt
-         let work = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL.resolvingSymlinksInPath().deletingLastPathComponent()
-         let name = mode == "alac" ? "filo-reference-44100-24.m4a" : "filo-reference-44100-24.wav"
-@@ -69,6 +69,7 @@
-             player.delegate = self
-             player.volume = 1; player.pan = 0; player.enableRate = false; player.rate = 1
-         }
+@@ -71,0 +72 @@
 +        reference.enableRate = enableRate
-         reference.numberOfLoops = 0
-         silence.numberOfLoops = -1
-         guard reference.prepareToPlay(), silence.prepareToPlay(), silence.play() else {
-@@ -145,8 +146,10 @@
-         let arguments = Array(CommandLine.arguments.dropFirst())
-         if arguments == ["--help"] || arguments == ["-h"] {
-             print("""
+@@ -148 +149 @@
 -            Usage: work/av-reference-player [--mode alac|wav]
 +            Usage: work/av-reference-player [--mode alac|wav] [--enable-rate]
-             Default: alac. Only the fixed original 5-second 44100/24 stereo fixture is accepted.
+@@ -149,0 +151,2 @@
 +            --enable-rate enables rate processing for the reference player only, retaining rate 1.
 +            The separate silence player always keeps rate processing disabled.
-             The reference is decoded with ReferencePCM and checked against every filo_test_sample.
-             Startup plays only an in-memory all-zero WAV, using a separate looping AVAudioPlayer.
-             Wait for JSON event ready, then send GO followed by a newline to play the reference once.
-@@ -161,17 +164,22 @@
-             """)
-             return
-         }
+@@ -163,0 +167,2 @@
 +        let enableRate = arguments.contains("--enable-rate")
 +        let modeArguments = arguments.filter { $0 != "--enable-rate" }
-         let mode: String
+@@ -165,3 +170,6 @@
 -        if arguments.isEmpty { mode = "alac" }
 -        else if arguments.count == 2, arguments[0] == "--mode", ["alac", "wav"].contains(arguments[1]) { mode = arguments[1] }
 -        else { emit(["event": "error", "error": "Usage: work/av-reference-player [--mode alac|wav]"]); exit(2) }
@@ -45,23 +24,12 @@
 +        if modeArguments.isEmpty { mode = "alac" }
 +        else if modeArguments.count == 2, modeArguments[0] == "--mode", ["alac", "wav"].contains(modeArguments[1]) { mode = modeArguments[1] }
 +        else { emit(["event": "error", "error": "Usage: work/av-reference-player [--mode alac|wav] [--enable-rate]"]); exit(2) }
- 
-         let startedAt = ProcessInfo.processInfo.systemUptime
-         signal(SIGALRM) { _ in _exit(124) }
-         alarm(30)
-         defer { alarm(0) }
-         do {
+@@ -174 +182 @@
 -            let player = try ReferencePlayer(mode: mode, startedAt: startedAt)
 +            let player = try ReferencePlayer(mode: mode, enableRate: enableRate, startedAt: startedAt)
-             defer { player.reference.stop(); player.silence.stop() }
-             let flags = fcntl(STDIN_FILENO, F_GETFL)
-             guard flags >= 0, fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK) == 0 else {
 --- inspect-api-reference-baseline.swift
 +++ inspect-api-reference.swift
-@@ -6,13 +6,14 @@
- import Foundation
- 
- let work = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL.deletingLastPathComponent()
+@@ -9,3 +9,4 @@
 -let mode = CommandLine.arguments.count == 2 ? CommandLine.arguments[1] : ""
 -guard ["alac", "wav"].contains(mode) else {
 -    fputs("Usage: inspect-api-reference alac|wav; original generated fixture only.\n", stderr); exit(2)
@@ -69,20 +37,9 @@
 +let enableRate = CommandLine.arguments.count == 3 && CommandLine.arguments[2] == "--enable-rate"
 +guard ["alac", "wav"].contains(mode), CommandLine.arguments.count == 2 || enableRate else {
 +    fputs("Usage: inspect-api-reference alac|wav [--enable-rate]; original generated fixture only.\n", stderr); exit(2)
- }
- let referenceURL = mode == "alac" ? work.appendingPathComponent("reference-server/filo-reference-44100-24.m4a")
-     : work.appendingPathComponent("filo-reference-44100-24.wav")
+@@ -15 +16 @@
 -let outputBase = work.appendingPathComponent("avplayer-\(mode)-tap")
 +let outputBase = work.appendingPathComponent("avplayer-\(mode)\(enableRate ? "-rate-enabled" : "")-tap")
- let captureURL = outputBase.appendingPathExtension("f32"), reportURL = outputBase.appendingPathExtension("json")
- 
- final class Child {
-@@ -20,7 +21,7 @@
-     var pending = Data(), events: [[String: Any]] = []
-     func start() throws {
-         process.executableURL = work.appendingPathComponent("av-reference-player")
+@@ -23 +24 @@
 -        process.arguments = ["--mode", mode]
 +        process.arguments = ["--mode", mode] + (enableRate ? ["--enable-rate"] : [])
-         process.currentDirectoryURL = work.deletingLastPathComponent()
-         process.standardInput = input; process.standardOutput = output
-         try process.run()
