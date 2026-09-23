@@ -62,7 +62,7 @@ public final class DeviceLease {
         guard outputUID == nil, let journalURL, FileManager.default.fileExists(atPath: journalURL.path) else { return [] }
         do {
             let record = try JSONDecoder().decode(Record.self, from: Data(contentsOf: journalURL))
-            if record.ownerPID > 0, kill(record.ownerPID, 0) == 0 { return ["Another filo connection is active. Quit it before connecting here."] }
+            if record.ownerPID > 0, kill(record.ownerPID, 0) == 0 || errno == EPERM { return ["Another filo connection may be active. Quit it before connecting here."] }
             guard record.originalRate.map({ $0.isFinite && $0 > 0 && $0 <= 768000 }) ?? true,
                   record.lastRate.map({ $0.isFinite && $0 > 0 && $0 <= 768000 }) ?? true else {
                 return ["The saved output recovery record is invalid."]
@@ -128,13 +128,20 @@ public final class DeviceLease {
         }
         do {
             let devices = try access.devices()
-            guard let device = devices.first(where: { $0.uid == outputUID }) else { return errors }
+            guard outputUID != nil else { return errors }
+            guard let device = devices.first(where: { $0.uid == outputUID }) else {
+                errors.append("The managed output is disconnected. Its recovery record is retained until it returns.")
+                return errors
+            }
             if let lastRate, let originalRate, abs(try access.rate(device.id) - lastRate) < 0.01 {
                 do { try access.setRate(device.id, originalRate) } catch { errors.append(error.localizedDescription) }
             }
-            if changedDefault, try access.defaultOutput() == device.id,
-               let previous = devices.first(where: { $0.uid == originalDefaultUID }) {
-                do { try access.setDefaultOutput(previous.id) } catch { errors.append(error.localizedDescription) }
+            if changedDefault, try access.defaultOutput() == device.id {
+                if let previous = devices.first(where: { $0.uid == originalDefaultUID }) {
+                    do { try access.setDefaultOutput(previous.id) } catch { errors.append(error.localizedDescription) }
+                } else if originalDefaultUID != nil {
+                    errors.append("The previous output is disconnected. Route recovery will be retried when it returns.")
+                }
             }
         } catch { errors.append(error.localizedDescription) }
         return errors

@@ -10,7 +10,28 @@ final class AppModel: ObservableObject {
     @Published var mode: ConnectionMode = .format
     @Published var rate: Double = 0
     var onUpdate: (() -> Void)?
+    var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "FiloReleaseLabel") as? String
+        ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "development"
+    }
     var selectedOutput: OutputDevice? { snapshot.devices.first { $0.uid == outputUID } }
+    var exclusiveSource: OutputDevice? { snapshot.devices.first(where: ConnectionController.isExclusiveSourceDevice) }
+    var outputChoices: [OutputDevice] {
+        snapshot.devices.filter { mode != .exclusive || !ConnectionController.isExclusiveSourceDevice($0) }
+    }
+    var availableRates: [Double] {
+        let rates = selectedOutput?.supportedRates ?? []
+        guard mode == .exclusive else { return rates }
+        return rates.filter { exclusiveSource?.supportedRates.contains($0) == true }
+    }
+    var connectionRequirement: String? {
+        guard mode == .exclusive else { return nil }
+        guard let exclusiveSource else { return "Install BlackHole 2ch to use exclusive preview." }
+        guard let selectedOutput else { return "Choose your physical DAC as the output." }
+        guard selectedOutput.uid != exclusiveSource.uid else { return "Choose your physical DAC as the output." }
+        guard !availableRates.isEmpty else { return "BlackHole and this output have no matching sample rates." }
+        return nil
+    }
     init() {
         controller.onSnapshot = { [weak self] value in
             guard let self else { return }
@@ -21,7 +42,7 @@ final class AppModel: ObservableObject {
     }
     func toggleConnection() {
         if snapshot.connected { controller.disconnect(); return }
-        guard let executable = Bundle.main.executableURL else { return }
+        guard connectionRequirement == nil, let executable = Bundle.main.executableURL else { return }
         UserDefaults.standard.set(source.rawValue, forKey: "source")
         UserDefaults.standard.set(outputUID, forKey: "outputUID")
         controller.connect(source: source, outputUID: outputUID, mode: mode, manualRate: rate == 0 ? nil : rate, executable: executable)
@@ -33,8 +54,13 @@ final class AppModel: ObservableObject {
     }
     func copyDiagnostics() {
         let output = selectedOutput
+        let exclusiveMetrics = snapshot.exclusiveMetrics
+        func describe(_ format: PCMFormat?) -> String {
+            guard let format else { return "Not active" }
+            return "\(format.rate) Hz, \(format.channels) channels, \(format.bits) bits, flags \(format.flags)"
+        }
         let text = """
-        filo 1.0.0
+        filo \(appVersion)
         macOS: \(ProcessInfo.processInfo.operatingSystemVersionString)
         Source: \(source.name)
         Mode: \(mode.name)
@@ -46,6 +72,26 @@ final class AppModel: ObservableObject {
         Capture rate: \(snapshot.tapFormat?.rate.description ?? "Not active") Hz
         Relay callbacks: \(snapshot.metrics?.callbacks ?? 0)
         Invalid buffers: \(snapshot.metrics?.invalidBuffers ?? 0)
+        Virtual route: \(snapshot.virtualSource?.name ?? "Not active")
+        Virtual route rate: \(snapshot.virtualSource?.rate.description ?? "Unknown") Hz
+        Exclusive output callback format: \(describe(snapshot.exclusiveOutputFormat))
+        Exclusive physical stream format: \(describe(snapshot.exclusivePhysicalFormat))
+        Exclusive path running: \(snapshot.relayRunning && mode == .exclusive)
+        Exclusive payload started: \(exclusiveMetrics?.started ?? false)
+        Input/output callbacks: \(exclusiveMetrics?.inputCallbacks ?? 0) / \(exclusiveMetrics?.outputCallbacks ?? 0)
+        Captured/delivered/queued frames: \(exclusiveMetrics?.capturedFrames ?? 0) / \(exclusiveMetrics?.deliveredFrames ?? 0) / \(exclusiveMetrics?.queuedFrames ?? 0)
+        Startup silence/initial reserve frames: \(exclusiveMetrics?.startupSilenceFrames ?? 0) / \(exclusiveMetrics?.initialQueuedFrames ?? 0)
+        Underflows/overflows: \(exclusiveMetrics?.underflows ?? 0) / \(exclusiveMetrics?.overflows ?? 0)
+        Invalid buffers/representation failures: \(exclusiveMetrics?.invalidBuffers ?? 0) / \(exclusiveMetrics?.representationFailures ?? 0)
+        Missing input/output timestamp evidence: \(exclusiveMetrics?.inputTimestampMissing ?? 0) / \(exclusiveMetrics?.outputTimestampMissing ?? 0)
+        Input/output timestamp discontinuities: \(exclusiveMetrics?.inputTimestampDiscontinuities ?? 0) / \(exclusiveMetrics?.outputTimestampDiscontinuities ?? 0)
+        Latched bridge fault: \(exclusiveMetrics?.fault ?? 0)
+        Virtual clock pitch (0.5 = nominal): \(snapshot.clockPitch?.description ?? "Not active")
+        Processing: \(snapshot.processingSummary ?? "Not assessed")
+        Unverified controls: \(snapshot.unverifiedControls.joined(separator: ", "))
+        Playback segment: \(snapshot.segmentNote ?? "Not assessed")
+        Software boundary: process-tap PCM to final output callback, no production audio recording
+        Player source identity and physical DAC input: not verified
         End-to-end bit-perfect: not verified
         """
         NSPasteboard.general.clearContents(); NSPasteboard.general.setString(text, forType: .string)

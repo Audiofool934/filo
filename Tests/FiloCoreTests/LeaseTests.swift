@@ -85,7 +85,23 @@ final class LeaseTests: XCTestCase {
         try owned.begin(output: devices.outputs[1]); try owned.apply(rate: 44100)
         devices.outputs[1].uid = "unrelated"
         XCTAssertThrowsError(try owned.apply(rate: 48000))
-        XCTAssertTrue(owned.restore().isEmpty)
+        XCTAssertFalse(owned.restore().isEmpty)
         XCTAssertEqual(devices.writes, [44100])
+    }
+    func testDisconnectedRecoveryRetainsJournalAndResolvesReconnectedUID() throws {
+        let devices = FakeDevices()
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let journal = folder.appendingPathComponent("connection.json")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let lease = DeviceLease(access: devices, journalURL: journal)
+        try lease.begin(output: devices.outputs[1]); try lease.apply(rate: 44100)
+        var detached = devices.outputs.removeLast()
+        XCTAssertFalse(lease.restore().isEmpty)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: journal.path))
+        detached.id = 9; devices.outputs.append(detached); devices.current = 9
+        XCTAssertTrue(DeviceLease(access: devices, journalURL: journal).recoverOrphaned().isEmpty)
+        XCTAssertEqual(try devices.rate(9), 192000)
+        XCTAssertEqual(devices.current, 1)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: journal.path))
     }
 }

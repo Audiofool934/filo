@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreAudio
 import FiloCore
 
 private let accent = Color(red: 0.12, green: 0.48, blue: 0.46)
@@ -13,8 +14,19 @@ struct FiloView: View {
             VStack(alignment: .leading, spacing: 22) {
                 header
                 configuration
-                Text("This becomes your Mac’s output while connected.")
+                Text(model.mode == .exclusive
+                     ? "BlackHole becomes your Mac’s output. Only the selected music app is forwarded to your DAC."
+                     : "This becomes your Mac’s output while connected.")
                     .font(.system(size: 10)).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                if let requirement = model.connectionRequirement, !state.connected {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(requirement).foregroundStyle(.orange)
+                        if model.exclusiveSource == nil {
+                            Link("Get BlackHole 2ch", destination: URL(string: "https://existential.audio/blackhole/")!)
+                        }
+                    }.font(.system(size: 11)).fixedSize(horizontal: false, vertical: true)
+                }
                 signalPath
                 status
                 Button(action: model.toggleConnection) {
@@ -26,7 +38,7 @@ struct FiloView: View {
                     }.padding(.vertical, 5)
                 }
                 .buttonStyle(.borderedProminent).tint(accent).controlSize(.large)
-                .disabled(state.busy || (!state.connected && model.selectedOutput == nil))
+                .disabled(state.busy || (!state.connected && (model.selectedOutput == nil || model.connectionRequirement != nil)))
                 .keyboardShortcut(.return, modifiers: [])
                 DisclosureGroup("Connection details", isExpanded: $showDetails) { details.padding(.top, 12) }
                     .font(.system(size: 12)).foregroundStyle(.secondary)
@@ -37,9 +49,15 @@ struct FiloView: View {
         .frame(width: 440, height: 650)
         .background(Color(nsColor: .windowBackgroundColor))
         .onChange(of: model.outputUID) { _, _ in
-            if model.rate != 0, !(model.selectedOutput?.supportedRates.contains(model.rate) ?? false) { model.rate = 0 }
+            if model.rate != 0, !model.availableRates.contains(model.rate) { model.rate = 0 }
         }
         .onChange(of: model.source) { _, _ in model.rate = 0 }
+        .onChange(of: model.mode) { _, _ in
+            if !model.outputChoices.contains(where: { $0.uid == model.outputUID }) {
+                model.outputUID = model.outputChoices.first(where: \.isDefault)?.uid ?? model.outputChoices.first?.uid ?? ""
+            }
+            if model.rate != 0, !model.availableRates.contains(model.rate) { model.rate = 0 }
+        }
     }
     private var header: some View {
         HStack(alignment: .top) {
@@ -62,16 +80,21 @@ struct FiloView: View {
                     ForEach(MusicSource.allCases) { Text($0.name).tag($0) }
                 }.labelsHidden()
             }
+            field("Audio path") {
+                Picker("Audio path", selection: $model.mode) {
+                    ForEach(ConnectionMode.allCases) { Text($0.name).tag($0) }
+                }.labelsHidden()
+            }
             field("Output") {
                 Picker("Output device", selection: $model.outputUID) {
                     if model.selectedOutput == nil { Text("Choose an output").tag(model.outputUID) }
-                    ForEach(state.devices) { Text($0.name).tag($0.uid) }
+                    ForEach(model.outputChoices) { Text($0.name).tag($0.uid) }
                 }.labelsHidden()
             }
             field("Sample rate") {
                 Picker("Sample rate", selection: $model.rate) {
                     Text(model.source == .appleMusic ? "Automatic" : "Spotify · 44.1 kHz").tag(Double(0))
-                    ForEach(model.selectedOutput?.supportedRates ?? [], id: \.self) { Text("\(rateLabel($0)) kHz").tag($0) }
+                    ForEach(model.availableRates, id: \.self) { Text("\(rateLabel($0)) kHz").tag($0) }
                 }.labelsHidden()
             }
         }.disabled(state.connected || state.busy)
@@ -97,7 +120,7 @@ struct FiloView: View {
                 Text("OUTPUT").font(.system(size: 9, weight: .semibold)).tracking(1.5).foregroundStyle(.secondary)
                 Text(model.selectedOutput.map { "\(rateLabel($0.rate)) kHz" } ?? "Offline")
                     .font(.system(size: 21, weight: .medium, design: .monospaced))
-                Text(model.selectedOutput?.formats.first.map { "\($0.channels) ch · \($0.bits)-bit container" } ?? "No device")
+                Text(outputDescription)
                     .font(.system(size: 10)).foregroundStyle(.secondary)
             }
         }
@@ -108,7 +131,8 @@ struct FiloView: View {
     private var status: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack(spacing: 7) {
-                Circle().fill(state.error != nil ? Color.orange : (state.connected ? accent : Color.secondary.opacity(0.4))).frame(width: 6, height: 6)
+                Circle().fill(state.error != nil || (state.connected && model.mode == .exclusive)
+                              ? Color.orange : (state.connected ? accent : Color.secondary.opacity(0.4))).frame(width: 6, height: 6)
                 Text(state.title).font(.system(size: 13, weight: .semibold))
                 Spacer()
                 Button(action: model.openSource) { Image(systemName: "arrow.up.right.square") }.buttonStyle(.plain)
@@ -116,7 +140,7 @@ struct FiloView: View {
             }
             Text(state.error ?? state.detail).font(.system(size: 11)).foregroundStyle(state.error == nil ? Color.secondary : Color.orange)
                 .fixedSize(horizontal: false, vertical: true)
-            if let volume = state.player.volume, state.player.playing, volume < 100 {
+            if model.mode != .exclusive, let volume = state.player.volume, state.player.playing, volume < 100 {
                 Text("Player volume is \(volume)%. For unchanged PCM, use 100% and control listening level on your DAC.")
                     .font(.system(size: 10)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             }
@@ -124,16 +148,32 @@ struct FiloView: View {
     }
     private var details: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Picker("Audio path", selection: $model.mode) {
-                ForEach([ConnectionMode.format, .relay]) { Text($0.name).tag($0) }
-            }.disabled(state.connected)
-            Text("Format matching lets your player output normally. Direct relay forwards the chosen app without DSP. The output remains shared with other apps.")
-                .fixedSize(horizontal: false, vertical: true)
+            if model.mode == .exclusive {
+                Text("Exclusive preview uses BlackHole 2ch and reserves your DAC. filo forwards captured samples to integer output without resampling, gain, or EQ. It stops when a buffer, timestamp, or exact-representation check fails.")
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("The software boundary ends at the output callback. Player decoding, unreadable processing settings, and the physical DAC input remain unverified.")
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("For early arming, choose the known track rate and connect before Play. The Spotify profile can also arm while paused. Automatic Music detection may arrive after the track begins; its opening samples remain unverified.")
+                    .fixedSize(horizontal: false, vertical: true)
+                if let processing = state.processingSummary {
+                    Text(processing).fixedSize(horizontal: false, vertical: true)
+                }
+                if !state.unverifiedControls.isEmpty {
+                    Text("Unverified controls: \(state.unverifiedControls.joined(separator: ", ")).")
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if let segment = state.segmentNote {
+                    Text(segment).fixedSize(horizontal: false, vertical: true)
+                }
+            } else {
+                Text("Format matching lets your player output normally. Direct relay forwards the chosen app without DSP. The output remains shared with other apps.")
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if model.source == .spotify {
                 Text("Spotify uses a fixed 44.1 kHz music profile. filo cannot verify individual Spotify tracks, podcasts, or ads.")
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Text("Matching rates and exclusive access do not prove end-to-end bit-perfect playback. Source processing, normalization, and the final DAC input need separate verification.")
+            Text("End-to-end bit-perfect playback is not verified. Matching rates and exclusive access alone cannot prove it.")
                 .fixedSize(horizontal: false, vertical: true)
             if let metrics = state.metrics {
                 Text("Relay: \(metrics.frames) frames · \(metrics.invalidBuffers) invalid buffers").monospacedDigit()
@@ -142,8 +182,18 @@ struct FiloView: View {
             if let format = state.tapFormat {
                 Text("Capture: \(rateLabel(format.rate)) kHz · \(format.channels) ch · Float32")
             }
+            if let metrics = state.exclusiveMetrics {
+                Text("Exclusive relay: \(metrics.deliveredFrames) frames delivered · \(metrics.queuedFrames) queued").monospacedDigit()
+                Text("Underflows: \(metrics.underflows) · Overflows: \(metrics.overflows) · Fault: \(metrics.fault)").monospacedDigit()
+                Text("Timestamp gaps: \(metrics.inputTimestampDiscontinuities + metrics.outputTimestampDiscontinuities) · Missing evidence: \(metrics.inputTimestampMissing + metrics.outputTimestampMissing)").monospacedDigit()
+            }
             Button("Copy diagnostics", action: model.copyDiagnostics).controlSize(.small)
         }
+    }
+    private var outputDescription: String {
+        guard let format = state.exclusiveOutputFormat ?? model.selectedOutput?.formats.first else { return "No device" }
+        let representation = format.flags & kAudioFormatFlagIsFloat != 0 ? "float" : "integer"
+        return "\(format.channels) ch · \(format.bits)-bit \(representation)"
     }
     private var sourceDescription: String {
         guard let format = state.sourceFormat else { return model.source.name }
@@ -152,7 +202,7 @@ struct FiloView: View {
     }
     private var footer: some View {
         HStack {
-            Text("1.0.0").foregroundStyle(.tertiary)
+            Text(model.appVersion).foregroundStyle(.tertiary)
             Spacer()
             Link("Guide", destination: URL(string: "https://github.com/Audiofool934/filo#readme")!)
             Text("·").foregroundStyle(.tertiary)
