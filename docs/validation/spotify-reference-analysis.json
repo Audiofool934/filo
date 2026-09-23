@@ -1,0 +1,995 @@
+{
+  "scope": "Original local synthetic fixture at the Spotify process tap; no relay, USB receiver, subscription stream, or streaming master proof",
+  "reference": {
+    "file": "filo-reference-44100-24.wav",
+    "sha256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "sampleRate": 44100,
+    "channels": 2,
+    "bits": 24,
+    "frames": 220500,
+    "samples": 441000,
+    "signed24PCMSHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e",
+    "float32PCMSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+  },
+  "analysisScriptSHA256": "cc5f1b58179a218fa5664e7879200c80efa0acdc36f76d2213d3289707b75fad",
+  "method": "Independent raw signed24 RIFF decoding and exact Float32 word comparison over every original stereo frame after one fixed byte-anchor alignment; only zero-valued outer silence is allowed; no ignored internal frames, rounding, resampling, gain fitting, or moving alignment",
+  "selfTests": [
+    {
+      "case": "exactPadded",
+      "expectedFullPass": true,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": true,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 79,
+          "lastFrameInclusive": 220578,
+          "frames": 220500,
+          "sha256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+          "byteIdenticalToReference": true,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 3
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 0,
+        "mismatchedFrames": 0,
+        "numericSampleMismatches": 0,
+        "firstWordMismatch": null,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "alignedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "missingFirstFrame",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220499,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 0,
+          "lastFrameInclusive": 220498,
+          "frames": 220499,
+          "sha256": "bf54459734c709b630aac6413d39e070ceeb325f6fc5bb21c237a7a53d775747",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": []
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                -1
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                -1
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": -1,
+              "matchingAnchors": 2
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": -1
+        },
+        "referenceStartFrame": 1,
+        "comparedFrames": 220499,
+        "comparedSamples": 440998,
+        "missingPrefixFrames": 1,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": false,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 0,
+        "trailingCaptureFrames": 0,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 0,
+        "mismatchedFrames": 0,
+        "numericSampleMismatches": 0,
+        "firstWordMismatch": null,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "alignedWindowSHA256": "bf54459734c709b630aac6413d39e070ceeb325f6fc5bb21c237a7a53d775747",
+        "expectedWindowSHA256": "bf54459734c709b630aac6413d39e070ceeb325f6fc5bb21c237a7a53d775747"
+      }
+    },
+    {
+      "case": "missingLastFrame",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220499,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 0,
+          "lastFrameInclusive": 220498,
+          "frames": 220499,
+          "sha256": "187d955883f751fbd0462533884a679efc06a0d3ff7570d256e4876c78400e70",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                0
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                0
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": []
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 0,
+              "matchingAnchors": 2
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 0
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220499,
+        "comparedSamples": 440998,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 1,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": false,
+        "leadingCaptureFrames": 0,
+        "trailingCaptureFrames": 0,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 0,
+        "mismatchedFrames": 0,
+        "numericSampleMismatches": 0,
+        "firstWordMismatch": null,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "alignedWindowSHA256": "187d955883f751fbd0462533884a679efc06a0d3ff7570d256e4876c78400e70",
+        "expectedWindowSHA256": "187d955883f751fbd0462533884a679efc06a0d3ff7570d256e4876c78400e70"
+      }
+    },
+    {
+      "case": "missingFirstFrameReplacedBySilence",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 80,
+          "lastFrameInclusive": 220578,
+          "frames": 220499,
+          "sha256": "bf54459734c709b630aac6413d39e070ceeb325f6fc5bb21c237a7a53d775747",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": []
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 2
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": false,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 2,
+        "mismatchedFrames": 1,
+        "numericSampleMismatches": 2,
+        "firstWordMismatch": {
+          "referenceFrame": 0,
+          "channel": 0
+        },
+        "maxAbsoluteErrorLSB24": 7394.0,
+        "alignedWindowSHA256": "59e0751f8032e4f0ceec9b943ae55fe4fa66819131ff922fbd96d22f77ae4268",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "missingLastFrameReplacedBySilence",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 79,
+          "lastFrameInclusive": 220577,
+          "frames": 220499,
+          "sha256": "187d955883f751fbd0462533884a679efc06a0d3ff7570d256e4876c78400e70",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": []
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 2
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": false,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 2,
+        "mismatchedFrames": 1,
+        "numericSampleMismatches": 2,
+        "firstWordMismatch": {
+          "referenceFrame": 220499,
+          "channel": 0
+        },
+        "maxAbsoluteErrorLSB24": 4096.0,
+        "alignedWindowSHA256": "86fa7b2dac9551e01443bce22bb96787f1a4a9206bc7df3bbeccbd3c26c8e4a4",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "additionalActivePrefixFrame",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 78,
+          "lastFrameInclusive": 220578,
+          "frames": 220501,
+          "sha256": "a102eb77ec0dea63a04242aabcaff4d9279ad9f1fc3465ef4699a122ec1dcf94",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 3
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 1,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 0,
+        "mismatchedFrames": 0,
+        "numericSampleMismatches": 0,
+        "firstWordMismatch": null,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "alignedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "additionalActiveTailFrame",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 79,
+          "lastFrameInclusive": 220579,
+          "frames": 220501,
+          "sha256": "98b5d0c1aa249a2f0f876c132958c98e2ef0b058822c39531d3ab592163b2767",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 3
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 1,
+        "float32WordMismatches": 0,
+        "mismatchedFrames": 0,
+        "numericSampleMismatches": 0,
+        "firstWordMismatch": null,
+        "maxAbsoluteErrorLSB24": 0.0,
+        "alignedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "internalDroppedFrame",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220657,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 79,
+          "lastFrameInclusive": 220577,
+          "frames": 220499,
+          "sha256": "272bbf333208fa16224f6c5dd7aa5ea7ac2bb3d8a160515e14e8e72706caf2d5",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                78
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 2
+            },
+            {
+              "captureOffsetFrames": 78,
+              "matchingAnchors": 1
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": false,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 78,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 194081,
+        "mismatchedFrames": 97044,
+        "numericSampleMismatches": 194081,
+        "firstWordMismatch": {
+          "referenceFrame": 123456,
+          "channel": 0
+        },
+        "maxAbsoluteErrorLSB24": 16358.0,
+        "alignedWindowSHA256": "199e464acaa9506568a44ac44fb566d22c797649c8cdc3de7e33d9d51460a5ef",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "subLSBFloat32Change",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 1,
+        "activeSpan": {
+          "firstFrame": 79,
+          "lastFrameInclusive": 220578,
+          "frames": 220500,
+          "sha256": "c1b1bb385f784e23bc7e4265af6a620b81f61dd8e001f18a7cab00478198737b",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 3
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 1,
+        "mismatchedFrames": 1,
+        "numericSampleMismatches": 1,
+        "firstWordMismatch": {
+          "referenceFrame": 12345,
+          "channel": 1
+        },
+        "maxAbsoluteErrorLSB24": 0.0001220703125,
+        "alignedWindowSHA256": "c1b1bb385f784e23bc7e4265af6a620b81f61dd8e001f18a7cab00478198737b",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    },
+    {
+      "case": "changedZeroSignBit",
+      "expectedFullPass": false,
+      "selfTestPassed": true,
+      "analysis": {
+        "capturedFrames": 220658,
+        "referenceFrames": 220500,
+        "nonFiniteSamples": 0,
+        "fullReferenceFloat32WordsExact": false,
+        "off24BitGridSamples": 0,
+        "activeSpan": {
+          "firstFrame": 79,
+          "lastFrameInclusive": 220578,
+          "frames": 220500,
+          "sha256": "42c0bc6c62a5c9b3d49ef6ac25288209cc6440e1d90eb3cae5a1634aaf66d529",
+          "byteIdenticalToReference": false,
+          "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+        },
+        "alignment": {
+          "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+          "anchors": [
+            {
+              "referenceStartFrame": 0,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 110250,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            },
+            {
+              "referenceStartFrame": 220468,
+              "frames": 32,
+              "candidateCaptureOffsets": [
+                79
+              ]
+            }
+          ],
+          "candidateVotes": [
+            {
+              "captureOffsetFrames": 79,
+              "matchingAnchors": 3
+            }
+          ],
+          "ambiguous": false,
+          "confident": true,
+          "captureOffsetFrames": 79
+        },
+        "referenceStartFrame": 0,
+        "comparedFrames": 220500,
+        "comparedSamples": 441000,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "firstReferenceFrameExact": true,
+        "lastReferenceFrameExact": true,
+        "leadingCaptureFrames": 79,
+        "trailingCaptureFrames": 79,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "float32WordMismatches": 1,
+        "mismatchedFrames": 1,
+        "numericSampleMismatches": 0,
+        "firstWordMismatch": {
+          "referenceFrame": 23109,
+          "channel": 0
+        },
+        "maxAbsoluteErrorLSB24": 0.0,
+        "alignedWindowSHA256": "42c0bc6c62a5c9b3d49ef6ac25288209cc6440e1d90eb3cae5a1634aaf66d529",
+        "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428"
+      }
+    }
+  ],
+  "captures": [
+    {
+      "capturedFrames": 1324544,
+      "referenceFrames": 220500,
+      "nonFiniteSamples": 0,
+      "fullReferenceFloat32WordsExact": true,
+      "off24BitGridSamples": 0,
+      "activeSpan": {
+        "firstFrame": 272896,
+        "lastFrameInclusive": 493395,
+        "frames": 220500,
+        "sha256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+        "byteIdenticalToReference": true,
+        "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+      },
+      "alignment": {
+        "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+        "anchors": [
+          {
+            "referenceStartFrame": 0,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              272896
+            ]
+          },
+          {
+            "referenceStartFrame": 110250,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              272896
+            ]
+          },
+          {
+            "referenceStartFrame": 220468,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              272896
+            ]
+          }
+        ],
+        "candidateVotes": [
+          {
+            "captureOffsetFrames": 272896,
+            "matchingAnchors": 3
+          }
+        ],
+        "ambiguous": false,
+        "confident": true,
+        "captureOffsetFrames": 272896
+      },
+      "referenceStartFrame": 0,
+      "comparedFrames": 220500,
+      "comparedSamples": 441000,
+      "missingPrefixFrames": 0,
+      "missingSuffixFrames": 0,
+      "firstReferenceFrameExact": true,
+      "lastReferenceFrameExact": true,
+      "leadingCaptureFrames": 272896,
+      "trailingCaptureFrames": 831148,
+      "nonzeroLeadingSamples": 0,
+      "nonzeroTrailingSamples": 0,
+      "float32WordMismatches": 0,
+      "mismatchedFrames": 0,
+      "numericSampleMismatches": 0,
+      "firstWordMismatch": null,
+      "maxAbsoluteErrorLSB24": 0.0,
+      "alignedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+      "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+      "captureFile": "spotify-flac-first-tap.f32",
+      "captureSHA256": "f8a0fbaec99a6e2f85a60fcb1bc84e896f2388a4e98110f3513e23eb4b5a0bd5",
+      "receiptFile": "spotify-flac-first-tap.json",
+      "receiptSHA256": "74ebd1c7118426684e8ee1e78b2a674b117b281333c8ba9bfa3ff97a1afe8872",
+      "sourceCodec": "FLAC",
+      "sourceFileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "receiptInvalidBuffers": 0,
+      "receiptReportedPass": true,
+      "receiptRestorationErrors": []
+    },
+    {
+      "capturedFrames": 1324032,
+      "referenceFrames": 220500,
+      "nonFiniteSamples": 0,
+      "fullReferenceFloat32WordsExact": true,
+      "off24BitGridSamples": 0,
+      "activeSpan": {
+        "firstFrame": 274432,
+        "lastFrameInclusive": 494931,
+        "frames": 220500,
+        "sha256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+        "byteIdenticalToReference": true,
+        "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+      },
+      "alignment": {
+        "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+        "anchors": [
+          {
+            "referenceStartFrame": 0,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              274432
+            ]
+          },
+          {
+            "referenceStartFrame": 110250,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              274432
+            ]
+          },
+          {
+            "referenceStartFrame": 220468,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              274432
+            ]
+          }
+        ],
+        "candidateVotes": [
+          {
+            "captureOffsetFrames": 274432,
+            "matchingAnchors": 3
+          }
+        ],
+        "ambiguous": false,
+        "confident": true,
+        "captureOffsetFrames": 274432
+      },
+      "referenceStartFrame": 0,
+      "comparedFrames": 220500,
+      "comparedSamples": 441000,
+      "missingPrefixFrames": 0,
+      "missingSuffixFrames": 0,
+      "firstReferenceFrameExact": true,
+      "lastReferenceFrameExact": true,
+      "leadingCaptureFrames": 274432,
+      "trailingCaptureFrames": 829100,
+      "nonzeroLeadingSamples": 0,
+      "nonzeroTrailingSamples": 0,
+      "float32WordMismatches": 0,
+      "mismatchedFrames": 0,
+      "numericSampleMismatches": 0,
+      "firstWordMismatch": null,
+      "maxAbsoluteErrorLSB24": 0.0,
+      "alignedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+      "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+      "captureFile": "spotify-wav-first-tap.f32",
+      "captureSHA256": "59eb0bccbf5412b17b8842e7672cf5f0effbb39ec27808e0dd65164380880ccf",
+      "receiptFile": "spotify-wav-first-tap.json",
+      "receiptSHA256": "9007734b97bebf6e15bb12c39a5f63e752f598412850e4e97a482d4f81634ed3",
+      "sourceCodec": "WAV",
+      "sourceFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "receiptInvalidBuffers": 0,
+      "receiptReportedPass": true,
+      "receiptRestorationErrors": []
+    },
+    {
+      "capturedFrames": 1324544,
+      "referenceFrames": 220500,
+      "nonFiniteSamples": 0,
+      "fullReferenceFloat32WordsExact": true,
+      "off24BitGridSamples": 0,
+      "activeSpan": {
+        "firstFrame": 248832,
+        "lastFrameInclusive": 469331,
+        "frames": 220500,
+        "sha256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+        "byteIdenticalToReference": true,
+        "method": "Remove only outer Float32 zero-valued silence; retain every frame and individual zero inside the span"
+      },
+      "alignment": {
+        "method": "Exact byte search for three disjoint 32-stereo-frame anchors; require two agreeing anchors and a unique highest vote",
+        "anchors": [
+          {
+            "referenceStartFrame": 0,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              248832
+            ]
+          },
+          {
+            "referenceStartFrame": 110250,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              248832
+            ]
+          },
+          {
+            "referenceStartFrame": 220468,
+            "frames": 32,
+            "candidateCaptureOffsets": [
+              248832
+            ]
+          }
+        ],
+        "candidateVotes": [
+          {
+            "captureOffsetFrames": 248832,
+            "matchingAnchors": 3
+          }
+        ],
+        "ambiguous": false,
+        "confident": true,
+        "captureOffsetFrames": 248832
+      },
+      "referenceStartFrame": 0,
+      "comparedFrames": 220500,
+      "comparedSamples": 441000,
+      "missingPrefixFrames": 0,
+      "missingSuffixFrames": 0,
+      "firstReferenceFrameExact": true,
+      "lastReferenceFrameExact": true,
+      "leadingCaptureFrames": 248832,
+      "trailingCaptureFrames": 855212,
+      "nonzeroLeadingSamples": 0,
+      "nonzeroTrailingSamples": 0,
+      "float32WordMismatches": 0,
+      "mismatchedFrames": 0,
+      "numericSampleMismatches": 0,
+      "firstWordMismatch": null,
+      "maxAbsoluteErrorLSB24": 0.0,
+      "alignedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+      "expectedWindowSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+      "captureFile": "spotify-alac-first-tap.f32",
+      "captureSHA256": "439df251f30aaa3cd194b7f1d95919f9512f8745e64c369af01cf74504480c00",
+      "receiptFile": "spotify-alac-first-tap.json",
+      "receiptSHA256": "5a5270842c2ecec8cf6429e54124e8ef5ab6a86b911aea6e2015edc6545a9fde",
+      "sourceCodec": "ALAC",
+      "sourceFileSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+      "receiptInvalidBuffers": 0,
+      "receiptReportedPass": true,
+      "receiptRestorationErrors": []
+    }
+  ],
+  "allCompleteCapturesExact": true,
+  "allActiveSpansByteIdenticalToReference": true,
+  "limits": "PCM equality does not establish callback timestamp continuity, which the original tap receipts do not expose; receipt metrics and restoration fields are retained but do not decide byte equality"
+}

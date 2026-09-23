@@ -1,5 +1,15 @@
 # filo validation record
 
+## Post-beta.2 Spotify local references
+
+Spotify 1.3.0.277 preserved the complete original five-second 44.1 kHz, stereo 24-bit reference through a process-specific BlackHole tap for WAV, ALAC, and FLAC.
+All three runs compared 220,500 frames and 441,000 Float32 words with zero differences, missing endpoints, or extra nonzero material.
+Independent manual RIFF decoding and whole-sequence byte comparison confirmed each result, with ten positive and negative controls.
+The [Spotify observation](research/spotify-reference-observation.md) links receipts, exact helper and analyzer sources, fixture hashes, settings, and restoration details.
+These runs used no exclusive relay or physical DAC; WALKMAN was disconnected.
+They establish a local reference at the named software boundary, not subscription-master identity or end-to-end receiver delivery.
+The shipped beta.2 application is unchanged.
+
 ## Post-beta.2 player API comparison
 
 The same complete ALAC reference passed an independent AVAudioPlayer-to-BlackHole process-tap test with rate adjustment disabled.
