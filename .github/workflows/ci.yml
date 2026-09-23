@@ -13,6 +13,8 @@ jobs:
         run: swift build -Xswiftc -warnings-as-errors
       - name: Test policies and PCM
         run: swift test
+      - name: Compile finite-reference laboratory without hardware
+        run: bash scripts/verify-finite-reference.sh --check
       - name: Package app
         run: bash scripts/build.sh --universal
       - name: Inspect bundle

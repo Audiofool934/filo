@@ -1,0 +1,73 @@
+{
+  "completedCases": 9,
+  "finalState": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "pitch": null,
+      "rate": 44100
+    }
+  },
+  "finishedAtUTC": "2026-09-23T15:13:17.681992+00:00",
+  "passedCases": 9,
+  "recovery": {
+    "errors": []
+  },
+  "restorationVerified": true,
+  "startedBaseline": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "pitch": null,
+      "rate": 44100
+    }
+  }
+}

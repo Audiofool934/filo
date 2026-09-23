@@ -1,6 +1,6 @@
 # Using filo
 
-filo 1.0 requires macOS 14.4 or later and a device with one stereo output stream.
+filo requires macOS 14.4 or later and a device with one stereo output stream.
 The universal app contains Apple Silicon and Intel executables.
 
 ## First connection
@@ -28,21 +28,28 @@ filo neither reads every effect setting nor turns effects off automatically.
 
 For unchanged samples, turn the DAC's listening level down before setting player volume to 100%, then adjust listening level on the DAC.
 A matching sample-rate display alone does not prove unchanged samples.
-Other apps can still mix into the shared output.
+Other apps can still mix into the shared output in Format matching and Direct relay.
+In Exclusive preview, only the selected application is forwarded from BlackHole to the DAC.
 
 ## Audio paths
 
 **Format matching** manages the output rate and leaves playback on the player's ordinary path.
 It is the default and does not start a process tap.
 
-**Direct relay**, in Connection details, taps the selected player and suppresses its ordinary output while the tap is active.
+**Direct relay**, in the Audio path picker, taps the selected player and suppresses its ordinary output while the tap is active.
 It forwards stereo samples without gain, EQ, or sample-rate conversion in filo.
 The output device is the aggregate clock, and the configuration requests no drift compensation.
 Unsupported formats or stopped callbacks cause the connection to stop.
 Disconnect before changing the audio path.
 
-Hog Mode is not an app option in 1.0.
-The laboratory retains an experimental switch, but the tested topology produces no callbacks with the physical output hogged.
+**Exclusive preview** uses an installed BlackHole 2ch as the selected player’s source route and opens the DAC directly with Hog Mode and matching integer formats.
+It requires a compatible stereo DAC advertising non-mixable integer formats.
+Select a known rate and connect before playback to arm the fixed-rate path; automatic Music detection can still miss the opening of a track.
+Known non-unity volume, mute, EQ, or per-track gain prevents the preview from starting.
+Unknown settings remain unverified, and there is no end-to-end certification indicator.
+The tested Music path changed a known reference before the relay, so this preview currently stops on that path's unrepresentable samples even with the inspected effects disabled.
+Use Format matching for ordinary listening while this [source-path issue](research/music-reference-observation.md) remains unresolved.
+Read [the preview guide](VERIFIED-OUTPUT.md) for dependencies, verification boundaries, and recovery.
 
 ## Automatic format limits
 
@@ -64,12 +71,15 @@ For podcasts, ads, videos, or other content, select a known rate manually if nee
 ## Permissions
 
 Automation permission allows the playback helper to read the selected player's state, track identity, and volume.
-Direct relay additionally requires macOS system-audio capture permission.
+Direct relay and Exclusive preview additionally require macOS system-audio capture permission.
 macOS names that privacy section differently across releases, including Screen & System Audio Recording.
+Exclusive preview can also trigger a Microphone permission prompt when CoreAudio opens BlackHole's virtual input.
+This is a broader macOS permission, although filo selects the virtual device and does not select your physical microphone.
+Resolve the system permission prompt before expecting the connection to finish.
 If denied, review the relevant permission in System Settings and reconnect filo.
 filo does not request administrator access, install a driver, or upload audio.
 
-The 1.0 download is ad-hoc signed and is not Developer ID notarized.
+The download is ad-hoc signed and is not Developer ID notarized.
 After an initial blocked launch attempt, macOS may offer Open Anyway in Privacy & Security.
 You decide whether to allow it; the app does not change Gatekeeper or other security settings.
 Building from source is another option.
@@ -83,6 +93,9 @@ An unplugged device also requires an explicit reconnect.
 
 Before modifying hardware settings, filo writes a small recovery record at `~/Library/Application Support/filo/connection.json`.
 After an unexpected process exit, reopening filo attempts to restore still-owned settings from that record.
+Exclusive preview also stores coupled DAC format and virtual-clock records under `~/Library/Application Support/filo/exclusive-recovery/`.
+Recovery coordinates filo processes with a file lock, resolves devices by persistent UID, and preserves external changes.
+These atomic records cover process interruption; they are not a power-loss durability guarantee.
 It does not automatically reconnect or start playback.
 Do not edit the record during an active connection.
 
@@ -95,6 +108,7 @@ Do not edit the record during an active connection.
 | No audio callbacks | Review audio-capture permission, start playback, or try Format matching. |
 | Output changed outside filo | Your change was preserved; reconnect to resume management. |
 | Unsupported format | Use a device exposing one stereo stream; relay requires matching Float32 capture/output. |
+| Captured samples cannot be represented exactly | Exclusive preview stopped because packing the incoming values would require rounding; use Format matching for ordinary listening. |
 | Brief gap during a rate change | This can occur while the DAC changes its hardware rate. |
 
 Copy diagnostics in Connection details gives version, selected source/mode, format observations, and callback counters.

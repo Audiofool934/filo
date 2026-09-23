@@ -1,0 +1,164 @@
+{
+  "architecture": "arm64",
+  "buildScope": "Temporary laboratory helper linked to local development FiloCore and FiloPCM objects; not the universal release executable",
+  "command": [
+    "finite-reference",
+    "--output",
+    "WALKMAN"
+  ],
+  "executableSHA256": "d16387aeee3c4b07519d77ee1992e10c4c2828b628a26515906cb6f3cb45961b",
+  "helperSourceSHA256": {
+    "finite-reference.c": "be6d387c5c210f3d08b1a24a50d89a3eda6ab8c5b09d737e9658ee047a900852",
+    "finite-reference.h": "79a311b82cfc438cebd2c5f5679b99913ecbc859f3685f0ba6c60cd16e1bba12",
+    "finite-reference.swift": "ae222d7f609bd3447f34aa30c3223a6f0ec520c6e5016cc89b3fe5870ffc0c87"
+  },
+  "macOS": "26.6.2",
+  "observedAtUTC": "2026-09-23T15:50:53.471397+00:00",
+  "postRunHardware": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "rate": 44100
+    }
+  },
+  "restoredKnownBaseline": true,
+  "result": {
+    "boundary": "Complete original fixture through actual physical-device signed32 output callback; USB receiver and player decoding unmeasured",
+    "cleanupErrors": [],
+    "comparison": {
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "actualCaptureSHA256": "124fe7bc51564d2b1989eab2509bca7ffeb42965e484dee152d00095648f0814",
+      "bytesPerPacket": 8,
+      "captureWellFormed": true,
+      "capturedFrames": 393216,
+      "comparedBytes": 1764000,
+      "comparedFrames": 220500,
+      "containerBits": 32,
+      "exactReferencePrecision": true,
+      "expectedAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "expectedReferenceSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "framesPerPacket": 1,
+      "mismatchedBytes": 0,
+      "mismatchedFrames": 0,
+      "mismatchedSampleWords": 0,
+      "nonzeroLeadingBytes": 0,
+      "nonzeroPaddingBytes": 0,
+      "nonzeroTrailingBytes": 0,
+      "outputFormat": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 76,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "paddingBits": 0,
+      "passed": true,
+      "precisionHandling": "Exact integer widening from 24 to 32 valid bits; 0 container padding bits must be zero.",
+      "rateMatches": true,
+      "referenceBits": 24,
+      "referenceFrames": 220500,
+      "sampleComparison": {
+        "aligned": true,
+        "alignmentAmbiguous": false,
+        "anchorFrames": 32,
+        "captureStartFrame": 53760,
+        "capturedFrames": 393216,
+        "comparedFrames": 220500,
+        "fullReferenceExact": true,
+        "leadingCaptureFrames": 53760,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "missingPrefixFrames": 0,
+        "missingSuffixFrames": 0,
+        "nonzeroLeadingSamples": 0,
+        "nonzeroTrailingSamples": 0,
+        "referenceFrames": 220500,
+        "referenceStartFrame": 0,
+        "trailingCaptureFrames": 118956,
+        "windowExact": true
+      },
+      "totalOutputBytes": 3145728,
+      "validFormat": true
+    },
+    "emitterMetrics": {
+      "callbacks": 1023,
+      "completed": true,
+      "emittedFrames": 220500,
+      "fault": false,
+      "firstFixtureOutputFrame": 69120,
+      "outputFrames": 523776,
+      "started": true,
+      "timestampDiscontinuities": 0,
+      "timestampMissing": 0
+    },
+    "handshake": "Child continuously emits zero, parent primes and captures, one GO emits the fixture once, then three seconds of postroll",
+    "metrics": {
+      "capturedFrames": 416256,
+      "deliveredFrames": 393216,
+      "fault": 0,
+      "initialQueuedFrames": 22528,
+      "inputCallbacks": 813,
+      "inputTimestampDiscontinuities": 0,
+      "inputTimestampMissing": 0,
+      "invalidBuffers": 0,
+      "outputCallbacks": 768,
+      "outputTimestampDiscontinuities": 0,
+      "outputTimestampMissing": 0,
+      "overflows": 0,
+      "queuedFrames": 23040,
+      "renderedCaptureFrames": 393216,
+      "representationFailures": 0,
+      "started": true,
+      "startupSilenceFrames": 0,
+      "underflows": 0
+    },
+    "outputFormat": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 76,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "outputName": "WALKMAN",
+    "passed": true,
+    "physicalFormat": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 76,
+      "formatID": 1819304813,
+      "rate": 44100
+    },
+    "referenceBits": 24,
+    "referenceFile": "filo-reference-44100-24.wav",
+    "referenceFrames": 220500,
+    "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "sampleRate": 44100
+  }
+}

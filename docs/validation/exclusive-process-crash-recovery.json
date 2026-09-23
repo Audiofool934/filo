@@ -1,0 +1,220 @@
+{
+  "afterCrashBeforeRecovery": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 76,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "rate": 44100,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 76,
+        "formatID": 1819304813,
+        "rate": 44100
+      }
+    },
+    "defaultOutputs": [
+      "BlackHole 2ch"
+    ],
+    "source": {
+      "clock": "Internal Adjustable",
+      "name": "BlackHole 2ch",
+      "pitch": 0.5032904,
+      "rate": 44100
+    }
+  },
+  "afterRecovery": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "pitch": null,
+      "rate": 44100
+    }
+  },
+  "allOwnedProcessesExited": true,
+  "architecture": "arm64",
+  "beforeCrash": {
+    "dac": {
+      "hogPID": 41610,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 76,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "rate": 44100,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 76,
+        "formatID": 1819304813,
+        "rate": 44100
+      }
+    },
+    "defaultOutputs": [
+      "BlackHole 2ch"
+    ],
+    "source": {
+      "clock": "Internal Adjustable",
+      "name": "BlackHole 2ch",
+      "pitch": 0.5032904,
+      "rate": 44100
+    }
+  },
+  "binarySHA256": "f9e9120e976451d1fc8a247459d274aef428075f2dd783b5090db9e632b0bbf3",
+  "command": [
+    "filo-lab",
+    "verify-exclusive",
+    "--device",
+    "WALKMAN",
+    "--source",
+    "BlackHole 2ch",
+    "--bits",
+    "24",
+    "--seconds",
+    "120"
+  ],
+  "emitterPID": 41614,
+  "finalRecovery": {
+    "errors": []
+  },
+  "finalRestorationVerified": true,
+  "finalState": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "pitch": null,
+      "rate": 44100
+    }
+  },
+  "finishedAtUTC": "2026-09-23T15:13:38.436328+00:00",
+  "initial": {
+    "dac": {
+      "hogPID": -1,
+      "name": "WALKMAN",
+      "physical": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "rate": 192000,
+      "virtual": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "defaultOutputs": [
+      "WALKMAN"
+    ],
+    "source": {
+      "clock": "Internal Fixed",
+      "name": "BlackHole 2ch",
+      "pitch": null,
+      "rate": 44100
+    }
+  },
+  "journalKindsAfterCrash": [
+    "clock",
+    "output"
+  ],
+  "journalKindsBeforeCrash": [
+    "clock",
+    "output"
+  ],
+  "macOS": "26.6.2",
+  "parentExitCode": -9,
+  "parentPID": 41610,
+  "parentStderr": "",
+  "parentStdout": "",
+  "passed": true,
+  "recovery": {
+    "errors": []
+  },
+  "remainingRecoveryRecords": 0,
+  "restorationVerified": true,
+  "schemaVersion": 1,
+  "scope": "quiet synthetic source; no media-player control",
+  "signalSequence": [
+    {
+      "pid": 41610,
+      "signal": "SIGSTOP"
+    },
+    {
+      "pid": 41614,
+      "signal": "SIGKILL"
+    },
+    {
+      "pid": 41610,
+      "signal": "SIGKILL"
+    }
+  ],
+  "startedAtUTC": "2026-09-23T15:13:30.236151+00:00",
+  "test": "actual-process-crash-exclusive-recovery"
+}

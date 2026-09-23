@@ -3,6 +3,7 @@
 #include <CoreAudio/CoreAudio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "FiloBridge.h"
 
 typedef struct FiloTransport FiloTransport;
 typedef struct {

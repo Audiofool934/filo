@@ -11,11 +11,13 @@ Keep your player and let filo manage the output format.
 - **Spotify:** offers an explicitly labeled 44.1 kHz music profile, plus manual output-rate selection.
 - **Your DAC:** reads its actual format, selects supported rates, and restores settings on disconnect or quit when they still belong to filo.
 - **Direct relay:** optionally forwards the selected application's stereo PCM through a CoreAudio process tap without gain, EQ, or resampling in filo.
+- **Exclusive preview:** routes through an already installed BlackHole 2ch, owns a compatible DAC with Hog Mode, and uses matching non-mixable integer callback and physical formats.
 - **Recovery:** stops on device or external routing changes, releases the audio path on sleep, and recovers still-owned settings after an interrupted session.
 
 filo distinguishes a detected source format, a capture format, and a physical output container.
 It never labels matching rates as verified end-to-end bit-perfect playback.
-The output remains shared with other apps.
+Format matching and Direct relay remain shared.
+Exclusive preview isolates the DAC output, but source identity and USB receiver delivery still need separate evidence.
 
 ## Install
 
@@ -33,9 +35,11 @@ No driver, administrator helper, account, or network service is installed.
 2. Select Apple Music or Spotify and an output such as your USB DAC.
 3. Choose **Automatic** for Music or the **Spotify · 44.1 kHz** profile, then **Connect**.
 4. Start a track in your music app.
-5. Open **Connection details** if you want to use Direct relay or copy a diagnostic summary.
+5. Choose the audio path in the main configuration; use **Connection details** for evidence limits and diagnostics.
 
-Connecting makes the selected device your Mac's default output.
+Connecting makes the selected device your Mac's default output in the shared paths.
+Exclusive preview instead routes media to BlackHole 2ch and takes direct ownership of the selected DAC.
+Other applications routed to BlackHole are not forwarded by the selected-player tap.
 System alerts keep their separate existing output selection.
 Disconnect restores the previous device and rate only if another app or you have not changed them in the meantime.
 After sleep or a device disconnect, reconnect explicitly.
@@ -51,7 +55,8 @@ See the [setup and troubleshooting guide](docs/USAGE.md).
 
 ## What the evidence means
 
-The [validation record](docs/VALIDATION.md) includes deterministic 16-bit and 24-bit tests at 44.1, 48, 96, and 192 kHz, a 60-second run, a Sony WALKMAN test, and an actual Apple Music 192 → 44.1 kHz queued transition.
+The [validation record](docs/VALIDATION.md) includes exclusive 16-bit and 24-bit tests at 44.1, 48, 96, and 192 kHz, a 120-second run, complete synthetic-reference output-byte equality, and actual process-crash recovery on a Sony WALKMAN.
+The historical 1.0 record separately includes an actual Apple Music 192 → 44.1 kHz queued transition.
 The software measurements compare known synthetic PCM against captured samples with no gain normalization or resampling allowed in the comparison.
 
 These results do **not** certify subscription masters, every macOS/player version, or the final USB/DAC input.
@@ -64,8 +69,13 @@ Spotify's profile is a playback policy, not per-track source-format detection.
 Podcasts, advertisements, videos, and lossy content may need a different choice.
 Matching 44.1 kHz does not establish that Spotify is delivering lossless audio.
 
-Exclusive/Hog Mode is available only as a laboratory experiment.
-The tested aggregate-device topology stopped delivering callbacks when the physical device was hogged, so exclusive relay is deliberately not offered as a working app mode.
+The 1.1 beta introduces a separate-source exclusive topology that avoids the callback starvation observed in the 1.0 same-device experiment.
+Its C bridge does no resampling, gain, clipping, dithering, or deliberate frame insertion/removal.
+A slow controller adjusts BlackHole’s virtual clock cadence to follow the physical DAC.
+Invalid representation, buffer exhaustion, or timestamp discontinuity stops the session.
+The tested Apple Music path altered a known reference before filo's bridge, even with the inspected effects disabled, so Exclusive preview stopped instead of passing it as exact PCM.
+Both HTTP and imported local-file playback produced the same changed samples; see the [reference investigation](docs/research/music-reference-observation.md).
+Read the [exclusive output and verification guide](docs/VERIFIED-OUTPUT.md) before using the preview.
 
 ## Build
 
@@ -98,6 +108,8 @@ DEVELOPER_DIR=/Library/Developer/CommandLineTools bash scripts/build.sh
 
 The laboratory is separate from normal playback.
 It generates quiet, deterministic synthetic stereo PCM and reports exact sample comparisons.
+It also verifies a whole known WAV/AIFF/ALAC reference against actual integer output bytes, including padding, prefix/tail coverage, hashes, and callback timestamps.
+Use reference capture only for known test material you own, never to record subscription audio.
 The app never records music to disk.
 
 ```sh
@@ -116,10 +128,14 @@ See [architecture and verification boundaries](docs/ARCHITECTURE.md) before inte
 
 filo has no telemetry, accounts, or audio uploads.
 Automation permission lets it read playback metadata.
-Direct relay needs macOS system-audio capture permission.
+Direct relay and Exclusive preview need macOS system-audio capture permission.
+Exclusive preview also checks Microphone permission before opening BlackHole's virtual input or changing the output route.
+That OS permission is broad, although filo selects BlackHole rather than a physical microphone.
 Only the selected process and output stream are tapped; physical input streams on an aggregate are disabled.
 Player titles and source diagnostics stay in memory.
-A small local recovery record contains device identifiers and previously owned settings, and is removed after restoration.
+Small local recovery records contain device identifiers and previously owned settings.
+Exclusive records use a process lock and record coupled format changes before each write; failed or disconnected recovery is retained for retry.
+The records are removed after restoration or when an intervening external change ends ownership.
 The optional **Copy diagnostics** action excludes track titles, file paths, and persistent device identifiers.
 
 ## Contributing
