@@ -19,6 +19,7 @@ bool filo_copy(const AudioBufferList * _Nullable input, AudioBufferList * _Nulla
 float filo_test_sample(uint64_t frame, uint32_t channel, uint32_t bits);
 FiloTransport * _Nullable filo_transport_create(bool emit, bool relay, uint32_t bits, uint64_t captureCapacity);
 void filo_transport_set_input_offset(FiloTransport * _Nonnull state, uint32_t skip, uint32_t count);
+OSStatus filo_select_tap_input(AudioObjectID device, AudioDeviceIOProcID _Nonnull proc, uint32_t streamCount);
 void filo_transport_destroy(FiloTransport * _Nullable state);
 FiloMetrics filo_transport_metrics(const FiloTransport * _Nullable state);
 // Read captured data only after AudioDeviceStop + AudioDeviceDestroyIOProcID.

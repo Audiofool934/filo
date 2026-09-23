@@ -160,7 +160,9 @@ public final class ConnectionController {
                 fail("The output rate changed outside filo. Your new rate has been preserved."); return
             }
             if requestPlayback { reader.request() }
-            let processes = try HAL.processes().filter { $0.bundleID == source.bundleID && $0.running }.map(\.id).sorted()
+            // Muting a tapped process can change its isRunningOutput flag.
+            // Process lifetime, not audible-output state, owns an existing relay.
+            let processes = try HAL.processes().filter { $0.bundleID == source.bundleID && kill($0.pid, 0) == 0 }.map(\.id).sorted()
             if mode != .format {
                 if processes.isEmpty {
                     audio.stop(); snapshot.relayRunning = false; lastProcesses = []; relayAttempts = 0

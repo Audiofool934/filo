@@ -30,6 +30,7 @@ public final class AudioSession {
     private var transport: OpaquePointer?
     private var inputSkip: UInt32 = 0
     private var inputCount: UInt32 = 1
+    private var inputStreamCount: UInt32 = 0
     public private(set) var inputFormat: PCMFormat?
     public private(set) var outputFormat: PCMFormat?
     public private(set) var running = false
@@ -86,6 +87,7 @@ public final class AudioSession {
             try HAL.check(AudioHardwareCreateAggregateDevice(config as CFDictionary, &aggregate), "Create connection")
             device = aggregate
             let inputStreams = try HAL.array(device, kAudioDevicePropertyStreams, seed: AudioObjectID(0), scope: kAudioObjectPropertyScopeInput)
+            inputStreamCount = UInt32(inputStreams.count)
             guard let tapStream = inputStreams.last else { throw AudioFailure("The aggregate has no tap input stream.") }
             inputFormat = PCMFormat(try HAL.value(tapStream, kAudioStreamPropertyVirtualFormat, default: AudioStreamBasicDescription()))
             outputFormat = PCMFormat(try HAL.streamFormat(device, scope: kAudioObjectPropertyScopeOutput))
@@ -110,6 +112,7 @@ public final class AudioSession {
         filo_transport_set_input_offset(state, inputSkip, inputCount)
         try HAL.check(AudioDeviceCreateIOProcID(device, filo_io, UnsafeMutableRawPointer(state), &ioProc), "Create audio callback")
         guard let ioProc else { throw AudioFailure("CoreAudio returned no audio callback.") }
+        if !emit { try HAL.check(filo_select_tap_input(device, ioProc, inputStreamCount), "Select source tap input") }
         try HAL.check(AudioDeviceStart(device, ioProc), "Start audio (check System Audio Recording permission)")
         running = true
     }

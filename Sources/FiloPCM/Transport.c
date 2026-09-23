@@ -2,6 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdatomic.h>
+#include <stddef.h>
+
+_Static_assert(ATOMIC_LLONG_LOCK_FREE == 2, "Audio metrics require lock-free 64-bit atomics");
+
+OSStatus filo_select_tap_input(AudioObjectID device, AudioDeviceIOProcID proc, uint32_t streamCount) {
+    if (!streamCount) return kAudioHardwareIllegalOperationError;
+    size_t bytes = offsetof(AudioHardwareIOProcStreamUsage, mStreamIsOn) + streamCount * sizeof(UInt32);
+    AudioHardwareIOProcStreamUsage *usage = calloc(1, bytes);
+    if (!usage) return kAudioHardwareUnspecifiedError;
+    usage->mIOProc = (void *)proc; usage->mNumberStreams = streamCount;
+    usage->mStreamIsOn[streamCount - 1] = 1;
+    AudioObjectPropertyAddress address = { kAudioDevicePropertyIOProcStreamUsage, kAudioObjectPropertyScopeInput, kAudioObjectPropertyElementMain };
+    OSStatus status = AudioObjectSetPropertyData(device, &address, 0, NULL, (UInt32)bytes, usage);
+    free(usage);
+    return status;
+}
 
 struct FiloTransport {
     bool emit, relay;

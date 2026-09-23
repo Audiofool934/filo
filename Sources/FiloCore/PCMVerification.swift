@@ -24,9 +24,13 @@ public enum PCMVerification {
         guard leading + 16 < capture.count / 2 else { return failure() }
         var offset: Int?
         for candidate in 0..<maximumSourceFrames {
-            if (0..<32).allSatisfy({ i in
-                capture[leading * 2 + i] == filo_test_sample(UInt64(candidate + i / 2), UInt32(i % 2), bits)
-            }) { offset = candidate; break }
+            var matches = true
+            for i in 0..<32 {
+                let frame = UInt64(candidate + i / 2)
+                let channel = UInt32(i % 2)
+                if capture[leading * 2 + i] != filo_test_sample(frame, channel, bits) { matches = false; break }
+            }
+            if matches { offset = candidate; break }
         }
         guard let offset else { return failure() }
         var mismatch = 0, maxError = Double(0)
