@@ -40,9 +40,12 @@ final class SourceProcessingTests: XCTestCase {
         let oldMessage = Data(#"{"playing":true,"trackID":"A","volume":100}"#.utf8)
         let oldState = try JSONDecoder().decode(PlayerState.self, from: oldMessage)
         XCTAssertNil(oldState.processing)
+        XCTAssertNil(oldState.primaryObservedAt)
+        let now = Date(timeIntervalSince1970: 100)
         let state = PlayerState(playing: true, trackID: "A", volume: 100,
-                                processing: SourceProcessingState(volume: 100, trackID: "A"))
+                                processing: SourceProcessingState(volume: 100, trackID: "A"), primaryObservedAt: now)
         let decoded = try JSONDecoder().decode(PlayerState.self, from: JSONEncoder().encode(state))
+        XCTAssertEqual(decoded.primaryObservedAt, now)
         XCTAssertEqual(decoded.processing?.volume, 100)
         XCTAssertNil(decoded.processing?.muted)
         XCTAssertNil(decoded.processing?.equalizerEnabled)
@@ -55,8 +58,10 @@ final class SourceProcessingTests: XCTestCase {
         let old = PlayerState(playing: true, trackID: "A", volume: 100, localRate: 192000,
                               processing: SourceProcessingState(volume: 100, muted: false,
                                                                 trackID: "A", trackVolumeAdjustment: 0))
-        let current = PlayerState(playing: true, trackID: "B", volume: 75)
+        let observation = Date(timeIntervalSince1970: 100)
+        let current = PlayerState(playing: true, trackID: "B", volume: 75, primaryObservedAt: observation)
         let merged = current.mergingSupplemental(old)
+        XCTAssertEqual(merged.primaryObservedAt, observation)
         XCTAssertEqual(merged.trackID, "B")
         XCTAssertEqual(merged.volume, 75)
         XCTAssertEqual(merged.processing?.volume, 75)
@@ -104,5 +109,109 @@ final class SourceProcessingTests: XCTestCase {
         wait(for: [first], timeout: 2)
         queue.async { reader.request() }
         wait(for: [second], timeout: 2)
+    }
+
+    func testHungPrimaryHelperInvalidatesCachedPlaybackAndDoesNotRestart() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let helper = directory.appendingPathComponent("mock-player")
+        try """
+        #!/usr/bin/python3
+        import json, signal, sys, time
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        count = 0
+        for request in sys.stdin:
+            if request.strip() == "processing":
+                print(json.dumps({"playing": True, "trackID": "OLD", "localRate": 192000}), flush=True)
+            else:
+                count += 1
+                if count == 1:
+                    print(json.dumps({"playing": True, "trackID": "CURRENT", "volume": 100,
+                                      "primaryObservedAt": time.time() - 978307200}), flush=True)
+                else:
+                    time.sleep(60)
+        """.write(to: helper, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: helper.path)
+        let queue = DispatchQueue(label: "filo.test.primary-deadline")
+        let reader = PlayerReader(queue: queue, responseTimeout: 0.5)
+        defer { queue.sync { reader.stop() } }
+        let first = expectation(description: "Initial primary observation")
+        let timeout = expectation(description: "Hung essential request invalidates playback")
+        var receivedFirst = false
+        var receivedTimeout = false
+        var stateAfterTimeout: PlayerState?
+        reader.onState = { state in
+            if receivedTimeout {
+                stateAfterTimeout = state
+                return
+            }
+            if state.error?.contains("timed out") == true {
+                receivedTimeout = true
+                stateAfterTimeout = state
+                timeout.fulfill()
+            } else if state.trackID == "CURRENT", !receivedFirst {
+                receivedFirst = true
+                XCTAssertNotNil(state.primaryObservedAt)
+                XCTAssertNil(state.localRate)
+                first.fulfill()
+            }
+        }
+        try queue.sync { try reader.start(source: .appleMusic, executable: helper) }
+        wait(for: [first], timeout: 2)
+        queue.async { reader.request() }
+        wait(for: [timeout], timeout: 3)
+        // A poll after failure must not restart either helper or restore old metadata.
+        queue.sync {
+            reader.request()
+            XCTAssertFalse(stateAfterTimeout?.playing ?? true)
+            XCTAssertNil(stateAfterTimeout?.trackID)
+            XCTAssertNil(stateAfterTimeout?.volume)
+            XCTAssertNil(stateAfterTimeout?.primaryObservedAt)
+            XCTAssertNil(stateAfterTimeout?.processing)
+            XCTAssertNil(stateAfterTimeout?.localRate)
+        }
+    }
+
+    func testReconnectDiscardsPreviousSourceDeadlineAndPendingReply() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let helper = directory.appendingPathComponent("mock-player")
+        try """
+        #!/usr/bin/python3
+        import json, sys, time
+        for request in sys.stdin:
+            if sys.argv[-1] == "appleMusic":
+                time.sleep(60)
+            else:
+                print(json.dumps({"playing": True, "trackID": "SPOTIFY", "volume": 100,
+                                  "primaryObservedAt": time.time() - 978307200}), flush=True)
+        """.write(to: helper, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: helper.path)
+        let queue = DispatchQueue(label: "filo.test.source-generation")
+        let reader = PlayerReader(queue: queue, responseTimeout: 0.5)
+        defer { queue.sync { reader.stop() } }
+        let current = expectation(description: "New source response")
+        let previousDeadline = expectation(description: "Previous source deadline passed")
+        var latest: PlayerState?
+        var received = false
+        reader.onState = { state in
+            latest = state
+            if !received, state.trackID == "SPOTIFY" { received = true; current.fulfill() }
+        }
+        try queue.sync {
+            try reader.start(source: .appleMusic, executable: helper)
+            try reader.start(source: .spotify, executable: helper)
+        }
+        wait(for: [current], timeout: 2)
+        queue.asyncAfter(deadline: .now() + 0.7) {
+            previousDeadline.fulfill()
+        }
+        wait(for: [previousDeadline], timeout: 2)
+        queue.sync {
+            XCTAssertEqual(latest?.trackID, "SPOTIFY")
+            XCTAssertNil(latest?.error)
+        }
     }
 }

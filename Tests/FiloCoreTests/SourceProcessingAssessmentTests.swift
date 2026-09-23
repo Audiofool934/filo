@@ -7,7 +7,7 @@ final class SourceProcessingAssessmentTests: XCTestCase {
         PlayerState(playing: true, trackID: "A", volume: 100,
             processing: SourceProcessingState(volume: 100, muted: false, equalizerEnabled: false,
                 observedAt: now, trackID: "A", trackVolumeAdjustment: 0,
-                trackEqualizerPreset: "", trackObservedAt: now))
+                trackEqualizerPreset: "", trackObservedAt: now), primaryObservedAt: now)
     }
 
     func testKnownFreshProcessingBlocksAndPrimaryVolumeTakesPrecedence() {
@@ -43,6 +43,28 @@ final class SourceProcessingAssessmentTests: XCTestCase {
         XCTAssertTrue(unknown.unverifiedControls.contains("Application volume"))
         XCTAssertTrue(unknown.unverifiedControls.contains("Application mute"))
         XCTAssertTrue(unknown.unverifiedControls.contains("Application equalizer"))
+    }
+
+    func testStaleUnknownAndFuturePrimaryVolumeAndIdentityAreUnverified() {
+        for volume in [0, 100] {
+            for observation in [nil, now.addingTimeInterval(-3.001), now.addingTimeInterval(0.001)] {
+                var state = cleanState()
+                state.volume = volume
+                state.primaryObservedAt = observation
+                // A fresh optional response cannot refresh the primary volume or track identity.
+                state.processing?.trackVolumeAdjustment = 10
+                let result = SourceProcessingAssessment(state: state, source: .appleMusic, now: now)
+                XCTAssertNil(result.blockingReason)
+                XCTAssertTrue(result.unverifiedControls.contains("Application volume"))
+                XCTAssertTrue(result.unverifiedControls.contains("Track volume adjustment"))
+                XCTAssertTrue(result.unverifiedControls.contains("Track equalizer preset"))
+                XCTAssertTrue(result.summary.contains("Current playback information is unverified"))
+            }
+        }
+        var state = cleanState()
+        state.primaryObservedAt = now.addingTimeInterval(-3)
+        state.volume = 0
+        XCTAssertNotNil(SourceProcessingAssessment(state: state, source: .appleMusic, now: now).blockingReason)
     }
 
     func testTrackModifiersRequireMatchingIdentityAndFreshObservation() {

@@ -1,5 +1,6 @@
 import AppKit
 import AVFAudio
+import Darwin
 
 /// Observations of the controls exposed by a player's scripting dictionary.
 /// Nil means unreadable or unsupported, never an inferred safe setting.
@@ -52,14 +53,18 @@ public struct PlayerState: Codable {
     public var trackID: String?
     public var title: String?
     public var volume: Int?
+    /// Start of the successful essential observation, never refreshed by optional reads.
+    public var primaryObservedAt: Date?
     public var localRate: Double?
     public var processing: SourceProcessingState?
     public var error: String?
     public init(playing: Bool = false, trackID: String? = nil, title: String? = nil,
                 volume: Int? = nil, localRate: Double? = nil,
-                processing: SourceProcessingState? = nil, error: String? = nil) {
+                processing: SourceProcessingState? = nil, error: String? = nil,
+                primaryObservedAt: Date? = nil) {
         self.playing = playing; self.trackID = trackID; self.title = title
         self.volume = volume; self.localRate = localRate; self.processing = processing; self.error = error
+        self.primaryObservedAt = primaryObservedAt
     }
 
     func mergingSupplemental(_ supplemental: PlayerState?) -> PlayerState {
@@ -190,7 +195,10 @@ public enum PlayerHelper {
         var trackControlsReadAt = Date.distantPast
         while let request = readLine() {
             var state: PlayerState = autoreleasepool {
-                guard !NSRunningApplication.runningApplications(withBundleIdentifier: source.bundleID).isEmpty else { return PlayerState() }
+                let observationStartedAt = Date()
+                guard !NSRunningApplication.runningApplications(withBundleIdentifier: source.bundleID).isEmpty else {
+                    return PlayerState(primaryObservedAt: observationStartedAt)
+                }
                 var error: NSDictionary?
                 guard let descriptor = script?.executeAndReturnError(&error), error == nil else {
                     let code = error?[NSAppleScript.errorNumber] as? Int
@@ -200,7 +208,8 @@ public enum PlayerHelper {
                 let id = descriptor.atIndex(2)?.stringValue ?? ""
                 let title = descriptor.atIndex(3)?.stringValue
                 return PlayerState(playing: playing, trackID: id.isEmpty ? nil : id, title: title,
-                                   volume: SourceProcessingState.integer(descriptor.atIndex(5)?.stringValue, in: 0...100))
+                                   volume: SourceProcessingState.integer(descriptor.atIndex(5)?.stringValue, in: 0...100),
+                                   primaryObservedAt: observationStartedAt)
             }
             guard request == "processing" else {
                 if source == .spotify, state.error == nil {
@@ -275,6 +284,7 @@ public enum PlayerHelper {
 public final class PlayerReader {
     private let queue: DispatchQueue
     private let supplemental: Bool
+    private let responseTimeout: TimeInterval
     private var supplementalReader: PlayerReader?
     private var latestState: PlayerState?
     private var latestSupplemental: PlayerState?
@@ -283,11 +293,18 @@ public final class PlayerReader {
     private var output: Pipe?
     private var buffer = Data()
     private var pending = false
+    private var requestSequence: UInt64 = 0
+    private var responseDeadline: DispatchWorkItem?
     private var generation: UInt64 = 0
     public var onState: ((PlayerState) -> Void)?
-    public convenience init(queue: DispatchQueue) { self.init(queue: queue, supplemental: false) }
-    private init(queue: DispatchQueue, supplemental: Bool) {
-        self.queue = queue; self.supplemental = supplemental
+    public convenience init(queue: DispatchQueue) { self.init(queue: queue, supplemental: false, responseTimeout: 3) }
+    /// An internal deadline override keeps fake-helper tests short without operating a player.
+    convenience init(queue: DispatchQueue, responseTimeout: TimeInterval) {
+        self.init(queue: queue, supplemental: false, responseTimeout: responseTimeout)
+    }
+    private init(queue: DispatchQueue, supplemental: Bool, responseTimeout: TimeInterval) {
+        precondition(responseTimeout.isFinite && responseTimeout > 0)
+        self.queue = queue; self.supplemental = supplemental; self.responseTimeout = responseTimeout
     }
     deinit { stop() }
     public func start(source: MusicSource, executable: URL) throws {
@@ -302,29 +319,34 @@ public final class PlayerReader {
             self?.queue.async { [weak self] in
                 guard let self, self.generation == generation else { return }
                 self.buffer.append(data)
-                if self.buffer.count > 65536 { self.buffer.removeAll(); self.pending = false; return }
+                if self.buffer.count > 65536 {
+                    self.fail("Playback reader returned too much data. Reconnect filo.")
+                    return
+                }
                 while let newline = self.buffer.firstIndex(of: 10) {
                     let line = Data(self.buffer[..<newline])
                     self.buffer.removeSubrange(...newline)
-                    self.pending = false
-                    if let state = try? JSONDecoder().decode(PlayerState.self, from: line) {
-                        self.latestState = state
-                        self.publish()
+                    guard self.pending else { continue }
+                    guard let state = try? JSONDecoder().decode(PlayerState.self, from: line) else {
+                        self.fail("Playback reader returned invalid information. Reconnect filo.")
+                        return
                     }
+                    self.finishRequest()
+                    self.latestState = state
+                    self.publish()
                 }
             }
         }
         process.terminationHandler = { [weak self] _ in
             self?.queue.async { [weak self] in
                 guard let self, self.generation == generation else { return }
-                self.latestState = PlayerState(error: "Playback reader stopped. Reconnect filo.")
-                self.publish()
+                self.fail("Playback reader stopped. Reconnect filo.")
             }
         }
         self.process = process; self.input = input; self.output = output
         do { try process.run() } catch { stop(); throw error }
         if !supplemental, source == .appleMusic {
-            let reader = PlayerReader(queue: queue, supplemental: true)
+            let reader = PlayerReader(queue: queue, supplemental: true, responseTimeout: 10)
             reader.onState = { [weak self] state in
                 guard let self, self.generation == generation else { return }
                 self.latestSupplemental = state.error == nil ? state : nil
@@ -346,22 +368,51 @@ public final class PlayerReader {
         supplementalReader?.request()
         guard process?.isRunning == true, !pending else { return }
         pending = true
-        do { try input?.fileHandleForWriting.write(contentsOf: supplemental ? Data("processing\n".utf8) : Data([10])) }
-        catch {
-            pending = false
-            latestState = PlayerState(error: "Playback reader is unavailable.")
-            publish()
+        requestSequence &+= 1
+        let generation = generation, sequence = requestSequence
+        let deadline = DispatchWorkItem { [weak self] in
+            guard let self, self.generation == generation,
+                  self.pending, self.requestSequence == sequence else { return }
+            self.fail("Playback reader timed out. Reconnect filo.")
         }
+        responseDeadline = deadline
+        queue.asyncAfter(deadline: .now() + responseTimeout, execute: deadline)
+        guard let input else { fail("Playback reader is unavailable."); return }
+        do { try input.fileHandleForWriting.write(contentsOf: supplemental ? Data("processing\n".utf8) : Data([10])) }
+        catch {
+            fail("Playback reader is unavailable.")
+        }
+    }
+    private func finishRequest() {
+        pending = false
+        responseDeadline?.cancel(); responseDeadline = nil
+    }
+    private func fail(_ message: String) {
+        // A failed primary reader also stops optional publishing, so old playback
+        // or track identity cannot be resurrected by an optional reply.
+        stop()
+        latestState = PlayerState(error: message)
+        publish()
     }
     public func stop() {
         generation &+= 1
+        finishRequest()
         supplementalReader?.stop(); supplementalReader = nil
         latestState = nil; latestSupplemental = nil
         output?.fileHandleForReading.readabilityHandler = nil
         try? input?.fileHandleForWriting.close()
         if let process {
             process.terminationHandler = nil
-            if process.isRunning { process.terminate(); process.waitUntilExit() }
+            if process.isRunning {
+                process.terminate()
+                // A helper stuck inside an Apple event must not block this queue forever.
+                let forceExit = DispatchWorkItem {
+                    if process.isRunning { kill(process.processIdentifier, SIGKILL) }
+                }
+                DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 0.25, execute: forceExit)
+                process.waitUntilExit()
+                forceExit.cancel()
+            }
         }
         try? output?.fileHandleForReading.close()
         process = nil; input = nil; output = nil; buffer.removeAll(); pending = false

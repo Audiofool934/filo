@@ -17,7 +17,8 @@ public struct SourceProcessingAssessment: Codable {
             return age.isFinite && age >= 0 && age <= maximumAge
         }
         let available = state.error == nil
-        if available, let volume = state.volume, (0...100).contains(volume) {
+        let primaryFresh = available && fresh(state.primaryObservedAt, maximumAge: 3)
+        if primaryFresh, let volume = state.volume, (0...100).contains(volume) {
             if volume != 100 { issues.append("Set \(source.name) volume to 100% before starting exclusive preview.") }
         } else {
             unknown.append("Application volume")
@@ -35,7 +36,7 @@ public struct SourceProcessingAssessment: Codable {
             unknown.append("Application equalizer")
         }
         let sameTrack = state.trackID != nil && state.trackID?.isEmpty == false && processing?.trackID == state.trackID
-        let trackFresh = available && sameTrack && fresh(processing?.trackObservedAt, maximumAge: 7)
+        let trackFresh = primaryFresh && sameTrack && fresh(processing?.trackObservedAt, maximumAge: 7)
         if trackFresh, let adjustment = processing?.trackVolumeAdjustment, (-100...100).contains(adjustment) {
             if adjustment != 0 { issues.append("Reset the track's volume adjustment to 0% before starting exclusive preview.") }
         } else {
@@ -58,6 +59,8 @@ public struct SourceProcessingAssessment: Codable {
             summary = "Player information is unavailable. Processing and end-to-end sample identity remain unverified."
         } else if !issues.isEmpty {
             summary = "Known player processing is active. \(unknown.count) other controls and end-to-end sample identity remain unverified."
+        } else if !primaryFresh {
+            summary = "Current playback information is unverified. \(unknown.count) controls and end-to-end sample identity remain unverified."
         } else {
             summary = "No alteration was identified in the readable controls. \(unknown.count) controls and end-to-end sample identity remain unverified."
         }

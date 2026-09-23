@@ -177,7 +177,7 @@ final class BridgeTests: XCTestCase {
         }
         let bridge = try create(config(sourceBits: 16))
         defer { filo_bridge_destroy(bridge) }
-        XCTAssertFalse(push([1.0 / 65536, 0], into: bridge))
+        XCTAssertFalse(push([Float(1) / 65536, 0], into: bridge))
         XCTAssertEqual(filo_bridge_metrics(bridge).representationFailures, 1)
     }
 
