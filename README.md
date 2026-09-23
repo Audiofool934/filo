@@ -75,6 +75,8 @@ A slow controller adjusts BlackHole’s virtual clock cadence to follow the phys
 Invalid representation, buffer exhaustion, or timestamp discontinuity stops the session.
 The tested Apple Music path altered a known reference before filo's bridge, even with the inspected effects disabled, so Exclusive preview stopped instead of passing it as exact PCM.
 Both HTTP and imported local-file playback produced the same changed samples; see the [reference investigation](docs/research/music-reference-observation.md).
+A separate neutral AVAudioPlayer preserved the complete same ALAC through filo's exclusive bridge to the WALKMAN software output callback; see the [controlled player comparison](docs/research/player-api-reference-observation.md).
+That laboratory result does not certify Music, Spotify, or samples received inside the DAC.
 Read the [exclusive output and verification guide](docs/VERIFIED-OUTPUT.md) before using the preview.
 
 ## Build

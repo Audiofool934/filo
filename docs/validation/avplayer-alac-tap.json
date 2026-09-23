@@ -1,0 +1,101 @@
+{
+  "activeSpanFrames" : 220500,
+  "boundary" : "Own AVAudioPlayer process tap on BlackHole; Music and physical DAC not observed",
+  "captureSHA256" : "60237779e0986ecae92185d22b84ba24bedb8d996d168648fa1526006044e58a",
+  "cleanupErrors" : [
+
+  ],
+  "comparison" : {
+    "aligned" : true,
+    "alignmentAmbiguous" : false,
+    "anchorFrames" : 32,
+    "capturedFrames" : 342016,
+    "captureStartFrame" : 29184,
+    "comparedFrames" : 220500,
+    "fullReferenceExact" : true,
+    "leadingCaptureFrames" : 29184,
+    "maxIntegerError" : 0,
+    "mismatchedSamples" : 0,
+    "missingPrefixFrames" : 0,
+    "missingSuffixFrames" : 0,
+    "nonzeroLeadingSamples" : 0,
+    "nonzeroTrailingSamples" : 0,
+    "referenceFrames" : 220500,
+    "referenceStartFrame" : 0,
+    "trailingCaptureFrames" : 92332,
+    "windowExact" : true
+  },
+  "createdAt" : "2026-09-23T16:30:01Z",
+  "firstNonzeroFrame" : 29184,
+  "inputFormat" : {
+    "bits" : 32,
+    "bytesPerFrame" : 8,
+    "channels" : 2,
+    "flags" : 9,
+    "formatID" : 1819304813,
+    "rate" : 44100
+  },
+  "metrics" : {
+    "callbacks" : 668,
+    "capturedFrames" : 342016,
+    "frames" : 342016,
+    "inputBuffers" : 2,
+    "inputFirstChannels" : 2,
+    "inputLastBytes" : 4096,
+    "inputLastChannels" : 2,
+    "invalidBuffers" : 0,
+    "nonzeroSamples" : 440970
+  },
+  "mode" : "alac",
+  "nonFiniteSamples" : 0,
+  "off24BitGridSamples" : 0,
+  "playerCompletion" : {
+    "completed" : true,
+    "completionSucceeded" : true,
+    "currentTime" : 0,
+    "duration" : 5,
+    "elapsed" : 8.0454974999884143,
+    "event" : "status",
+    "mode" : "alac",
+    "playing" : false,
+    "ready" : true,
+    "silencePlaying" : true,
+    "started" : true
+  },
+  "playerReady" : {
+    "bits" : 24,
+    "deadlineSeconds" : 30,
+    "event" : "ready",
+    "frames" : 220500,
+    "halOutputActive" : true,
+    "mode" : "alac",
+    "referencePlayer" : {
+      "channelCount" : 2,
+      "enableRate" : false,
+      "numberOfLoops" : 0,
+      "pan" : 0,
+      "rate" : 1,
+      "sampleRate" : 44100,
+      "volume" : 1
+    },
+    "referenceSHA256" : "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+    "sampleRate" : 44100,
+    "silencePlayer" : {
+      "channelCount" : 2,
+      "enableRate" : false,
+      "numberOfLoops" : -1,
+      "pan" : 0,
+      "rate" : 1,
+      "sampleRate" : 44100,
+      "volume" : 1
+    },
+    "silencePlaying" : true
+  },
+  "referenceSHA256" : "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+  "sourceAPI" : "AVAudioPlayer plus continuously running same-format zero player",
+  "sourceSHA256" : {
+    "av-reference-player.swift" : "35b54c70dfdc9950cd3e5a4cd2b650b9057a09084c86a65ea5599755fb427737",
+    "inspect-api-reference.swift" : "fdbb322894a5a4b5ff93baa8cf82693244f86e8e44b60d19491c0da8526fa106"
+  },
+  "systemVersion" : "Version 26.6.2 (Build 25G83)"
+}
