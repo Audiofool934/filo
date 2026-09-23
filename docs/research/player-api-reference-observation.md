@@ -26,6 +26,10 @@ In the first run, `enableRate` was `false`.
 In the second run, only the reference player's `enableRate` changed to `true` before preparation; the silent player's controls stayed unchanged.
 The ready handshake read back these properties and the player's sample rate and channel count.
 Both [baseline](../validation/avplayer-alac-tap.json) and [rate-enabled](../validation/avplayer-alac-rate-enabled-tap.json) receipts include those readbacks, capture hashes, and the temporary helper source hashes.
+The two runs used different helper revisions because the second introduced the configurable rate flag.
+The [frozen source snapshots and exact diff](experiments/avplayer-reference/README.md) make those revisions auditable against the hashes in the original receipts.
+The child changes add the rate flag and assign it before preparation; the tap-parent changes parse and forward that flag and select a distinct output filename.
+These were not measurements from one identical binary, and the source snapshots preserve that provenance rather than replacing the historical receipts.
 
 Apple documents that rate adjustment must be enabled before `prepareToPlay()`, and that `rate = 1` means normal speed.
 Those descriptions do not promise that an enabled time/pitch processing path at normal speed preserves every sample.
@@ -120,6 +124,7 @@ The third experiment above adds a measured ALAC-decoding-to-output-callback resu
 After each of the three runs, independent device-list, WALKMAN physical/virtual format, and BlackHole clock snapshots were byte-identical to their pre-test snapshots.
 WALKMAN remained the default output at 192 kHz after restoration, without a Hog Mode owner, and BlackHole returned to its Internal Fixed clock at 44.1 kHz.
 The parent and child exited, and no audio helper remained running.
-The synthetic raw captures and temporary source helpers are retained locally under the ignored `work/` directory; they are laboratory artifacts, not a supported player feature.
+The synthetic raw captures and working helper copies are retained locally under the ignored `work/` directory.
+Exact frozen helper sources are also published with the [experiment provenance](experiments/avplayer-reference/README.md); they are laboratory artifacts, not a supported player feature.
 The baseline source files were preserved before introducing the single-factor control, so their hashes remain reproducible locally.
 This research changes no shipped application code or beta.2 binary.
