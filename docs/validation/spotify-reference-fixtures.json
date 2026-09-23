@@ -1,0 +1,339 @@
+{
+  "scope": "Original deterministic five-second synthetic filo reference only; local preparation and offline decoding; no Spotify indexing or playback performed",
+  "fixtureDirectory": "work/spotify-reference-fixtures",
+  "reference": {
+    "file": "work/filo-reference-44100-24.wav",
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "format": {
+      "formatCode": 1,
+      "channels": 2,
+      "sampleRate": 44100,
+      "bytesPerSecond": 264600,
+      "blockAlign": 6,
+      "bitsPerSample": 24,
+      "effectiveFormatCode": 1,
+      "frames": 220500
+    },
+    "pcm24SHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e",
+    "pcmFloat32SHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+    "frames": 220500,
+    "samples": 441000,
+    "durationSeconds": 5
+  },
+  "verificationMethod": "Decode each prepared file independently with installed /usr/bin/afconvert into signed24 and Float32 WAV; parse RIFF payloads independently in Python and compare complete bytes to original signed24 WAV and its exact Float32 representation",
+  "tools": {
+    "encoderDecoder": "/usr/bin/afconvert",
+    "formatInspector": "/usr/bin/afinfo",
+    "pythonVersion": "3.14.7",
+    "numpyVersion": "2.4.6"
+  },
+  "files": [
+    {
+      "fileName": "filo reference 44100 stereo 24bit WAV.wav",
+      "codec": "WAV",
+      "fileBytes": 1323044,
+      "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "provenance": {
+        "kind": "byte-identical copy",
+        "inputFile": "work/reference-server/filo-reference-44100-24.wav",
+        "inputSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e"
+      },
+      "afinfo": "File type ID:   WAVE\nNum Tracks:     1\n----\nData format:     2 ch,  44100 Hz, lpcm (0x0000000C) 24-bit little-endian signed integer\n                no channel layout.\nestimated duration: 5.000000 sec\naudio bytes: 1323000\naudio packets: 220500\nbit rate: 2116800 bits per second\npacket size upper bound: 6\nmaximum packet size: 6\naudio data file offset: 44\noptimized\nsource bit depth: I24\n----\n",
+      "headerMetadata": {
+        "waveFormat": {
+          "formatCode": 1,
+          "channels": 2,
+          "sampleRate": 44100,
+          "bytesPerSecond": 264600,
+          "blockAlign": 6,
+          "bitsPerSample": 24,
+          "effectiveFormatCode": 1,
+          "frames": 220500
+        },
+        "riffChunks": [
+          {
+            "type": "fmt ",
+            "bytes": 16
+          },
+          {
+            "type": "data",
+            "bytes": 1323000
+          }
+        ],
+        "artworkPresent": false,
+        "privateTextFieldsPresent": false
+      },
+      "independentDecodes": [
+        {
+          "outputDataFormat": "LEI24",
+          "decodedFormat": {
+            "formatCode": 1,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bytesPerSecond": 264600,
+            "blockAlign": 6,
+            "bitsPerSample": 24,
+            "effectiveFormatCode": 1,
+            "frames": 220500
+          },
+          "decodedPCMBytes": 1323000,
+          "decodedPCMSHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e",
+          "exactEverySample": true,
+          "comparedFrames": 220500,
+          "comparedSamples": 441000,
+          "mismatchedSamples": 0,
+          "missingFrames": 0,
+          "extraFrames": 0,
+          "firstFrameExact": true,
+          "lastFrameExact": true,
+          "comparison": "Fixed frame-zero alignment, every sample and frame, exact packed PCM or Float32 word comparison, no trimming, resampling, gain fit, or rounding"
+        },
+        {
+          "outputDataFormat": "LEF32",
+          "decodedFormat": {
+            "formatCode": 3,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bytesPerSecond": 352800,
+            "blockAlign": 8,
+            "bitsPerSample": 32,
+            "effectiveFormatCode": 3,
+            "frames": 220500
+          },
+          "decodedPCMBytes": 1764000,
+          "decodedPCMSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+          "exactEverySample": true,
+          "comparedFrames": 220500,
+          "comparedSamples": 441000,
+          "mismatchedSamples": 0,
+          "missingFrames": 0,
+          "extraFrames": 0,
+          "firstFrameExact": true,
+          "lastFrameExact": true,
+          "comparison": "Fixed frame-zero alignment, every sample and frame, exact packed PCM or Float32 word comparison, no trimming, resampling, gain fit, or rounding"
+        }
+      ]
+    },
+    {
+      "fileName": "filo reference 44100 stereo 24bit ALAC.m4a",
+      "codec": "ALAC",
+      "fileBytes": 806172,
+      "fileSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+      "provenance": {
+        "kind": "byte-identical copy",
+        "inputFile": "work/reference-server/filo-reference-44100-24.m4a",
+        "inputSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022"
+      },
+      "afinfo": "File type ID:   m4af\nNum Tracks:     1\n----\nData format:     2 ch,  44100 Hz, alac (0x00000003) from 24-bit source, 4096 frames/packet\n                no channel layout.\nestimated duration: 5.000000 sec\naudio bytes: 802076\naudio packets: 54\nbit rate: 1279352 bits per second\npacket size upper bound: 15234\nmaximum packet size: 15234\naudio data file offset: 4096\noptimized\naudio 220500 valid frames + 0 priming + 684 remainder = 221184\nsource bit depth: I24\n----\n",
+      "headerMetadata": {
+        "metadataTags": [
+          "----"
+        ],
+        "freeformFields": [
+          {
+            "field": "mean",
+            "value": "com.apple.iTunes"
+          },
+          {
+            "field": "name",
+            "value": "iTunSMPB"
+          }
+        ],
+        "atomPaths": [
+          "ftyp",
+          "moov",
+          "moov/mvhd",
+          "moov/trak",
+          "moov/trak/tkhd",
+          "moov/trak/mdia",
+          "moov/trak/mdia/mdhd",
+          "moov/trak/mdia/hdlr",
+          "moov/trak/mdia/minf",
+          "moov/trak/mdia/minf/smhd",
+          "moov/trak/mdia/minf/dinf",
+          "moov/trak/mdia/minf/stbl",
+          "moov/trak/mdia/minf/stbl/stsd",
+          "moov/trak/mdia/minf/stbl/stts",
+          "moov/trak/mdia/minf/stbl/stsc",
+          "moov/trak/mdia/minf/stbl/stsz",
+          "moov/trak/mdia/minf/stbl/stco",
+          "moov/udta",
+          "moov/udta/meta",
+          "moov/udta/meta/hdlr",
+          "moov/udta/meta/ilst",
+          "moov/udta/meta/ilst/----",
+          "moov/udta/meta/ilst/----/mean",
+          "moov/udta/meta/ilst/----/name",
+          "moov/udta/meta/ilst/----/data",
+          "free",
+          "mdat"
+        ],
+        "interpretation": "Only iTunSMPB gapless timing metadata; no title, artist, album, artwork, or private text fields",
+        "artworkPresent": false,
+        "privateTextFieldsPresent": false
+      },
+      "independentDecodes": [
+        {
+          "outputDataFormat": "LEI24",
+          "decodedFormat": {
+            "formatCode": 65534,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bytesPerSecond": 264600,
+            "blockAlign": 6,
+            "bitsPerSample": 24,
+            "validBitsPerSample": 24,
+            "channelMask": 3,
+            "subFormatGUID": "0100000000001000800000aa00389b71",
+            "effectiveFormatCode": 1,
+            "frames": 220500
+          },
+          "decodedPCMBytes": 1323000,
+          "decodedPCMSHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e",
+          "exactEverySample": true,
+          "comparedFrames": 220500,
+          "comparedSamples": 441000,
+          "mismatchedSamples": 0,
+          "missingFrames": 0,
+          "extraFrames": 0,
+          "firstFrameExact": true,
+          "lastFrameExact": true,
+          "comparison": "Fixed frame-zero alignment, every sample and frame, exact packed PCM or Float32 word comparison, no trimming, resampling, gain fit, or rounding"
+        },
+        {
+          "outputDataFormat": "LEF32",
+          "decodedFormat": {
+            "formatCode": 65534,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bytesPerSecond": 352800,
+            "blockAlign": 8,
+            "bitsPerSample": 32,
+            "validBitsPerSample": 32,
+            "channelMask": 3,
+            "subFormatGUID": "0300000000001000800000aa00389b71",
+            "effectiveFormatCode": 3,
+            "frames": 220500
+          },
+          "decodedPCMBytes": 1764000,
+          "decodedPCMSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+          "exactEverySample": true,
+          "comparedFrames": 220500,
+          "comparedSamples": 441000,
+          "mismatchedSamples": 0,
+          "missingFrames": 0,
+          "extraFrames": 0,
+          "firstFrameExact": true,
+          "lastFrameExact": true,
+          "comparison": "Fixed frame-zero alignment, every sample and frame, exact packed PCM or Float32 word comparison, no trimming, resampling, gain fit, or rounding"
+        }
+      ]
+    },
+    {
+      "fileName": "filo reference 44100 stereo 24bit FLAC.flac",
+      "codec": "FLAC",
+      "fileBytes": 793149,
+      "fileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "provenance": {
+        "kind": "lossless encoding",
+        "inputFile": "work/reference-server/filo-reference-44100-24.wav",
+        "inputSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e"
+      },
+      "afinfo": "File type ID:   flac\nNum Tracks:     1\n----\nData format:     2 ch,  44100 Hz, flac (0x00000003) from 24-bit source, 4608 frames/packet\nChannel layout: Stereo (L R)\nestimated duration: 5.000000 sec\naudio bytes: 793049\naudio packets: 48\nbit rate: 1264954 bits per second\npacket size upper bound: 16590\nmaximum packet size: 16590\naudio data file offset: 100\noptimized\naudio 220500 valid frames + 0 priming + 684 remainder = 221184\nsource bit depth: I24\n----\n",
+      "headerMetadata": {
+        "streamInfo": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "bitsPerSample": 24,
+          "frames": 220500,
+          "pcmMD5": "c363d7435f61e6a064b17ee66dae94dc"
+        },
+        "metadataBlocks": [
+          {
+            "type": 0,
+            "bytes": 34
+          },
+          {
+            "type": 4,
+            "bytes": 54
+          }
+        ],
+        "vendor": "Apple",
+        "vorbisComments": [
+          "WAVEFORMATEXTENSIBLE_CHANNEL_MASK=0x3"
+        ],
+        "artworkPresent": false,
+        "privateTextFieldsPresent": false
+      },
+      "independentDecodes": [
+        {
+          "outputDataFormat": "LEI24",
+          "decodedFormat": {
+            "formatCode": 65534,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bytesPerSecond": 264600,
+            "blockAlign": 6,
+            "bitsPerSample": 24,
+            "validBitsPerSample": 24,
+            "channelMask": 3,
+            "subFormatGUID": "0100000000001000800000aa00389b71",
+            "effectiveFormatCode": 1,
+            "frames": 220500
+          },
+          "decodedPCMBytes": 1323000,
+          "decodedPCMSHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e",
+          "exactEverySample": true,
+          "comparedFrames": 220500,
+          "comparedSamples": 441000,
+          "mismatchedSamples": 0,
+          "missingFrames": 0,
+          "extraFrames": 0,
+          "firstFrameExact": true,
+          "lastFrameExact": true,
+          "comparison": "Fixed frame-zero alignment, every sample and frame, exact packed PCM or Float32 word comparison, no trimming, resampling, gain fit, or rounding"
+        },
+        {
+          "outputDataFormat": "LEF32",
+          "decodedFormat": {
+            "formatCode": 65534,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bytesPerSecond": 352800,
+            "blockAlign": 8,
+            "bitsPerSample": 32,
+            "validBitsPerSample": 32,
+            "channelMask": 3,
+            "subFormatGUID": "0300000000001000800000aa00389b71",
+            "effectiveFormatCode": 3,
+            "frames": 220500
+          },
+          "decodedPCMBytes": 1764000,
+          "decodedPCMSHA256": "f8277734d6e03b38d497bc2397fed81e470cec581a9c564081d7a1db412ae428",
+          "exactEverySample": true,
+          "comparedFrames": 220500,
+          "comparedSamples": 441000,
+          "mismatchedSamples": 0,
+          "missingFrames": 0,
+          "extraFrames": 0,
+          "firstFrameExact": true,
+          "lastFrameExact": true,
+          "comparison": "Fixed frame-zero alignment, every sample and frame, exact packed PCM or Float32 word comparison, no trimming, resampling, gain fit, or rounding"
+        }
+      ],
+      "encodeCommand": [
+        "/usr/bin/afconvert",
+        "-f",
+        "flac",
+        "-d",
+        "flac",
+        "work/reference-server/filo-reference-44100-24.wav",
+        "filo reference 44100 stereo 24bit FLAC.flac"
+      ]
+    }
+  ],
+  "temporaryDecodeFilesRemoved": true,
+  "indexedFolderContainsOnlyThreeAudioFiles": true,
+  "privacy": "RIFF, MP4 metadata, and FLAC metadata inspected; no artwork or embedded private text; ALAC keeps iTunSMPB timing metadata; FLAC keeps Apple vendor and stereo channel mask",
+  "limits": "Offline file equivalence proves these three files carry the same reference samples; it does not establish Spotify compatibility, Spotify playback correctness, relay correctness, or USB receiver behavior"
+}
