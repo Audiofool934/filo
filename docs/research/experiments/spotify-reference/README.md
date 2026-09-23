@@ -114,9 +114,11 @@ Run it from a working copy with the original WAV and capture names already prese
 
 ```sh
 cp docs/research/experiments/spotify-reference/analyze-spotify-reference.py work/analyze-spotify-reference.py
-python3 work/analyze-spotify-reference.py --self-test --output work/spotify-reference-analysis-reproduction.json
+python3 work/analyze-spotify-reference.py --output work/spotify-reference-analysis-reproduction.json
 ```
 
 The default capture inputs are `spotify-flac-first-tap.f32`, `spotify-wav-first-tap.f32`, and `spotify-alac-first-tap.f32` beside the working script.
+This invocation runs all ten controls, analyzes the captures, and writes the full report.
+The optional `--self-test` flag prints only the control results and exits before capture analysis or report creation.
 Repeated `--capture` arguments can instead select explicit local captures.
 A newly recorded run can have different surrounding silence and a different whole-capture hash while its complete reference span still matches exactly.
