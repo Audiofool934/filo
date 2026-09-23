@@ -155,9 +155,16 @@ do {
         }
         let bundleID = option("--player") ?? "com.apple.Music"
         guard ["com.apple.Music", "com.spotify.client"].contains(bundleID) else { throw AudioFailure("Unsupported reference player.") }
-        defer {
+        func stopReferenceSession() -> [String] {
             session.stop()
-            let errors = session.cleanupErrors + route.restore()
+            var errors = session.cleanupErrors
+            // Keep the virtual route and its journal while callbacks or exclusive
+            // settings are still owned. Recovery can retry after process exit.
+            if errors.isEmpty { errors += route.restore() }
+            return errors
+        }
+        defer {
+            let errors = stopReferenceSession()
             if !errors.isEmpty { fputs(errors.joined(separator: " ") + "\n", stderr) }
         }
         try route.begin(output: initialSource)
@@ -187,8 +194,7 @@ do {
         let capture = session.finishRawCapture()
         let comparison = OutputByteVerification.compare(capture: capture, format: session.outputASBD, reference: reference)
         let metrics = session.metrics
-        session.stop()
-        let cleanupErrors = session.cleanupErrors + route.restore()
+        let cleanupErrors = stopReferenceSession()
         struct ReferenceResult: Encodable {
             let referenceSHA256: String; let input: PCMFormat?; let output: PCMFormat?; let physical: PCMFormat?
             let metrics: ExclusiveRelayMetrics; let comparison: OutputByteComparison; let cleanupErrors: [String]
