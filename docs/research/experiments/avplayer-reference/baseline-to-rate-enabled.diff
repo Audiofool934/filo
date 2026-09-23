@@ -1,0 +1,45 @@
+--- av-reference-player-baseline.swift
++++ av-reference-player.swift
+@@ -46 +46 @@
+-    init(mode: String, startedAt: TimeInterval) throws {
++    init(mode: String, enableRate: Bool, startedAt: TimeInterval) throws {
+@@ -71,0 +72 @@
++        reference.enableRate = enableRate
+@@ -148 +149 @@
+-            Usage: work/av-reference-player [--mode alac|wav]
++            Usage: work/av-reference-player [--mode alac|wav] [--enable-rate]
+@@ -149,0 +151,2 @@
++            --enable-rate enables rate processing for the reference player only, retaining rate 1.
++            The separate silence player always keeps rate processing disabled.
+@@ -163,0 +167,2 @@
++        let enableRate = arguments.contains("--enable-rate")
++        let modeArguments = arguments.filter { $0 != "--enable-rate" }
+@@ -165,3 +170,6 @@
+-        if arguments.isEmpty { mode = "alac" }
+-        else if arguments.count == 2, arguments[0] == "--mode", ["alac", "wav"].contains(arguments[1]) { mode = arguments[1] }
+-        else { emit(["event": "error", "error": "Usage: work/av-reference-player [--mode alac|wav]"]); exit(2) }
++        guard arguments.count - modeArguments.count <= 1 else {
++            emit(["event": "error", "error": "--enable-rate may be specified only once."]); exit(2)
++        }
++        if modeArguments.isEmpty { mode = "alac" }
++        else if modeArguments.count == 2, modeArguments[0] == "--mode", ["alac", "wav"].contains(modeArguments[1]) { mode = modeArguments[1] }
++        else { emit(["event": "error", "error": "Usage: work/av-reference-player [--mode alac|wav] [--enable-rate]"]); exit(2) }
+@@ -174 +182 @@
+-            let player = try ReferencePlayer(mode: mode, startedAt: startedAt)
++            let player = try ReferencePlayer(mode: mode, enableRate: enableRate, startedAt: startedAt)
+--- inspect-api-reference-baseline.swift
++++ inspect-api-reference.swift
+@@ -9,3 +9,4 @@
+-let mode = CommandLine.arguments.count == 2 ? CommandLine.arguments[1] : ""
+-guard ["alac", "wav"].contains(mode) else {
+-    fputs("Usage: inspect-api-reference alac|wav; original generated fixture only.\n", stderr); exit(2)
++let mode = CommandLine.arguments.count >= 2 ? CommandLine.arguments[1] : ""
++let enableRate = CommandLine.arguments.count == 3 && CommandLine.arguments[2] == "--enable-rate"
++guard ["alac", "wav"].contains(mode), CommandLine.arguments.count == 2 || enableRate else {
++    fputs("Usage: inspect-api-reference alac|wav [--enable-rate]; original generated fixture only.\n", stderr); exit(2)
+@@ -15 +16 @@
+-let outputBase = work.appendingPathComponent("avplayer-\(mode)-tap")
++let outputBase = work.appendingPathComponent("avplayer-\(mode)\(enableRate ? "-rate-enabled" : "")-tap")
+@@ -23 +24 @@
+-        process.arguments = ["--mode", mode]
++        process.arguments = ["--mode", mode] + (enableRate ? ["--enable-rate"] : [])
