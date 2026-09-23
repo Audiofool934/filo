@@ -1,0 +1,22 @@
+name: macOS
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build -Xswiftc -warnings-as-errors
+      - name: Test policies and PCM
+        run: swift test
+      - name: Package app
+        run: bash scripts/build.sh
+      - name: Inspect bundle
+        run: |
+          plutil -lint dist/filo.app/Contents/Info.plist
+          codesign --verify --strict dist/filo.app
+          dist/filo.app/Contents/MacOS/filo-lab help
