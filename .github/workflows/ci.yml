@@ -14,9 +14,11 @@ jobs:
       - name: Test policies and PCM
         run: swift test
       - name: Package app
-        run: bash scripts/build.sh
+        run: bash scripts/build.sh --universal
       - name: Inspect bundle
         run: |
           plutil -lint dist/filo.app/Contents/Info.plist
-          codesign --verify --strict dist/filo.app
+          codesign --verify --deep --strict dist/filo.app
+          lipo -verify_arch arm64 x86_64 dist/filo.app/Contents/MacOS/filo
+          lipo -verify_arch arm64 x86_64 dist/filo.app/Contents/MacOS/filo-lab
           dist/filo.app/Contents/MacOS/filo-lab help

@@ -1,0 +1,40 @@
+{
+  "bits" : 24,
+  "comparison" : {
+    "aligned" : true,
+    "comparedFrames" : 381440,
+    "leadingCaptureFrames" : 0,
+    "maxIntegerError" : 0,
+    "mismatchedSamples" : 0,
+    "sourceFrameOffset" : 12220
+  },
+  "input" : {
+    "bits" : 32,
+    "bytesPerFrame" : 8,
+    "channels" : 2,
+    "flags" : 9,
+    "formatID" : 1819304813,
+    "rate" : 192000
+  },
+  "metrics" : {
+    "callbacks" : 745,
+    "capturedFrames" : 381440,
+    "frames" : 381440,
+    "inputBuffers" : 1,
+    "inputFirstChannels" : 2,
+    "inputLastBytes" : 4096,
+    "inputLastChannels" : 2,
+    "invalidBuffers" : 0,
+    "nonzeroSamples" : 762823
+  },
+  "output" : {
+    "bits" : 32,
+    "bytesPerFrame" : 8,
+    "channels" : 2,
+    "flags" : 9,
+    "formatID" : 1819304813,
+    "rate" : 192000
+  },
+  "passed" : true,
+  "rate" : 192000
+}

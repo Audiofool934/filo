@@ -1,0 +1,338 @@
+{
+  "date": "2026-09-23T08:36:28.329935+00:00",
+  "os": "26.6.2",
+  "architecture": "arm64",
+  "device": "BlackHole 2ch",
+  "scope": "Synthetic renderer -> process tap; software relay enabled; no DAC input verification",
+  "cases": [
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 131072,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 4096
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "metrics": {
+        "callbacks": 256,
+        "capturedFrames": 131072,
+        "frames": 131072,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 258061
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "passed": true,
+      "rate": 44100,
+      "exitCode": 0
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 131072,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 4096
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "metrics": {
+        "callbacks": 256,
+        "capturedFrames": 131072,
+        "frames": 131072,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 262125
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "passed": true,
+      "rate": 44100,
+      "exitCode": 0
+    },
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 142848,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 4608
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "metrics": {
+        "callbacks": 279,
+        "capturedFrames": 142848,
+        "frames": 142848,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 281239
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "passed": true,
+      "rate": 48000,
+      "exitCode": 0
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 142848,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 4608
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "metrics": {
+        "callbacks": 279,
+        "capturedFrames": 142848,
+        "frames": 142848,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 285673
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "passed": true,
+      "rate": 48000,
+      "exitCode": 0
+    },
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 286208,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 9216
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "metrics": {
+        "callbacks": 559,
+        "capturedFrames": 286208,
+        "frames": 286208,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 563449
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "passed": true,
+      "rate": 96000,
+      "exitCode": 0
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 286720,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 10240
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "metrics": {
+        "callbacks": 560,
+        "capturedFrames": 286720,
+        "frames": 286720,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 573392
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "passed": true,
+      "rate": 96000,
+      "exitCode": 0
+    },
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 572928,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 20992
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "metrics": {
+        "callbacks": 1119,
+        "capturedFrames": 572928,
+        "frames": 572928,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 1127869
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "passed": true,
+      "rate": 192000,
+      "exitCode": 0
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": true,
+        "comparedFrames": 572928,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 19456
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "metrics": {
+        "callbacks": 1119,
+        "capturedFrames": 572928,
+        "frames": 572928,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 1145776
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "passed": true,
+      "rate": 192000,
+      "exitCode": 0
+    }
+  ],
+  "restored": true
+}

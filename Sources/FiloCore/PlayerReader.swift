@@ -27,7 +27,6 @@ public enum PlayerHelper {
                 set s to player state as text
                 if s is "stopped" then return {s, "", "", 0, sound volume, ""}
                 set t to current track
-                set p to ""
                 set trackIdentifier to ""
                 try
                     set trackIdentifier to persistent ID of t
@@ -37,7 +36,7 @@ public enum PlayerHelper {
                 if trackIdentifier is "" or trackIdentifier is "0000000000000000" then
                     set trackIdentifier to (name of t) & "|" & (artist of t) & "|" & (album of t)
                 end if
-                return {s, trackIdentifier, name of t, 0, sound volume, p}
+                return {s, trackIdentifier, name of t, 0, sound volume, ""}
             end tell
         end timeout
         """
@@ -56,9 +55,19 @@ public enum PlayerHelper {
         with timeout of 2 seconds
             tell application id "com.apple.Music"
                 try
-                    return POSIX path of (location of current track)
+                    set t to current track
+                    set trackIdentifier to ""
+                    try
+                        set trackIdentifier to persistent ID of t
+                    on error
+                        set trackIdentifier to (name of t) & "|" & (artist of t)
+                    end try
+                    if trackIdentifier is "" or trackIdentifier is "0000000000000000" then
+                        set trackIdentifier to (name of t) & "|" & (artist of t) & "|" & (album of t)
+                    end if
+                    return {trackIdentifier, POSIX path of (location of t)}
                 on error
-                    return ""
+                    return {"", ""}
                 end try
             end tell
         end timeout
@@ -76,13 +85,8 @@ public enum PlayerHelper {
                 let playing = descriptor.atIndex(1)?.stringValue == "playing"
                 let id = descriptor.atIndex(2)?.stringValue ?? ""
                 let title = descriptor.atIndex(3)?.stringValue
-                let path = descriptor.atIndex(6)?.stringValue ?? ""
-                var localRate: Double?
-                if !path.isEmpty, let file = try? AVAudioFile(forReading: URL(fileURLWithPath: path)) {
-                    localRate = file.fileFormat.sampleRate
-                }
                 return PlayerState(playing: playing, trackID: id.isEmpty ? nil : id, title: title,
-                                   volume: Int(descriptor.atIndex(5)?.int32Value ?? 0), localRate: localRate)
+                                   volume: Int(descriptor.atIndex(5)?.int32Value ?? 0))
             }
             if state.trackID == inspectedTrack { state.localRate = cachedLocalRate }
             if let data = try? JSONEncoder().encode(state) {
@@ -93,7 +97,9 @@ public enum PlayerHelper {
             if source == .appleMusic, let track = state.trackID, track != inspectedTrack {
                 inspectedTrack = track; cachedLocalRate = nil
                 var error: NSDictionary?
-                if let path = fileScript?.executeAndReturnError(&error).stringValue, error == nil, !path.isEmpty,
+                if let descriptor = fileScript?.executeAndReturnError(&error), error == nil,
+                   descriptor.atIndex(1)?.stringValue == track,
+                   let path = descriptor.atIndex(2)?.stringValue, !path.isEmpty,
                    let file = try? AVAudioFile(forReading: URL(fileURLWithPath: path)) {
                     cachedLocalRate = file.fileFormat.sampleRate
                 }

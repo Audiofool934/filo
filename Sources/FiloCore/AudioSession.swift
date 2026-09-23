@@ -50,6 +50,19 @@ public final class AudioSession {
         } catch { stop(); throw error }
     }
 
+    /// Laboratory-only digital loopback input. Normal app playback never calls this.
+    public func startLoopback(device input: OutputDevice, captureFrames: UInt64) throws {
+        stop(); device = input.id
+        do {
+            inputFormat = PCMFormat(try HAL.streamFormat(device, scope: kAudioObjectPropertyScopeInput))
+            outputFormat = PCMFormat(try HAL.streamFormat(device, scope: kAudioObjectPropertyScopeOutput))
+            let channels = try HAL.bufferChannels(device, scope: kAudioObjectPropertyScopeInput)
+            guard inputFormat?.isFloatStereo == true, channels == [2] else { throw AudioFailure("Loopback requires one interleaved stereo Float32 input.") }
+            inputSkip = 0; inputCount = 1; inputStreamCount = 1
+            try startIO(emit: false, relay: false, bits: 24, captureFrames: captureFrames)
+        } catch { stop(); throw error }
+    }
+
     public func startCapture(processIDs: [AudioObjectID], output: OutputDevice,
                              relay: Bool, exclusive: Bool = false, captureFrames: UInt64 = 0) throws {
         stop()
@@ -63,7 +76,7 @@ public final class AudioSession {
             try HAL.check(AudioHardwareCreateProcessTap(description, &tap), "Create source tap")
             let tapUID = try HAL.string(tap, kAudioTapPropertyUID)
             let tapFormat = try HAL.value(tap, kAudioTapPropertyFormat, default: AudioStreamBasicDescription())
-            guard PCMFormat(tapFormat).isFloatStereo else { throw AudioFailure("The source tap requires stereo Float32 PCM.") }
+            guard PCMFormat(tapFormat).isFloatStereo, tapFormat.mSampleRate == output.rate else { throw AudioFailure("The source tap requires matching-rate stereo Float32 PCM.") }
 
             if exclusive {
                 let owner = try HAL.value(output.id, kAudioDevicePropertyHogMode, default: Int32(-1))
@@ -80,7 +93,7 @@ public final class AudioSession {
                 kAudioAggregateDeviceIsPrivateKey: true,
                 kAudioAggregateDeviceIsStackedKey: false,
                 kAudioAggregateDeviceMainSubDeviceKey: output.uid,
-                kAudioAggregateDeviceSubDeviceListKey: [[kAudioSubDeviceUIDKey: output.uid, kAudioSubDeviceInputChannelsKey: 0]],
+                kAudioAggregateDeviceSubDeviceListKey: [[kAudioSubDeviceUIDKey: output.uid, kAudioSubDeviceInputChannelsKey: 0, kAudioSubDeviceDriftCompensationKey: false]],
                 kAudioAggregateDeviceTapListKey: [[kAudioSubTapUIDKey: tapUID, kAudioSubTapDriftCompensationKey: false]],
                 kAudioAggregateDeviceTapAutoStartKey: true
             ]
@@ -103,6 +116,9 @@ public final class AudioSession {
             }
             inputSkip = UInt32(channels.count) - inputCount
             try startIO(emit: false, relay: relay, bits: 24, captureFrames: captureFrames)
+            guard try HAL.string(aggregate, kAudioAggregateDevicePropertyMainSubDevice) == output.uid else {
+                throw AudioFailure("CoreAudio did not confirm the selected output clock.")
+            }
         } catch { stop(); throw error }
     }
 

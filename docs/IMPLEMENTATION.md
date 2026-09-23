@@ -17,7 +17,7 @@ Report source format, captured format, device format, and verification scope sep
 - Real device checks on Sony WALKMAN and native UI inspection.
 - Reproducible build, install instructions, privacy/permissions documentation, license, CI, versioned release assets, and public repository verification.
 
-## Current evidence
+## Initial evidence
 
 2026-09-23: existing project contained research documentation only.
 Swift 6.3.3 and the macOS 26.5 SDK are usable through the installed Command Line Tools.
@@ -30,4 +30,7 @@ Use Swift Package Manager, native macOS UI, direct public CoreAudio APIs, and a 
 Use the MIT license for original implementation; do not incorporate GPL implementation code.
 The realtime callback must not allocate, block, access files, or log.
 Only synthetic test PCM may be saved by the laboratory tool; the app must not save captured music.
-The release gate remains open until measured behavior and packaged runtime checks are recorded.
+The native implementation, synthetic PCM measurements, player/device checks, and packaged runtime checks are recorded in [VALIDATION.md](VALIDATION.md).
+Exclusive output was investigated and failed the callback-delivery test, so it remains a laboratory experiment rather than a claimed app feature.
+See [USAGE.md](USAGE.md) for the supported 1.0 behavior and limitations.
+The versioned public release is the final delivery gate.

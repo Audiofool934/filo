@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--binary", default=".build/debug/filo-lab")
 parser.add_argument("--device", default="BlackHole 2ch")
 parser.add_argument("--seconds", type=float, default=3)
+parser.add_argument("--loopback", action="store_true", help="Measure rendered digital output through the virtual input")
 parser.add_argument("--report", default="work/validation/pcm-matrix.json")
 args = parser.parse_args()
 binary = str(pathlib.Path(args.binary).resolve())
@@ -32,7 +33,7 @@ report = {
     "os": platform.mac_ver()[0],
     "architecture": platform.machine(),
     "device": device["name"],
-    "scope": "Synthetic renderer -> process tap; software relay enabled; no DAC input verification",
+    "scope": "Synthetic renderer -> filo relay -> digital loopback" if args.loopback else "Synthetic renderer -> process tap; software relay enabled; no DAC input verification",
     "cases": [],
 }
 report_path = pathlib.Path(args.report)
@@ -45,7 +46,7 @@ try:
             raise RuntimeError(result.stderr)
         last_set_rate = rate
         for bits in [16, 24]:
-            result = call("verify", "--device", args.device, "--bits", bits, "--seconds", args.seconds, "--relay")
+            result = call("verify", "--device", args.device, "--bits", bits, "--seconds", args.seconds, "--relay", *(["--loopback"] if args.loopback else []))
             try:
                 case = json.loads(result.stdout)
             except json.JSONDecodeError:

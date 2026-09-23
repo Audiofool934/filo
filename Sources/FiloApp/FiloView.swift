@@ -88,7 +88,7 @@ struct FiloView: View {
                 Text("SOURCE").font(.system(size: 9, weight: .semibold)).tracking(1.5).foregroundStyle(.secondary)
                 Text(state.sourceFormat.map { "\(rateLabel($0.rate)) kHz" } ?? "Unknown")
                     .font(.system(size: 21, weight: .medium, design: .monospaced))
-                Text(state.sourceFormat?.evidence.rawValue ?? model.source.name).font(.system(size: 10)).foregroundStyle(.secondary)
+                Text(sourceDescription).font(.system(size: 10)).foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
             Image(systemName: "arrow.right").foregroundStyle(accent).font(.system(size: 14, weight: .light))
@@ -137,9 +137,18 @@ struct FiloView: View {
                 .fixedSize(horizontal: false, vertical: true)
             if let metrics = state.metrics {
                 Text("Relay: \(metrics.frames) frames · \(metrics.invalidBuffers) invalid buffers").monospacedDigit()
+                Text("Non-silent samples: \(metrics.nonzeroSamples)").monospacedDigit()
+            }
+            if let format = state.tapFormat {
+                Text("Capture: \(rateLabel(format.rate)) kHz · \(format.channels) ch · Float32")
             }
             Button("Copy diagnostics", action: model.copyDiagnostics).controlSize(.small)
         }
+    }
+    private var sourceDescription: String {
+        guard let format = state.sourceFormat else { return model.source.name }
+        if let bits = format.bits { return "\(bits)-bit · \(format.evidence.rawValue)" }
+        return format.evidence.rawValue
     }
     private var footer: some View {
         HStack {

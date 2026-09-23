@@ -43,6 +43,7 @@ final class AppModel: ObservableObject {
         Output rate: \(output?.rate.description ?? "Unknown") Hz
         Source rate: \(snapshot.sourceFormat?.rate.description ?? "Unknown") Hz
         Evidence: \(snapshot.sourceFormat?.evidence.rawValue ?? "None")
+        Capture rate: \(snapshot.tapFormat?.rate.description ?? "Not active") Hz
         Relay callbacks: \(snapshot.metrics?.callbacks ?? 0)
         Invalid buffers: \(snapshot.metrics?.invalidBuffers ?? 0)
         End-to-end bit-perfect: not verified

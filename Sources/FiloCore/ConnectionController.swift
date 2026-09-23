@@ -23,6 +23,7 @@ public struct ConnectionSnapshot {
     public var output: OutputDevice?
     public var player = PlayerState()
     public var metrics: TransportMetrics?
+    public var tapFormat: PCMFormat?
     public var relayRunning = false
     public var error: String?
     public init() {}
@@ -113,7 +114,7 @@ public final class ConnectionController {
         monitor.stop(); reader.stop(); audio.stop()
         let restorationErrors = lease.restore()
         snapshot.connected = false; snapshot.busy = false; snapshot.relayRunning = false
-        snapshot.sourceFormat = nil; snapshot.metrics = nil; snapshot.player = PlayerState()
+        snapshot.sourceFormat = nil; snapshot.metrics = nil; snapshot.tapFormat = nil; snapshot.player = PlayerState()
         snapshot.title = "Ready when you are"; snapshot.detail = "Choose your music app and output, then connect."
         snapshot.error = restorationErrors.isEmpty ? nil : restorationErrors.joined(separator: " ")
         policy.reset(); lastProcesses = []; lastRate = nil; lastCallbackCount = 0
@@ -192,6 +193,7 @@ public final class ConnectionController {
                 }
                 if audio.running {
                     let metrics = audio.metrics; snapshot.metrics = metrics
+                    snapshot.tapFormat = audio.inputFormat
                     if metrics.callbacks != lastCallbackCount {
                         lastCallbackCount = metrics.callbacks; lastCallbackProgress = Date()
                     }
@@ -203,6 +205,7 @@ public final class ConnectionController {
                         fail("The audio device stopped delivering callbacks. The relay was released; reconnect to try again."); return
                     }
                 }
+                else { snapshot.tapFormat = nil }
             }
             if let error = snapshot.player.error { snapshot.title = "Playback access needed"; snapshot.detail = error }
             else if !snapshot.player.playing {
