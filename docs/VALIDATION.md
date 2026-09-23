@@ -1,5 +1,14 @@
 # filo validation record
 
+## 1.1.0-beta.2 recovery correction
+
+Beta.2 corrects the `verify-reference` laboratory command's cleanup ordering on an operating-system failure to release an exclusive callback or restore its settings.
+Both normal completion and deferred error cleanup now use one path that restores the media route only after exclusive cleanup returns no errors.
+An incomplete release retains the virtual route and recovery journal so a later process can retry safely.
+The native application and finite-reference harness already had this guard.
+This correction does not change the measured PCM transport or turn the failed Music reference result into a pass.
+Actual operating-system callback-destruction failure has not been injected on the physical device; the correction was verified by inspecting both command exits and strict compilation, with CI and packaged checks recorded in the release.
+
 ## 1.1.0-beta.1 validation record
 
 Validation date: 2026-09-23.
