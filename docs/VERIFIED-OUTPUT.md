@@ -33,7 +33,7 @@ The audio callbacks do not allocate, lock, log, access files, or run Swift code.
 - macOS 14.4 or later.
 - An already installed [BlackHole 2ch](https://github.com/ExistentialAudio/BlackHole) with its adjustable virtual clock control.
 - A DAC exposing one stereo stream and matching non-mixable integer virtual/physical formats.
-- System-audio capture permission and player metadata access.
+- System-audio capture permission, player metadata access, and any Microphone permission macOS requests for BlackHole's virtual input.
 
 filo does not bundle or install BlackHole.
 Its clock adapter uses the documented [virtual clock control](https://github.com/ExistentialAudio/BlackHole/wiki/Adjust-Virtual-Clock).

@@ -70,7 +70,8 @@ do {
     }
     switch command {
     case "recover":
-        let errors = ExclusiveRecoveryJournal.recoverOrphaned()
+        var errors = ExclusiveRecoveryJournal.recoverOrphaned()
+        if errors.isEmpty { errors += DeviceLease(journalURL: DeviceLease.defaultJournalURL).recoverOrphaned() }
         try json(["errors": errors])
         if !errors.isEmpty { throw AudioFailure("Some audio settings still need recovery.") }
     case "devices": try json(HAL.outputDevices())
@@ -144,10 +145,13 @@ do {
         guard recovery.isEmpty else { throw AudioFailure(recovery.joined(separator: " ")) }
         guard let path = option("--reference") else { throw AudioFailure("Specify a local lossless --reference file.") }
         let reference = try ReferencePCM.load(from: URL(fileURLWithPath: path))
-        let output = try selectedDevice(), session = ExclusiveRelaySession(), route = DeviceLease()
+        let output = try selectedDevice(), session = ExclusiveRelaySession(), route = DeviceLease(journalURL: DeviceLease.defaultJournalURL)
         let seconds = try duration(default: 45)
         guard let sourceName = option("--source"), let initialSource = try HAL.outputDevices().first(where: { $0.uid == sourceName || $0.name == sourceName }) else {
             throw AudioFailure("Specify a separate BlackHole --source.")
+        }
+        guard ConnectionController.isExclusiveSourceDevice(initialSource), initialSource.uid != output.uid else {
+            throw AudioFailure("The reference source must be BlackHole 2ch, separate from the physical output.")
         }
         let bundleID = option("--player") ?? "com.apple.Music"
         guard ["com.apple.Music", "com.spotify.client"].contains(bundleID) else { throw AudioFailure("Unsupported reference player.") }

@@ -94,17 +94,22 @@ public enum PlayerHelper {
                     set v to sound volume as text
                 end try
                 if s is "stopped" then return {s, "", "", 0, v, ""}
-                set t to current track
-                set trackIdentifier to ""
                 try
-                    set trackIdentifier to persistent ID of t
-                on error
-                    set trackIdentifier to (name of t) & "|" & (artist of t)
+                    set t to current track
+                    set trackIdentifier to ""
+                    try
+                        set trackIdentifier to persistent ID of t
+                    on error
+                        set trackIdentifier to (name of t) & "|" & (artist of t)
+                    end try
+                    if trackIdentifier is "" or trackIdentifier is "0000000000000000" then
+                        set trackIdentifier to (name of t) & "|" & (artist of t) & "|" & (album of t)
+                    end if
+                    return {s, trackIdentifier, name of t, 0, v, ""}
+                on error readMessage number readNumber
+                    if readNumber is -1728 then return {s, "", "", 0, v, ""}
+                    error readMessage number readNumber
                 end try
-                if trackIdentifier is "" or trackIdentifier is "0000000000000000" then
-                    set trackIdentifier to (name of t) & "|" & (artist of t) & "|" & (album of t)
-                end if
-                return {s, trackIdentifier, name of t, 0, v, ""}
             end tell
         end timeout
         """
@@ -118,7 +123,13 @@ public enum PlayerHelper {
                     set v to sound volume as text
                 end try
                 if s is "stopped" then return {s, "", "", 0, v, ""}
-                return {s, id of current track, name of current track, 0, v, ""}
+                try
+                    set t to current track
+                    return {s, id of t, name of t, 0, v, ""}
+                on error readMessage number readNumber
+                    if readNumber is -1728 then return {s, "", "", 0, v, ""}
+                    error readMessage number readNumber
+                end try
             end tell
         end timeout
         """
@@ -285,6 +296,7 @@ public final class PlayerReader {
     private let queue: DispatchQueue
     private let supplemental: Bool
     private let responseTimeout: TimeInterval
+    private let scheduleDeadline: (DispatchTime, DispatchWorkItem) -> Void
     private var supplementalReader: PlayerReader?
     private var latestState: PlayerState?
     private var latestSupplemental: PlayerState?
@@ -298,13 +310,16 @@ public final class PlayerReader {
     private var generation: UInt64 = 0
     public var onState: ((PlayerState) -> Void)?
     public convenience init(queue: DispatchQueue) { self.init(queue: queue, supplemental: false, responseTimeout: 3) }
-    /// An internal deadline override keeps fake-helper tests short without operating a player.
-    convenience init(queue: DispatchQueue, responseTimeout: TimeInterval) {
-        self.init(queue: queue, supplemental: false, responseTimeout: responseTimeout)
+    /// Tests advance deadlines after a helper readiness reply, independently of process startup time.
+    /// A supplied scheduler must execute its work items on the reader's queue.
+    convenience init(queue: DispatchQueue, scheduleDeadline: @escaping (DispatchTime, DispatchWorkItem) -> Void) {
+        self.init(queue: queue, supplemental: false, responseTimeout: 3, scheduleDeadline: scheduleDeadline)
     }
-    private init(queue: DispatchQueue, supplemental: Bool, responseTimeout: TimeInterval) {
+    private init(queue: DispatchQueue, supplemental: Bool, responseTimeout: TimeInterval,
+                 scheduleDeadline: ((DispatchTime, DispatchWorkItem) -> Void)? = nil) {
         precondition(responseTimeout.isFinite && responseTimeout > 0)
         self.queue = queue; self.supplemental = supplemental; self.responseTimeout = responseTimeout
+        self.scheduleDeadline = scheduleDeadline ?? { queue.asyncAfter(deadline: $0, execute: $1) }
     }
     deinit { stop() }
     public func start(source: MusicSource, executable: URL) throws {
@@ -376,7 +391,7 @@ public final class PlayerReader {
             self.fail("Playback reader timed out. Reconnect filo.")
         }
         responseDeadline = deadline
-        queue.asyncAfter(deadline: .now() + responseTimeout, execute: deadline)
+        scheduleDeadline(.now() + responseTimeout, deadline)
         guard let input else { fail("Playback reader is unavailable."); return }
         do { try input.fileHandleForWriting.write(contentsOf: supplemental ? Data("processing\n".utf8) : Data([10])) }
         catch {

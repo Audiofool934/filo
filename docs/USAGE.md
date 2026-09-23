@@ -69,8 +69,11 @@ For podcasts, ads, videos, or other content, select a known rate manually if nee
 ## Permissions
 
 Automation permission allows the playback helper to read the selected player's state, track identity, and volume.
-Direct relay additionally requires macOS system-audio capture permission.
+Direct relay and Exclusive preview additionally require macOS system-audio capture permission.
 macOS names that privacy section differently across releases, including Screen & System Audio Recording.
+Exclusive preview can also trigger a Microphone permission prompt when CoreAudio opens BlackHole's virtual input.
+This is a broader macOS permission, although filo selects the virtual device and does not select your physical microphone.
+Resolve the system permission prompt before expecting the connection to finish.
 If denied, review the relevant permission in System Settings and reconnect filo.
 filo does not request administrator access, install a driver, or upload audio.
 

@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import SwiftUI
 import FiloCore
 
@@ -7,8 +8,31 @@ final class AppModel: ObservableObject {
     @Published var snapshot = ConnectionSnapshot()
     @Published var source: MusicSource = MusicSource(rawValue: UserDefaults.standard.string(forKey: "source") ?? "") ?? .appleMusic
     @Published var outputUID = UserDefaults.standard.string(forKey: "outputUID") ?? ""
-    @Published var mode: ConnectionMode = .format
+    @Published var mode: ConnectionMode = .format {
+        didSet {
+            if mode != oldValue { cancelPermissionPreflight(); publishSnapshot() }
+        }
+    }
     @Published var rate: Double = 0
+    private struct ConnectionIntent: Equatable {
+        let source: MusicSource
+        let outputUID: String
+        let mode: ConnectionMode
+        let rate: Double
+        let executable: URL
+    }
+    private struct PermissionPresentation {
+        let title: String
+        let detail: String
+        let busy: Bool
+        let error: String?
+    }
+    private var controllerSnapshot = ConnectionSnapshot()
+    private var permissionPresentation: PermissionPresentation?
+    private var permissionToken: UUID?
+    private var permissionRequestInFlight = false
+    private var permissionTimeout: DispatchWorkItem?
+    private var terminating = false
     var onUpdate: (() -> Void)?
     var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "FiloReleaseLabel") as? String
@@ -34,18 +58,120 @@ final class AppModel: ObservableObject {
     }
     init() {
         controller.onSnapshot = { [weak self] value in
-            guard let self else { return }
-            self.snapshot = value
+            guard let self, !self.terminating else { return }
+            self.controllerSnapshot = value
+            if value.error != nil || value.connected { self.cancelPermissionPreflight() }
             if self.outputUID.isEmpty { self.outputUID = value.devices.first(where: \.isDefault)?.uid ?? value.devices.first?.uid ?? "" }
-            self.onUpdate?()
+            self.publishSnapshot()
         }
     }
     func toggleConnection() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        guard !terminating else { return }
+        if permissionToken != nil {
+            cancelPermissionPreflight(); publishSnapshot(); return
+        }
         if snapshot.connected { controller.disconnect(); return }
-        guard connectionRequirement == nil, let executable = Bundle.main.executableURL else { return }
-        UserDefaults.standard.set(source.rawValue, forKey: "source")
-        UserDefaults.standard.set(outputUID, forKey: "outputUID")
-        controller.connect(source: source, outputUID: outputUID, mode: mode, manualRate: rate == 0 ? nil : rate, executable: executable)
+        guard !snapshot.busy, connectionRequirement == nil, let executable = Bundle.main.executableURL else { return }
+        let intent = ConnectionIntent(source: source, outputUID: outputUID, mode: mode, rate: rate, executable: executable)
+        if mode == .exclusive { preflightExclusivePermission(intent) }
+        else { connect(intent) }
+    }
+    private func publishSnapshot() {
+        var value = controllerSnapshot
+        if let permissionPresentation {
+            value.busy = permissionPresentation.busy
+            value.title = permissionPresentation.title
+            value.detail = permissionPresentation.detail
+            value.error = permissionPresentation.error
+        }
+        snapshot = value
+        onUpdate?()
+    }
+    private func permissionMessage(title: String, detail: String, waiting: Bool = false) {
+        permissionPresentation = PermissionPresentation(title: title, detail: detail, busy: waiting, error: waiting ? nil : detail)
+        publishSnapshot()
+    }
+    private func cancelPermissionPreflight() {
+        permissionToken = nil
+        permissionTimeout?.cancel(); permissionTimeout = nil
+        permissionPresentation = nil
+        // AVFoundation cannot dismiss a system prompt. Its eventual callback must not revive this intent.
+    }
+    private func connect(_ intent: ConnectionIntent) {
+        cancelPermissionPreflight()
+        UserDefaults.standard.set(intent.source.rawValue, forKey: "source")
+        UserDefaults.standard.set(intent.outputUID, forKey: "outputUID")
+        publishSnapshot()
+        controller.connect(source: intent.source, outputUID: intent.outputUID, mode: intent.mode,
+                           manualRate: intent.rate == 0 ? nil : intent.rate, executable: intent.executable)
+    }
+    private func preflightExclusivePermission(_ intent: ConnectionIntent) {
+        // This entire gate runs on the main queue, before ConnectionController can change any route or lease the DAC.
+        switch AVCaptureDevice.authorizationStatus(for: .audio) {
+        case .authorized:
+            connect(intent)
+        case .notDetermined:
+            guard !permissionRequestInFlight else {
+                permissionMessage(title: "Microphone permission pending",
+                    detail: "Respond to the macOS microphone prompt, then click Connect again to use BlackHole's virtual input.")
+                return
+            }
+            let token = UUID()
+            permissionToken = token; permissionRequestInFlight = true
+            permissionMessage(title: "Waiting for microphone permission",
+                detail: "Allow filo in the macOS prompt to use BlackHole's virtual audio input. Connection will start after permission is granted.", waiting: true)
+            let timeout = DispatchWorkItem { [weak self] in
+                guard let self, self.permissionToken == token, !self.terminating else { return }
+                self.cancelPermissionPreflight()
+                self.permissionMessage(title: "Connection not started",
+                    detail: "The permission request is still pending. Respond to the macOS prompt, then click Connect again.")
+            }
+            permissionTimeout = timeout
+            DispatchQueue.main.asyncAfter(deadline: .now() + 60, execute: timeout)
+            AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    self.permissionRequestInFlight = false
+                    guard !self.terminating, self.permissionToken == token else { return }
+                    self.cancelPermissionPreflight()
+                    guard self.source == intent.source, self.outputUID == intent.outputUID,
+                          self.mode == intent.mode, self.rate == intent.rate, self.connectionRequirement == nil else {
+                        self.permissionMessage(title: "Connection not started",
+                            detail: "The connection options or available devices changed. Choose your output and click Connect again.")
+                        return
+                    }
+                    if granted, AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
+                        self.connect(intent)
+                    } else {
+                        self.showPermissionUnavailable()
+                    }
+                }
+            }
+        case .denied, .restricted:
+            showPermissionUnavailable()
+        @unknown default:
+            permissionMessage(title: "Microphone permission unavailable",
+                detail: "macOS could not confirm microphone permission for BlackHole. Check System Settings > Privacy & Security > Microphone, then click Connect again.")
+        }
+    }
+    private func showPermissionUnavailable() {
+        if AVCaptureDevice.authorizationStatus(for: .audio) == .restricted {
+            permissionMessage(title: "Microphone access restricted",
+                detail: "macOS restricts microphone access. Ask your administrator to allow filo to use BlackHole's virtual input, or choose Format matching.")
+        } else {
+            permissionMessage(title: "Microphone permission needed",
+                detail: "Enable filo in System Settings > Privacy & Security > Microphone, then click Connect again to use BlackHole's virtual input.")
+        }
+    }
+    func sleep() {
+        cancelPermissionPreflight(); publishSnapshot()
+        controller.sleep()
+    }
+    func shutdown() {
+        terminating = true
+        cancelPermissionPreflight()
+        controller.shutdown()
     }
     func openSource() {
         if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: source.bundleID) {
@@ -124,13 +250,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         for name in ["com.apple.Music.playerInfo", "com.apple.iTunes.playerInfo", "com.spotify.client.PlaybackStateChanged"] {
             observers.append(DistributedNotificationCenter.default().addObserver(forName: Notification.Name(name), object: nil, queue: .main) { [weak self] _ in self?.model.controller.sourceDidChange() })
         }
-        observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in self?.model.controller.sleep() })
+        observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in self?.model.sleep() })
         showWindow()
     }
     @objc func showWindow() { window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showWindow(); return true }
     func applicationWillTerminate(_ notification: Notification) {
-        model.controller.shutdown()
+        model.shutdown()
         for observer in observers {
             DistributedNotificationCenter.default().removeObserver(observer)
             NSWorkspace.shared.notificationCenter.removeObserver(observer)

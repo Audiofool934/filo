@@ -134,7 +134,8 @@ final class SourceProcessingTests: XCTestCase {
         """.write(to: helper, atomically: true, encoding: .utf8)
         try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: helper.path)
         let queue = DispatchQueue(label: "filo.test.primary-deadline")
-        let reader = PlayerReader(queue: queue, responseTimeout: 0.5)
+        var deadlines: [DispatchWorkItem] = []
+        let reader = PlayerReader(queue: queue, scheduleDeadline: { _, item in deadlines.append(item) })
         defer { queue.sync { reader.stop() } }
         let first = expectation(description: "Initial primary observation")
         let timeout = expectation(description: "Hung essential request invalidates playback")
@@ -158,8 +159,17 @@ final class SourceProcessingTests: XCTestCase {
             }
         }
         try queue.sync { try reader.start(source: .appleMusic, executable: helper) }
-        wait(for: [first], timeout: 2)
-        queue.async { reader.request() }
+        wait(for: [first], timeout: 5)
+        // Advance only after a successful response proves the helper is ready.
+        queue.sync {
+            XCTAssertTrue(receivedFirst)
+            XCTAssertEqual(deadlines.count, 1)
+            guard receivedFirst, deadlines.count == 1 else { return }
+            XCTAssertTrue(deadlines[0].isCancelled)
+            reader.request()
+            XCTAssertEqual(deadlines.count, 2)
+            deadlines[1].perform()
+        }
         wait(for: [timeout], timeout: 3)
         // A poll after failure must not restart either helper or restore old metadata.
         queue.sync {
@@ -170,6 +180,7 @@ final class SourceProcessingTests: XCTestCase {
             XCTAssertNil(stateAfterTimeout?.primaryObservedAt)
             XCTAssertNil(stateAfterTimeout?.processing)
             XCTAssertNil(stateAfterTimeout?.localRate)
+            XCTAssertEqual(deadlines.count, 2)
         }
     }
 
@@ -190,10 +201,10 @@ final class SourceProcessingTests: XCTestCase {
         """.write(to: helper, atomically: true, encoding: .utf8)
         try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: helper.path)
         let queue = DispatchQueue(label: "filo.test.source-generation")
-        let reader = PlayerReader(queue: queue, responseTimeout: 0.5)
+        var deadlines: [DispatchWorkItem] = []
+        let reader = PlayerReader(queue: queue, scheduleDeadline: { _, item in deadlines.append(item) })
         defer { queue.sync { reader.stop() } }
         let current = expectation(description: "New source response")
-        let previousDeadline = expectation(description: "Previous source deadline passed")
         var latest: PlayerState?
         var received = false
         reader.onState = { state in
@@ -204,12 +215,15 @@ final class SourceProcessingTests: XCTestCase {
             try reader.start(source: .appleMusic, executable: helper)
             try reader.start(source: .spotify, executable: helper)
         }
-        wait(for: [current], timeout: 2)
-        queue.asyncAfter(deadline: .now() + 0.7) {
-            previousDeadline.fulfill()
-        }
-        wait(for: [previousDeadline], timeout: 2)
+        wait(for: [current], timeout: 5)
         queue.sync {
+            XCTAssertEqual(deadlines.count, 2)
+            guard deadlines.count == 2 else { return }
+            XCTAssertTrue(deadlines[0].isCancelled)
+            XCTAssertTrue(deadlines[1].isCancelled)
+            // A previous source's scheduled item cannot invalidate the ready source.
+            deadlines[0].perform()
+            deadlines[1].perform()
             XCTAssertEqual(latest?.trackID, "SPOTIFY")
             XCTAssertNil(latest?.error)
         }

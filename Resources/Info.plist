@@ -15,5 +15,5 @@
     <key>NSHighResolutionCapable</key><true/>
     <key>NSAudioCaptureUsageDescription</key><string>filo forwards the music app you select to your output device. Audio stays on your Mac and is never saved or uploaded.</string>
     <key>NSAppleEventsUsageDescription</key><string>filo reads your player's current track and playback state to match your output format. It does not modify your library.</string>
-    <key>NSMicrophoneUsageDescription</key><string>The optional audio laboratory uses virtual loopback inputs to verify synthetic PCM. Normal playback does not use your microphone.</string>
+    <key>NSMicrophoneUsageDescription</key><string>Exclusive preview uses BlackHole's virtual audio input, which macOS protects with microphone permission. filo selects the virtual device, not your physical microphone. The optional laboratory also uses virtual loopback inputs.</string>
 </dict></plist>
