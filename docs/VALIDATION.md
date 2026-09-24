@@ -1,5 +1,17 @@
 # filo validation record
 
+## Post-beta.2 connected Spotify references
+
+After reconnecting the NW-ZX706, one-run measurements connected Spotify 1.3.0.277 through BlackHole and filo's exclusive relay to the actual WALKMAN integer output callback.
+Repeated playback of the original FLAC and WAV fixtures preserved all 220,500 stereo frames and 1,764,000 signed32 bytes exactly, with silent margins and zero reported buffer, timestamp, or cleanup errors.
+New FLAC and ALAC selections also passed after BlackHole remained the default route between trials.
+Other selections, including the first held-route trial, triggered representation fault 5 before a complete reference anchor reached the output capture.
+Both an unmuted-tap control and a fixed-clock first-switch control also failed, so neither change alone resolves the observed failure.
+Route and player history remain relevant uncontrolled state; the observations do not identify the responsible internal component or establish a generally reliable workaround.
+The [connected observation](research/spotify-exclusive-observation.md) records positive and negative receipts, run order, binary identities, settings, and the measured boundary.
+The production implementation and shipped beta.2 application remain unchanged.
+These conditional local-file measurements do not verify subscription masters, arbitrary track transitions, USB payloads, or samples inside the DAC.
+
 ## Post-beta.2 Spotify local references
 
 Spotify 1.3.0.277 preserved the complete original five-second 44.1 kHz, stereo 24-bit reference through a process-specific BlackHole tap for WAV, ALAC, and FLAC.

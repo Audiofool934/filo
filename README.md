@@ -78,7 +78,9 @@ Both HTTP and imported local-file playback produced the same changed samples; se
 A separate neutral AVAudioPlayer preserved the complete same ALAC through filo's exclusive bridge to the WALKMAN software output callback; see the [controlled player comparison](docs/research/player-api-reference-observation.md).
 That laboratory result does not certify Music, Spotify, or samples received inside the DAC.
 A separate [Spotify local-file test](docs/research/spotify-reference-observation.md) preserved the complete WAV, ALAC, and FLAC reference at its BlackHole process tap.
-That result does not yet connect Spotify to the exclusive DAC output or certify subscription playback.
+A subsequent [connected Spotify experiment](docs/research/spotify-exclusive-observation.md) preserved complete FLAC, WAV, and ALAC references through the exclusive WALKMAN output callback under recorded conditions.
+Other runs failed the strict sample check after output-route changes, including fixed-clock and unmuted-tap controls; holding BlackHole as the default allowed later new-file selections to pass, while the first held-route trial still failed.
+This is a conditional local-file result, not reliable arbitrary-track playback, subscription verification, or a measurement inside the DAC.
 Read the [exclusive output and verification guide](docs/VERIFIED-OUTPUT.md) before using the preview.
 
 ## Build

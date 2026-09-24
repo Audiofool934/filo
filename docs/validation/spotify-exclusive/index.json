@@ -1,0 +1,1399 @@
+{
+  "schemaVersion": 1,
+  "status": "Completed thirteen connected measurements: six full-reference output-byte passes and seven early representation failures; hardware and task-mutated player preferences restored.",
+  "measurementDateLocal": "2026-09-24",
+  "timezone": "Asia/Singapore",
+  "environment": {
+    "player": "Spotify",
+    "playerVersion": "1.3.0.277",
+    "macOSVersion": "26.6.2",
+    "macOSBuild": "25G83",
+    "physicalDevice": "Sony NW-ZX706 in USB DAC mode, HAL name WALKMAN",
+    "virtualDevice": "BlackHole 2ch"
+  },
+  "measurementBoundary": "Known original local fixture through Spotify, process tap and filo exclusive relay to raw bytes supplied by the actual WALKMAN software output IOProc; USB receiver and analog output unmeasured.",
+  "reference": {
+    "manifest": "../spotify-reference-fixtures.json",
+    "canonicalFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "frames": 220500,
+    "channels": 2,
+    "sampleRate": 44100,
+    "sourceBits": 24,
+    "actualOutputValidBits": 32,
+    "actualOutputContainerBits": 32,
+    "actualOutputFlags": 76,
+    "expectedSigned32Bytes": 1764000,
+    "expectedSigned32SHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+    "independentExpectedBytesMethod": "Read canonical packed24 RIFF samples with Python wave; decode signed little-endian integers; shift each left by8 and pack as signed little-endian32; hash all bytes.",
+    "firstFrameSigned32Words": [
+      874496,
+      1892864
+    ],
+    "lastFrameSigned32Words": [
+      180224,
+      1048576
+    ]
+  },
+  "baseline": {
+    "defaultOutput": "WALKMAN",
+    "walkmanRate": 192000,
+    "walkmanPhysicalFlags": 12,
+    "walkmanVirtualFlags": 9,
+    "walkmanExclusiveOwnerPresent": false,
+    "blackHoleRate": 44100,
+    "blackHoleClock": "Internal Fixed",
+    "scope": "Applies to runs1-8 and to the outer holder launch; runs9 onward start inner CLI with BlackHole default held by the outer lease."
+  },
+  "playerControls": {
+    "volume": 1,
+    "normalization": false,
+    "equalizer": false,
+    "mono": false,
+    "crossfade": false,
+    "repeat": false,
+    "shuffle": false,
+    "autoplay": false,
+    "gapless": true,
+    "automix": true,
+    "evidence": "Operator UI observations; no per-sample assertion about hidden player processing."
+  },
+  "binaries": {
+    "production": {
+      "localExecutable": ".build/debug/filo-lab",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "tapMutePolicy": "mutedWhenTapped",
+      "sourceCommit": "9e5eee4faf2e67f3653a62e35d346784299a2fc6"
+    },
+    "unmuted-prototype": {
+      "localExecutable": "work/unmuted-prototype/artifacts/unmuted/filo-lab",
+      "executableSHA256": "60bfac081dec2f23d47e27ff925738b284034b8915428d62a7d8655a2a78fdcc",
+      "tapMutePolicy": "unmuted",
+      "sourceCommit": "9e5eee4faf2e67f3653a62e35d346784299a2fc6"
+    },
+    "matched-muted-prototype": {
+      "localExecutable": "work/unmuted-prototype/artifacts/muted/filo-lab",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "tapMutePolicy": "mutedWhenTapped",
+      "sourceCommit": "9e5eee4faf2e67f3653a62e35d346784299a2fc6"
+    }
+  },
+  "runs": [
+    {
+      "order": 1,
+      "receipt": "spotify-connected-flac-reference.json",
+      "receiptSHA256": "620ea55188eaaf222df9d719d9870b49deb0cc343c9ccd44a1ff6a5ef7c9e30a",
+      "selectedCodec": "FLAC",
+      "previousSelectedCodec": "ALAC",
+      "selectionClassification": "first selection in this connected series",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "production",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "argv": [
+        ".build/debug/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "30"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 30,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit FLAC.flac",
+      "playedFileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 735232,
+      "outputCaptureBytes": 5881856,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 2,
+      "receipt": "spotify-connected-flac-fixed-reference.json",
+      "receiptSHA256": "535942910c0c3b7de64b9c07931a00afc1a5362a094c270a02fe1ec2a60f0cbb",
+      "selectedCodec": "FLAC",
+      "previousSelectedCodec": "FLAC",
+      "selectionClassification": "same-file replay",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "production",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "argv": [
+        ".build/debug/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "30",
+        "--fixed-clock"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 30,
+      "followClock": false,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit FLAC.flac",
+      "playedFileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": true,
+      "fault": 0,
+      "comparedReferenceFrames": 220500,
+      "comparedReferenceBytes": 1764000,
+      "outputCaptureFrames": 1325568,
+      "outputCaptureBytes": 10604544,
+      "leadingSilenceFrames": 820258,
+      "trailingSilenceFrames": 284810,
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "recordedOutputIsAllZeroByIndependentHash": false,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 3,
+      "receipt": "spotify-connected-flac-follow-repeat-reference.json",
+      "receiptSHA256": "6d51dd67c88bb53cda43dfed6a08494857c49eac712226e6fa1da728029bbff7",
+      "selectedCodec": "FLAC",
+      "previousSelectedCodec": "FLAC",
+      "selectionClassification": "same-file replay",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "production",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "argv": [
+        ".build/debug/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit FLAC.flac",
+      "playedFileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": true,
+      "fault": 0,
+      "comparedReferenceFrames": 220500,
+      "comparedReferenceBytes": 1764000,
+      "outputCaptureFrames": 1768448,
+      "outputCaptureBytes": 14147584,
+      "leadingSilenceFrames": 671266,
+      "trailingSilenceFrames": 876682,
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "recordedOutputIsAllZeroByIndependentHash": false,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 4,
+      "receipt": "spotify-connected-wav-reference.json",
+      "receiptSHA256": "e7822b3111f9ad8870016e0e33af224fd2a306728ab96d985b041f4477221a39",
+      "selectedCodec": "WAV",
+      "previousSelectedCodec": "FLAC",
+      "selectionClassification": "new-file selection",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "production",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "argv": [
+        ".build/debug/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit WAV.wav",
+      "playedFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 745984,
+      "outputCaptureBytes": 5967872,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 5,
+      "receipt": "spotify-connected-wav-repeat-reference.json",
+      "receiptSHA256": "6a46b8fbca656010fdc53648d76e7e204e3959b68169b2a67d0c0f200f099877",
+      "selectedCodec": "WAV",
+      "previousSelectedCodec": "WAV",
+      "selectionClassification": "same-file replay",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "production",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "argv": [
+        ".build/debug/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit WAV.wav",
+      "playedFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": true,
+      "fault": 0,
+      "comparedReferenceFrames": 220500,
+      "comparedReferenceBytes": 1764000,
+      "outputCaptureFrames": 1771520,
+      "outputCaptureBytes": 14172160,
+      "leadingSilenceFrames": 759842,
+      "trailingSilenceFrames": 791178,
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "recordedOutputIsAllZeroByIndependentHash": false,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 6,
+      "receipt": "spotify-connected-alac-reference.json",
+      "receiptSHA256": "c1081e0d76959aba0b557441f3f7be7183570144692c27b8080f0140fcd3378d",
+      "selectedCodec": "ALAC",
+      "previousSelectedCodec": "WAV",
+      "selectionClassification": "new-file selection",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "production",
+      "executableSHA256": "8dcc4b38a73c6b5d847e26e5d8abe7bf2d9dd98c71ee5253dc5452a0ddea0347",
+      "argv": [
+        ".build/debug/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit ALAC.m4a",
+      "playedFileSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 1083392,
+      "outputCaptureBytes": 8667136,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 7,
+      "receipt": "spotify-connected-unmuted-flac-reference.json",
+      "receiptSHA256": "b0b086bc326bfc80512fdd15c83aa7758f48ee357b43a0dbe88a250bfcca3549",
+      "selectedCodec": "FLAC",
+      "previousSelectedCodec": "ALAC",
+      "selectionClassification": "new-file selection",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "unmuted-prototype",
+      "executableSHA256": "60bfac081dec2f23d47e27ff925738b284034b8915428d62a7d8655a2a78fdcc",
+      "argv": [
+        "work/unmuted-prototype/artifacts/unmuted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "unmuted",
+      "playedFile": "filo reference 44100 stereo 24bit FLAC.flac",
+      "playedFileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 710144,
+      "outputCaptureBytes": 5681152,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 8,
+      "receipt": "spotify-connected-muted-fixed-wav-reference.json",
+      "receiptSHA256": "03be685ddb98efe749f0b59fef14d38766f8cd2f3f2a64f86c1b8d2734261597",
+      "selectedCodec": "WAV",
+      "previousSelectedCodec": "FLAC",
+      "selectionClassification": "new-file selection",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "matched-muted-prototype",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "argv": [
+        "work/unmuted-prototype/artifacts/muted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40",
+        "--fixed-clock"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": false,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit WAV.wav",
+      "playedFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 539648,
+      "outputCaptureBytes": 4317184,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Each CLI temporarily routes from restored WALKMAN192k default to BlackHole44100.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 9,
+      "receipt": "spotify-connected-held-fixed-alac-reference.json",
+      "receiptSHA256": "e10633c21e4a41ed75a9145322a7658d15bf06c01ed6fd4e5560e37bb2812b9f",
+      "selectedCodec": "ALAC",
+      "previousSelectedCodec": "WAV",
+      "selectionClassification": "new-file selection with outer BlackHole route held; no warmup playback",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "matched-muted-prototype",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "argv": [
+        "work/unmuted-prototype/artifacts/muted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40",
+        "--fixed-clock"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": false,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit ALAC.m4a",
+      "playedFileSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 512,
+      "outputCaptureBytes": 4096,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Outer route holder keeps BlackHole44100 default across inner CLI runs; WALKMAN is acquired and restored separately by each inner CLI.",
+      "startupSilenceFrames": 231424,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 10,
+      "receipt": "spotify-connected-held-fixed-flac-reference.json",
+      "receiptSHA256": "fe85520be690ab94fa6ae943854d031e1d0efa03999dee963170504e8a745349",
+      "selectedCodec": "FLAC",
+      "previousSelectedCodec": "ALAC",
+      "selectionClassification": "new-file selection under the same continuous outer BlackHole route lease",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "matched-muted-prototype",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "argv": [
+        "work/unmuted-prototype/artifacts/muted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40",
+        "--fixed-clock"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": false,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit FLAC.flac",
+      "playedFileSHA256": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": true,
+      "fault": 0,
+      "comparedReferenceFrames": 220500,
+      "comparedReferenceBytes": 1764000,
+      "outputCaptureFrames": 1767424,
+      "outputCaptureBytes": 14139392,
+      "leadingSilenceFrames": 271872,
+      "trailingSilenceFrames": 1275052,
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "recordedOutputIsAllZeroByIndependentHash": false,
+      "cleanupErrors": [],
+      "routeCondition": "Outer route holder keeps BlackHole44100 default across inner CLI runs; WALKMAN is acquired and restored separately by each inner CLI.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 11,
+      "receipt": "spotify-connected-held-fixed-alac-second-switch-reference.json",
+      "receiptSHA256": "76c34f21c6236f40cfb1f1100074f9a4a987d95363d47f919c22052b0b44519d",
+      "selectedCodec": "ALAC",
+      "previousSelectedCodec": "FLAC",
+      "selectionClassification": "new-file selection under the same continuous outer BlackHole route lease",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "matched-muted-prototype",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "argv": [
+        "work/unmuted-prototype/artifacts/muted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40",
+        "--fixed-clock"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": false,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit ALAC.m4a",
+      "playedFileSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": true,
+      "fault": 0,
+      "comparedReferenceFrames": 220500,
+      "comparedReferenceBytes": 1764000,
+      "outputCaptureFrames": 1766912,
+      "outputCaptureBytes": 14135296,
+      "leadingSilenceFrames": 284160,
+      "trailingSilenceFrames": 1262252,
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "recordedOutputIsAllZeroByIndependentHash": false,
+      "cleanupErrors": [],
+      "routeCondition": "Outer route holder keeps BlackHole44100 default across inner CLI runs; WALKMAN is acquired and restored separately by each inner CLI.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 12,
+      "receipt": "spotify-connected-held-follow-wav-reference.json",
+      "receiptSHA256": "e48d8cba15858a14374cd9ae9d5516b2aaf69f6dd2f28eafd56312b279050ccf",
+      "selectedCodec": "WAV",
+      "previousSelectedCodec": "ALAC",
+      "selectionClassification": "new-file selection under the same continuous outer BlackHole route lease",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "matched-muted-prototype",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "argv": [
+        "work/unmuted-prototype/artifacts/muted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit WAV.wav",
+      "playedFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": true,
+      "fault": 0,
+      "comparedReferenceFrames": 220500,
+      "comparedReferenceBytes": 1764000,
+      "outputCaptureFrames": 1768448,
+      "outputCaptureBytes": 14147584,
+      "leadingSilenceFrames": 730624,
+      "trailingSilenceFrames": 817324,
+      "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "recordedOutputIsAllZeroByIndependentHash": false,
+      "cleanupErrors": [],
+      "routeCondition": "Outer route holder keeps BlackHole44100 default across inner CLI runs; WALKMAN is acquired and restored separately by each inner CLI.",
+      "startupSilenceFrames": 0,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks."
+    },
+    {
+      "order": 13,
+      "receipt": "spotify-connected-held-fresh-spotify-alac-reference.json",
+      "receiptSHA256": "5be805eaed790fc6320b4168293a5bf0b87ceba09b79ebb47fe04cdf5ab84b31",
+      "selectedCodec": "ALAC",
+      "previousSelectedCodec": "WAV",
+      "selectionClassification": "first playback after operator quit and relaunched Spotify while the same outer BlackHole route lease remained active",
+      "selectionEvidence": "Operator observed file-specific Play after capture armed, selected title, and empty queue; ordering confirmed separately from CLI receipt.",
+      "variant": "matched-muted-prototype",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "argv": [
+        "work/unmuted-prototype/artifacts/muted/filo-lab",
+        "verify-reference",
+        "--device",
+        "WALKMAN",
+        "--source",
+        "BlackHole 2ch",
+        "--reference",
+        "work/filo-reference-44100-24.wav",
+        "--player",
+        "com.spotify.client",
+        "--seconds",
+        "40"
+      ],
+      "argvNote": "Recorded executable and option values; argument ordering normalized for this index.",
+      "requestedWindowSeconds": 40,
+      "followClock": true,
+      "tapMutePolicy": "mutedWhenTapped",
+      "playedFile": "filo reference 44100 stereo 24bit ALAC.m4a",
+      "playedFileSHA256": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+      "canonicalReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "passed": false,
+      "fault": 5,
+      "comparedReferenceFrames": 0,
+      "comparedReferenceBytes": 0,
+      "outputCaptureFrames": 3072,
+      "outputCaptureBytes": 24576,
+      "leadingSilenceFrames": null,
+      "trailingSilenceFrames": null,
+      "actualAlignedSHA256": null,
+      "recordedOutputIsAllZeroByIndependentHash": true,
+      "cleanupErrors": [],
+      "routeCondition": "Outer route holder keeps BlackHole44100 default across inner CLI runs; WALKMAN is acquired and restored separately by each inner CLI.",
+      "startupSilenceFrames": 736256,
+      "outputCaptureScope": "Post-prime delivered frames copied by the bridge; excludes pre-prime startup silence and fault-silenced callbacks.",
+      "playerLifecycleEvidence": "Operator observed paused WAV and empty queue, quit Spotify, confirmed its main process absent, relaunched to Home with no Now Playing, then selected local ALAC after capture armed."
+    }
+  ],
+  "prototypeProvenance": {
+    "artifacts": [
+      {
+        "file": "prototype-build-manifest.json",
+        "sha256": "9d9b6dfe8588fee3734b19dedfd2ae8ef914718b0e836c052dee97917680add3",
+        "originalLocalFile": "work/unmuted-prototype/experiment-manifest.json",
+        "byteIdenticalCopy": true
+      },
+      {
+        "file": "unmuted-tap-policy.patch",
+        "sha256": "efdf9ed6753c1df2d232a5fa8cd81f8cb53219d3e2308f860ab9497adced8d5d",
+        "originalLocalFile": "work/unmuted-prototype/source.patch",
+        "byteIdenticalCopy": true
+      }
+    ],
+    "manifestScope": "Frozen build-time record; liveAudioExecuted:false states that the builder did not execute audio before handoff, not that these later runs did not occur.",
+    "productionSourceUnchanged": true,
+    "soleSourceChange": {
+      "file": "Sources/FiloCore/ExclusiveRelaySession.swift",
+      "before": "description.muteBehavior = .mutedWhenTapped",
+      "after": "description.muteBehavior = .unmuted"
+    },
+    "pairedComparison": {
+      "sourceDifferences": [
+        "Sources/FiloCore/ExclusiveRelaySession.swift"
+      ],
+      "changedLinkedObjects": [
+        ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRelaySession.swift.o"
+      ],
+      "identicalLinkedObjects": 19,
+      "sameCompilerAndFlags": true,
+      "strictRepresentationCheckSourceUnchanged": true,
+      "strictRepresentationCheckObjectUnchanged": true
+    },
+    "offlineTests": {
+      "status": "blocked before execution",
+      "exitCode": 1,
+      "command": [
+        "xcrun",
+        "swift",
+        "test",
+        "--configuration",
+        "debug",
+        "-Xcc",
+        "-Wall",
+        "-Xcc",
+        "-Wextra",
+        "-Xcc",
+        "-Werror",
+        "-Xswiftc",
+        "-warnings-as-errors"
+      ],
+      "elapsedSeconds": 3.014,
+      "log": "offline-tests.log",
+      "logSHA256": "5a7c48c3881df7a3cc609b4c41e3b7f4556ffb84e245884d09e61e703d688f90",
+      "reason": "Installed Command Line Tools cannot import XCTest: no such module 'XCTest'. No tests executed."
+    },
+    "rebuildWarning": "The final rebuilt prototype .build binary has a different identity; these measurements used the preserved artifacts listed above."
+  },
+  "independentSnapshotSummaries": [
+    {
+      "localSnapshotPrefix": "spotify-connected-before",
+      "rawSnapshotSHA256": {
+        "devices": "24d794168a01d7a138a325b1d21748b4a52973b3db80a4114b3730fd9f05ada1",
+        "formats": "db3589101551ebf041fbccbb2ae427b40e58e4984386c4b1174224012614360a",
+        "clock": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": true,
+          "rate": 192000,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 12,
+              "formatID": 1819304813,
+              "rate": 192000
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 9,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 0,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        }
+      ],
+      "rawSnapshotsPublished": false
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-flac-during",
+      "rawSnapshotSHA256": {
+        "devices": "24d794168a01d7a138a325b1d21748b4a52973b3db80a4114b3730fd9f05ada1",
+        "formats": "db3589101551ebf041fbccbb2ae427b40e58e4984386c4b1174224012614360a",
+        "clock": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": true,
+          "rate": 192000,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 12,
+              "formatID": 1819304813,
+              "rate": 192000
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 9,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 0,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        }
+      ],
+      "rawSnapshotsPublished": false,
+      "timingCorrection": "Taken after run1 early failure and restoration; not evidence of a live exclusive session.",
+      "byteIdenticalToBefore": {
+        "devices": true,
+        "formats": true,
+        "clock": true
+      }
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-flac-fixed-during",
+      "rawSnapshotSHA256": {
+        "devices": "d49f72343de088bbdb1772e81d3f36eb3d2cbfeb87560525a24a02f409ca4fa9",
+        "formats": "b66194395efde8de8d1bbaf947e81502ae9eac72b97ec975075ac33967d6e1dc",
+        "clock": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": true,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 76,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": true
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 76,
+            "formatID": 1819304813,
+            "rate": 44100
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 76,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 0,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        }
+      ],
+      "rawSnapshotsPublished": false
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-flac-follow-repeat-during",
+      "rawSnapshotSHA256": {
+        "devices": "1ef5c62ab7a8ac5982d2f5ad6cc4a81b3c98b71de4bc68d2bb93c3aee2db77e7",
+        "formats": "51f5d0d991c3526b8297b9c65f543d1a2422b2bf875a169b8ae9c7655950a0c2",
+        "clock": "e652c6c79cdfcb64f9f0f575e3692915e10238ec6acbe3d5b5ebef06f204d20e"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": true,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 76,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": true
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 76,
+            "formatID": 1819304813,
+            "rate": 44100
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 76,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 1,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        },
+        {
+          "pitch": 0.5075777
+        }
+      ],
+      "rawSnapshotsPublished": false,
+      "timingCorrection": "Initially named after snapshots, then correctly relabeled as during run3 before the helper exited."
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-restored-after-flac",
+      "rawSnapshotSHA256": {
+        "devices": "24d794168a01d7a138a325b1d21748b4a52973b3db80a4114b3730fd9f05ada1",
+        "formats": "db3589101551ebf041fbccbb2ae427b40e58e4984386c4b1174224012614360a",
+        "clock": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": true,
+          "rate": 192000,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 12,
+              "formatID": 1819304813,
+              "rate": 192000
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 9,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 0,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        }
+      ],
+      "rawSnapshotsPublished": false,
+      "byteIdenticalToBefore": {
+        "devices": true,
+        "formats": true,
+        "clock": true
+      }
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-held-alac-observed",
+      "rawSnapshotSHA256": {
+        "devices": "9a5b173a7c974e2888300060e6a5f6a7e99a3682715887a26aee14b82d6cce3e",
+        "formats": "db3589101551ebf041fbccbb2ae427b40e58e4984386c4b1174224012614360a",
+        "clock": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": true,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": false,
+          "rate": 192000,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 12,
+              "formatID": 1819304813,
+              "rate": 192000
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 9,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 0,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        }
+      ],
+      "rawSnapshotsPublished": false,
+      "timingCorrection": "Captured after run9 early failure and inner cleanup; confirms held BlackHole default and restored WALKMAN, not live exclusive acquisition."
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-held-follow-wav-observed",
+      "rawSnapshotSHA256": {
+        "devices": "b0080d53cd0dc354080e4b76b8d94df5cd0f310c622ca8d3f64c423e84240dcb",
+        "formats": "51f5d0d991c3526b8297b9c65f543d1a2422b2bf875a169b8ae9c7655950a0c2",
+        "clock": "8175d1a4b611c847afa82dd06651478c6f88c6b8e93535af697a7cb300d71a76"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": true,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 76,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": true
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 76,
+            "formatID": 1819304813,
+            "rate": 44100
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 76,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 1,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        },
+        {
+          "pitch": 0.5009971
+        }
+      ],
+      "rawSnapshotsPublished": false,
+      "timing": "Observed during run12 with nonempty exclusive ownership and Internal Adjustable readback."
+    },
+    {
+      "localSnapshotPrefix": "spotify-connected-final-restored",
+      "rawSnapshotSHA256": {
+        "devices": "24d794168a01d7a138a325b1d21748b4a52973b3db80a4114b3730fd9f05ada1",
+        "formats": "db3589101551ebf041fbccbb2ae427b40e58e4984386c4b1174224012614360a",
+        "clock": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+      },
+      "deviceSummary": [
+        {
+          "name": "BlackHole 2ch",
+          "isDefault": false,
+          "rate": 44100,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 9,
+              "formatID": 1819304813,
+              "rate": 44100
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        },
+        {
+          "name": "WALKMAN",
+          "isDefault": true,
+          "rate": 192000,
+          "formats": [
+            {
+              "bits": 32,
+              "bytesPerFrame": 8,
+              "channels": 2,
+              "flags": 12,
+              "formatID": 1819304813,
+              "rate": 192000
+            }
+          ],
+          "exclusiveOwnerPresent": false
+        }
+      ],
+      "currentFormats": [
+        {
+          "physicalFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          },
+          "virtualFormat": {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 9,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        }
+      ],
+      "blackHoleClockSummary": [
+        {
+          "currentItem": 0,
+          "items": {
+            "0": "Internal Fixed",
+            "1": "Internal Adjustable"
+          }
+        }
+      ],
+      "rawSnapshotsPublished": false,
+      "timing": "After run13 inner exit and outer holder restoration and exit.",
+      "byteIdenticalToBefore": {
+        "devices": true,
+        "formats": true,
+        "clock": true
+      }
+    }
+  ],
+  "interpretationLimits": [
+    "Six successful runs prove complete finite waveform and raw signed32 output bytes at the stated software boundary.",
+    "Seven failures have no reference alignment and no compared reference bytes; zero mismatch fields are not successful comparisons.",
+    "All seven failure output-capture hashes independently match same-length all-zero data; the rejected input callback was not retained.",
+    "Failure occurs with both mutedWhenTapped and unmuted and with following enabled and disabled; neither mute suppression nor clock following is necessary for the observed failure.",
+    "The first8 runs showed new-file failures and replay passes, but held-route runs10,11 and12 passed new-file selections, and earlier source-only first selections passed.",
+    "Holding the route did not guarantee success: its first ALAC trial, run9, failed without warmup playback, followed by passing FLAC,ALAC and WAV selections.",
+    "After Spotify was quit and relaunched under the same held route, first ALAC playback in run13 failed; this is additional startup-state evidence, not identification of an internal renderer or decoder cause.",
+    "No source gain curve, decoder reset, resampler activation, renderer transition, USB receiver data, or subscription master was measured.",
+    "Run9 includes231424 pre-prime startup-silence frames excluded from its512-frame raw output capture; run13 includes736256 pre-prime startup-silence frames excluded from its3072-frame capture; neither early-failure capture is the entire IOProc timeline."
+  ],
+  "pendingInvestigations": [],
+  "heldRouteControl": {
+    "status": "Runs9-13 complete; outer holder restored and exited.",
+    "holderArgv": [
+      "work/spotify-held-route",
+      "--seconds",
+      "600"
+    ],
+    "holderSource": "spotify-held-route.swift",
+    "holderSourceSHA256": "7f4b99aa7354476957c0966fae5841f858d6acc360f41047fdfb03f10e8685ed",
+    "holderExecutableSHA256": "4202eeb9bbea981356a900bb2e41eca742a23236cdc970452032caf262a5d5c1",
+    "holderBuildRecord": "spotify-held-route-build.json",
+    "holderBuildRecordSHA256": "aff2f13ec9fa6901474ebf04364179b4aacf24adbb83c9154cf55ba722111886",
+    "originalBuildRecordSHA256": "b65b450e80e58eb2b045340c202b1bac0a68bc415dbd6905fe72735996a797f5",
+    "buildRecordAdaptation": "Absolute project prefix removed from command arguments; compiler options, ordered inputs, source hash, object hashes, and executable hash unchanged.",
+    "sourceBehavior": "Separate guarded route lease holds BlackHole44100; no tap or audio callback is created by the holder; quit, signal, EOF, or deadline triggers guarded restoration after inner output restoration.",
+    "outerOriginalDefault": "WALKMAN192000",
+    "innerDefaultRoute": "BlackHole44100",
+    "warmupPlayback": false,
+    "outerCleanupStatus": "Restored after stdin quit, empty errors, process exit0 observed by operator; final independent device/format/clock snapshots byte-identical to original baseline.",
+    "outerRestoration": {
+      "event": "restored",
+      "reason": "stdin quit",
+      "errors": [],
+      "exitCode": 0,
+      "processAbsent": true,
+      "processEvidence": "Operator verified the task-owned outer holder and audio/compiler helpers absent after completion.",
+      "outerJournalAbsent": true,
+      "outerContextAbsent": true
+    }
+  },
+  "playerRestoration": {
+    "receipt": "spotify-connected-ui-restoration.json",
+    "receiptSHA256": "17398c4b3863dc8574aca251e03ecf91e9e6e0f39805533087f8523b65502ee7",
+    "restored": true,
+    "taskSourceEnabled": false,
+    "disabledCustomSourceRowRetained": true,
+    "scope": "Task-mutated Spotify preferences restored; playback paused, queue empty, volume1 observed; Automix remained on throughout these measurements."
+  }
+}
