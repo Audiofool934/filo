@@ -65,6 +65,8 @@ Unlike the earlier [Music observation](music-reference-observation.md), these ca
 That difference applies to these player versions, fixtures, and settings; it does not establish that subscription playback uses the same decoder and processing path.
 The passing Spotify source measurement and the earlier passing exclusive bridge measurements must not be combined into an unmeasured Spotify-to-DAC claim.
 The next hardware experiment must measure that connected path in one run.
+That subsequent [connected experiment](spotify-exclusive-observation.md) now records complete passing replays and failing first switches at the WALKMAN software output callback.
+Its different route baseline and additional physical-output stages are documented separately; it does not change these source-only measurements.
 
 Spotify's current [exclusive-mode documentation](https://support.spotify.com/us/article/exclusive-mode/) lists Windows Desktop support, not macOS support.
 It does not provide a native macOS integration path or specify per-track DAC sample-rate and bit-depth negotiation.

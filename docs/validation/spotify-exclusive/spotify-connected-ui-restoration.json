@@ -1,0 +1,26 @@
+{
+  "restored": true,
+  "spotifyRestartedForRun": 13,
+  "autoplay": true,
+  "showLocalFiles": false,
+  "downloadsSource": true,
+  "myMusicSource": true,
+  "syntheticSourceEnabled": false,
+  "disabledCustomSourceRowRetained": true,
+  "normalization": false,
+  "equalizer": false,
+  "crossfade": false,
+  "mono": false,
+  "gapless": true,
+  "automix": true,
+  "playback": "paused",
+  "queue": "empty",
+  "musicPreferencesChangedThisTurn": false,
+  "outerRouteHelper": {
+    "pid": 72475,
+    "event": "restored",
+    "reason": "stdin quit",
+    "errors": []
+  },
+  "note": "Preferences verified through Spotify UI. Only task-mutated preferences restored; Automix permission remains pending."
+}

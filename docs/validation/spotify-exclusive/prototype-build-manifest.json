@@ -1,0 +1,512 @@
+{
+  "purpose": "Isolated unmuted process-tap hypothesis experiment; not a production fix or playback result",
+  "createdAt": "2026-09-24T02:11:59.105725+00:00",
+  "baseCommit": "9e5eee4faf2e67f3653a62e35d346784299a2fc6",
+  "baseInputGitStatus": "",
+  "sourceRoots": [
+    "Package.swift",
+    "Sources",
+    "Tests"
+  ],
+  "soleSourceChange": {
+    "file": "Sources/FiloCore/ExclusiveRelaySession.swift",
+    "before": "description.muteBehavior = .mutedWhenTapped",
+    "after": "description.muteBehavior = .unmuted"
+  },
+  "sourcePatchSHA256": "efdf9ed6753c1df2d232a5fa8cd81f8cb53219d3e2308f860ab9497adced8d5d",
+  "baseInputSHA256": {
+    "Package.swift": "7d2149a04076cc3cef57fa8d73d721014b08464060484c503930d02aa84bd04e",
+    "Sources/FiloApp/AppModel.swift": "c9b9787af71c2f6728e0cb3e03820d51e23db889b8fc9b0e120f11289e23d9e3",
+    "Sources/FiloApp/FiloView.swift": "24fb841795ca47f513a9c0b1e20d1098ff6192afec9bdb8c8968cc72463b85da",
+    "Sources/FiloApp/main.swift": "a2668a5fcbd510575f419af8a83765b8e9c2306c17633476b635bf8df8829a56",
+    "Sources/FiloCore/AudioHardware.swift": "89ff1233f8949eef496ee5571ce5bfc5263412d6cf500803dd838117d5ca904e",
+    "Sources/FiloCore/AudioSession.swift": "2e741749cc1ff55c0cc77c1ddb17fb7d16fd1ad406c69b604fa188af0de9c83a",
+    "Sources/FiloCore/ClockFollower.swift": "a5eda8344a83cd00da6e983e9a0a6e06ae69d16ca26424af3432c7ce32d74250",
+    "Sources/FiloCore/ConnectionController.swift": "ff17c6f9b95913366deef3c4415e26267aeb91c43160b153e32b96378430ffde",
+    "Sources/FiloCore/DecoderMonitor.swift": "509e217b5207bc13a5f23f9f5b9eca11c6e9f82ad1690bf20cb2eaddab88cafa",
+    "Sources/FiloCore/DeviceInspection.swift": "5a46875b4a6c2574e0cbdbaffca69d23e5ffd30c06b645dba99f1824cc235e66",
+    "Sources/FiloCore/DeviceLease.swift": "8bc34b208781001b8ee653fa1562f1bade39ac55207123beff8a88a8446b24a5",
+    "Sources/FiloCore/ExclusiveDevice.swift": "6ab664f2240bd10c838d5a98eb3d6ace056e03f0e9cfd1f5c8029511d34cf3d1",
+    "Sources/FiloCore/ExclusiveRecoveryJournal.swift": "0d0a99a97d7db2c2f7c1eb14968833b05ed94fbce70a278a32d53cce54a518cf",
+    "Sources/FiloCore/ExclusiveRelaySession.swift": "80fe18d0affc6b020fa7db71fb8d15a595ffe27fe171175fd46027ef7b1e6b87",
+    "Sources/FiloCore/FormatPolicy.swift": "85fd448a6bcdd32ddc5e83fb6a5fabd7b86231fadf27ade5ff7bc2bd1112f8b7",
+    "Sources/FiloCore/OutputByteVerification.swift": "7196849b55289d1a6ce20b7b86f2e3ae0b7abfd9a7fdc16de0c7ca877ca51096",
+    "Sources/FiloCore/PCMVerification.swift": "f6a19f13a18ae812ab719bae2f9ddd6c4e8f8e58b3d9ce7c951614f56ecd14e2",
+    "Sources/FiloCore/PlayerReader.swift": "4affcf4cd583288c656a37b3d9f79020ac7219f4c57355f724c1168336d73f48",
+    "Sources/FiloCore/ReferencePCM.swift": "95020aca10dad69a2b9a4f1f6e011f933b1f561f121593d85610a772a346aaf0",
+    "Sources/FiloCore/SourceProcessingAssessment.swift": "c99d6681a3dad5a86c7417e17922b65b3f7f2fd31254b2eb026d31e4828e331b",
+    "Sources/FiloCore/VirtualClock.swift": "8438034a0193e1a649790d9cfcb4beff0b66b349d80a436a803a1b9ec461c826",
+    "Sources/FiloLab/main.swift": "c1b2c1f4a368147b0adf89a0eeaab1579f176d92100025e2b0105d686086ffa0",
+    "Sources/FiloPCM/Bridge.c": "3a534aa4776df70c45aab1c43a25e692bc014823fb5b8bd83f227372c873ed42",
+    "Sources/FiloPCM/Transport.c": "2fd436f0615c275b723f25b32b2090b9377fb16579d0fc100cf26d0344978161",
+    "Sources/FiloPCM/include/FiloBridge.h": "421bd7e447c699a6a7e2ade20c5540b89c13e7d7df6ff5cefe7efdd755ff2cb2",
+    "Sources/FiloPCM/include/FiloPCM.h": "e6cc9a0479a2ab5606e78b1a2a2126c2f02b2d1a72eebd8045f85ccd80a42ddc",
+    "Tests/FiloCoreTests/BridgeTests.swift": "03b1b3ae486b9b53a2acb9509243bdc666b53537a6b71eaff678d5934da0869c",
+    "Tests/FiloCoreTests/ClockFollowerTests.swift": "11c8892a7b3a15e522136433f023e2e590c668a499d71f33b8e07e7de5ac3933",
+    "Tests/FiloCoreTests/ExclusivePlaybackPolicyTests.swift": "1e0fea5ef92c1a0cc216ecc47aca4f5a76f14c1e2e09f879650367abb9fd64d6",
+    "Tests/FiloCoreTests/ExclusiveRecoveryJournalTests.swift": "5eff78351f68993819313073544166e6042d707a54bdf6dd5d5fa79706d99249",
+    "Tests/FiloCoreTests/LeaseTests.swift": "79e67668cb10db97f2f86147c546a79ee9823b108d34bd05ad94df5003400145",
+    "Tests/FiloCoreTests/OutputByteVerificationTests.swift": "1fdac874598b828a7ebe41411b3dd16fe7fd8ab3d2468c690bee533edffb5a35",
+    "Tests/FiloCoreTests/PCMTests.swift": "8c172c629c70dd6d059ec8ce7b8a0e8ea6ba14249f24d10f28a75aec0e0a8725",
+    "Tests/FiloCoreTests/PolicyTests.swift": "8689af25b157c2ea5d0f54ffc2e7bce9c7fbde98a7d88444919dd039b6cd9f6b",
+    "Tests/FiloCoreTests/ReferencePCMTests.swift": "5db858bf5363e1b895976757b17173bab6de60dd678952cd335e393876d32f47",
+    "Tests/FiloCoreTests/SourceProcessingAssessmentTests.swift": "34a895f1c24873d14438b590cbcd6594cf0d5faade9e4e3ace4fcc9c7bedcd38",
+    "Tests/FiloCoreTests/SourceProcessingTests.swift": "3ab11e15ab4a81177cf2a07362f0fd5da06394351f0fb078a79cf9153bc69ce1"
+  },
+  "prototypeInputSHA256": {
+    "Package.swift": "7d2149a04076cc3cef57fa8d73d721014b08464060484c503930d02aa84bd04e",
+    "Sources/FiloApp/AppModel.swift": "c9b9787af71c2f6728e0cb3e03820d51e23db889b8fc9b0e120f11289e23d9e3",
+    "Sources/FiloApp/FiloView.swift": "24fb841795ca47f513a9c0b1e20d1098ff6192afec9bdb8c8968cc72463b85da",
+    "Sources/FiloApp/main.swift": "a2668a5fcbd510575f419af8a83765b8e9c2306c17633476b635bf8df8829a56",
+    "Sources/FiloCore/AudioHardware.swift": "89ff1233f8949eef496ee5571ce5bfc5263412d6cf500803dd838117d5ca904e",
+    "Sources/FiloCore/AudioSession.swift": "2e741749cc1ff55c0cc77c1ddb17fb7d16fd1ad406c69b604fa188af0de9c83a",
+    "Sources/FiloCore/ClockFollower.swift": "a5eda8344a83cd00da6e983e9a0a6e06ae69d16ca26424af3432c7ce32d74250",
+    "Sources/FiloCore/ConnectionController.swift": "ff17c6f9b95913366deef3c4415e26267aeb91c43160b153e32b96378430ffde",
+    "Sources/FiloCore/DecoderMonitor.swift": "509e217b5207bc13a5f23f9f5b9eca11c6e9f82ad1690bf20cb2eaddab88cafa",
+    "Sources/FiloCore/DeviceInspection.swift": "5a46875b4a6c2574e0cbdbaffca69d23e5ffd30c06b645dba99f1824cc235e66",
+    "Sources/FiloCore/DeviceLease.swift": "8bc34b208781001b8ee653fa1562f1bade39ac55207123beff8a88a8446b24a5",
+    "Sources/FiloCore/ExclusiveDevice.swift": "6ab664f2240bd10c838d5a98eb3d6ace056e03f0e9cfd1f5c8029511d34cf3d1",
+    "Sources/FiloCore/ExclusiveRecoveryJournal.swift": "0d0a99a97d7db2c2f7c1eb14968833b05ed94fbce70a278a32d53cce54a518cf",
+    "Sources/FiloCore/ExclusiveRelaySession.swift": "d741f7db0ee8fa02980a1f9c11beb3567e44408741c6c4de86aa08da02e93304",
+    "Sources/FiloCore/FormatPolicy.swift": "85fd448a6bcdd32ddc5e83fb6a5fabd7b86231fadf27ade5ff7bc2bd1112f8b7",
+    "Sources/FiloCore/OutputByteVerification.swift": "7196849b55289d1a6ce20b7b86f2e3ae0b7abfd9a7fdc16de0c7ca877ca51096",
+    "Sources/FiloCore/PCMVerification.swift": "f6a19f13a18ae812ab719bae2f9ddd6c4e8f8e58b3d9ce7c951614f56ecd14e2",
+    "Sources/FiloCore/PlayerReader.swift": "4affcf4cd583288c656a37b3d9f79020ac7219f4c57355f724c1168336d73f48",
+    "Sources/FiloCore/ReferencePCM.swift": "95020aca10dad69a2b9a4f1f6e011f933b1f561f121593d85610a772a346aaf0",
+    "Sources/FiloCore/SourceProcessingAssessment.swift": "c99d6681a3dad5a86c7417e17922b65b3f7f2fd31254b2eb026d31e4828e331b",
+    "Sources/FiloCore/VirtualClock.swift": "8438034a0193e1a649790d9cfcb4beff0b66b349d80a436a803a1b9ec461c826",
+    "Sources/FiloLab/main.swift": "c1b2c1f4a368147b0adf89a0eeaab1579f176d92100025e2b0105d686086ffa0",
+    "Sources/FiloPCM/Bridge.c": "3a534aa4776df70c45aab1c43a25e692bc014823fb5b8bd83f227372c873ed42",
+    "Sources/FiloPCM/Transport.c": "2fd436f0615c275b723f25b32b2090b9377fb16579d0fc100cf26d0344978161",
+    "Sources/FiloPCM/include/FiloBridge.h": "421bd7e447c699a6a7e2ade20c5540b89c13e7d7df6ff5cefe7efdd755ff2cb2",
+    "Sources/FiloPCM/include/FiloPCM.h": "e6cc9a0479a2ab5606e78b1a2a2126c2f02b2d1a72eebd8045f85ccd80a42ddc",
+    "Tests/FiloCoreTests/BridgeTests.swift": "03b1b3ae486b9b53a2acb9509243bdc666b53537a6b71eaff678d5934da0869c",
+    "Tests/FiloCoreTests/ClockFollowerTests.swift": "11c8892a7b3a15e522136433f023e2e590c668a499d71f33b8e07e7de5ac3933",
+    "Tests/FiloCoreTests/ExclusivePlaybackPolicyTests.swift": "1e0fea5ef92c1a0cc216ecc47aca4f5a76f14c1e2e09f879650367abb9fd64d6",
+    "Tests/FiloCoreTests/ExclusiveRecoveryJournalTests.swift": "5eff78351f68993819313073544166e6042d707a54bdf6dd5d5fa79706d99249",
+    "Tests/FiloCoreTests/LeaseTests.swift": "79e67668cb10db97f2f86147c546a79ee9823b108d34bd05ad94df5003400145",
+    "Tests/FiloCoreTests/OutputByteVerificationTests.swift": "1fdac874598b828a7ebe41411b3dd16fe7fd8ab3d2468c690bee533edffb5a35",
+    "Tests/FiloCoreTests/PCMTests.swift": "8c172c629c70dd6d059ec8ce7b8a0e8ea6ba14249f24d10f28a75aec0e0a8725",
+    "Tests/FiloCoreTests/PolicyTests.swift": "8689af25b157c2ea5d0f54ffc2e7bce9c7fbde98a7d88444919dd039b6cd9f6b",
+    "Tests/FiloCoreTests/ReferencePCMTests.swift": "5db858bf5363e1b895976757b17173bab6de60dd678952cd335e393876d32f47",
+    "Tests/FiloCoreTests/SourceProcessingAssessmentTests.swift": "34a895f1c24873d14438b590cbcd6594cf0d5faade9e4e3ace4fcc9c7bedcd38",
+    "Tests/FiloCoreTests/SourceProcessingTests.swift": "3ab11e15ab4a81177cf2a07362f0fd5da06394351f0fb078a79cf9153bc69ce1"
+  },
+  "productionInputsVerifiedUnchanged": true,
+  "build": {
+    "configuration": "debug",
+    "product": "filo-lab",
+    "developerDirectory": "/Library/Developer/CommandLineTools",
+    "command": [
+      "xcrun",
+      "swift",
+      "build",
+      "--configuration",
+      "debug",
+      "--product",
+      "filo-lab",
+      "-Xcc",
+      "-Wall",
+      "-Xcc",
+      "-Wextra",
+      "-Xcc",
+      "-Werror",
+      "-Xswiftc",
+      "-warnings-as-errors"
+    ],
+    "status": "passed",
+    "elapsedSeconds": 48.108
+  },
+  "offlineTests": {
+    "status": "blocked before execution",
+    "exitCode": 1,
+    "command": [
+      "xcrun",
+      "swift",
+      "test",
+      "--configuration",
+      "debug",
+      "-Xcc",
+      "-Wall",
+      "-Xcc",
+      "-Wextra",
+      "-Xcc",
+      "-Werror",
+      "-Xswiftc",
+      "-warnings-as-errors"
+    ],
+    "elapsedSeconds": 3.014,
+    "log": "offline-tests.log",
+    "logSHA256": "5a7c48c3881df7a3cc609b4c41e3b7f4556ffb84e245884d09e61e703d688f90",
+    "reason": "Installed Command Line Tools cannot import XCTest: no such module 'XCTest'. No tests executed."
+  },
+  "liveAudioExecuted": false,
+  "variants": {
+    "unmuted": {
+      "variant": "unmuted",
+      "executable": "artifacts/unmuted/filo-lab",
+      "executableSHA256": "60bfac081dec2f23d47e27ff925738b284034b8915428d62a7d8655a2a78fdcc",
+      "executableBytes": 2098688,
+      "binaryDescription": "Mach-O 64-bit executable arm64",
+      "sourceInputSHA256": {
+        "Package.swift": "7d2149a04076cc3cef57fa8d73d721014b08464060484c503930d02aa84bd04e",
+        "Sources/FiloApp/AppModel.swift": "c9b9787af71c2f6728e0cb3e03820d51e23db889b8fc9b0e120f11289e23d9e3",
+        "Sources/FiloApp/FiloView.swift": "24fb841795ca47f513a9c0b1e20d1098ff6192afec9bdb8c8968cc72463b85da",
+        "Sources/FiloApp/main.swift": "a2668a5fcbd510575f419af8a83765b8e9c2306c17633476b635bf8df8829a56",
+        "Sources/FiloCore/AudioHardware.swift": "89ff1233f8949eef496ee5571ce5bfc5263412d6cf500803dd838117d5ca904e",
+        "Sources/FiloCore/AudioSession.swift": "2e741749cc1ff55c0cc77c1ddb17fb7d16fd1ad406c69b604fa188af0de9c83a",
+        "Sources/FiloCore/ClockFollower.swift": "a5eda8344a83cd00da6e983e9a0a6e06ae69d16ca26424af3432c7ce32d74250",
+        "Sources/FiloCore/ConnectionController.swift": "ff17c6f9b95913366deef3c4415e26267aeb91c43160b153e32b96378430ffde",
+        "Sources/FiloCore/DecoderMonitor.swift": "509e217b5207bc13a5f23f9f5b9eca11c6e9f82ad1690bf20cb2eaddab88cafa",
+        "Sources/FiloCore/DeviceInspection.swift": "5a46875b4a6c2574e0cbdbaffca69d23e5ffd30c06b645dba99f1824cc235e66",
+        "Sources/FiloCore/DeviceLease.swift": "8bc34b208781001b8ee653fa1562f1bade39ac55207123beff8a88a8446b24a5",
+        "Sources/FiloCore/ExclusiveDevice.swift": "6ab664f2240bd10c838d5a98eb3d6ace056e03f0e9cfd1f5c8029511d34cf3d1",
+        "Sources/FiloCore/ExclusiveRecoveryJournal.swift": "0d0a99a97d7db2c2f7c1eb14968833b05ed94fbce70a278a32d53cce54a518cf",
+        "Sources/FiloCore/ExclusiveRelaySession.swift": "d741f7db0ee8fa02980a1f9c11beb3567e44408741c6c4de86aa08da02e93304",
+        "Sources/FiloCore/FormatPolicy.swift": "85fd448a6bcdd32ddc5e83fb6a5fabd7b86231fadf27ade5ff7bc2bd1112f8b7",
+        "Sources/FiloCore/OutputByteVerification.swift": "7196849b55289d1a6ce20b7b86f2e3ae0b7abfd9a7fdc16de0c7ca877ca51096",
+        "Sources/FiloCore/PCMVerification.swift": "f6a19f13a18ae812ab719bae2f9ddd6c4e8f8e58b3d9ce7c951614f56ecd14e2",
+        "Sources/FiloCore/PlayerReader.swift": "4affcf4cd583288c656a37b3d9f79020ac7219f4c57355f724c1168336d73f48",
+        "Sources/FiloCore/ReferencePCM.swift": "95020aca10dad69a2b9a4f1f6e011f933b1f561f121593d85610a772a346aaf0",
+        "Sources/FiloCore/SourceProcessingAssessment.swift": "c99d6681a3dad5a86c7417e17922b65b3f7f2fd31254b2eb026d31e4828e331b",
+        "Sources/FiloCore/VirtualClock.swift": "8438034a0193e1a649790d9cfcb4beff0b66b349d80a436a803a1b9ec461c826",
+        "Sources/FiloLab/main.swift": "c1b2c1f4a368147b0adf89a0eeaab1579f176d92100025e2b0105d686086ffa0",
+        "Sources/FiloPCM/Bridge.c": "3a534aa4776df70c45aab1c43a25e692bc014823fb5b8bd83f227372c873ed42",
+        "Sources/FiloPCM/Transport.c": "2fd436f0615c275b723f25b32b2090b9377fb16579d0fc100cf26d0344978161",
+        "Sources/FiloPCM/include/FiloBridge.h": "421bd7e447c699a6a7e2ade20c5540b89c13e7d7df6ff5cefe7efdd755ff2cb2",
+        "Sources/FiloPCM/include/FiloPCM.h": "e6cc9a0479a2ab5606e78b1a2a2126c2f02b2d1a72eebd8045f85ccd80a42ddc",
+        "Tests/FiloCoreTests/BridgeTests.swift": "03b1b3ae486b9b53a2acb9509243bdc666b53537a6b71eaff678d5934da0869c",
+        "Tests/FiloCoreTests/ClockFollowerTests.swift": "11c8892a7b3a15e522136433f023e2e590c668a499d71f33b8e07e7de5ac3933",
+        "Tests/FiloCoreTests/ExclusivePlaybackPolicyTests.swift": "1e0fea5ef92c1a0cc216ecc47aca4f5a76f14c1e2e09f879650367abb9fd64d6",
+        "Tests/FiloCoreTests/ExclusiveRecoveryJournalTests.swift": "5eff78351f68993819313073544166e6042d707a54bdf6dd5d5fa79706d99249",
+        "Tests/FiloCoreTests/LeaseTests.swift": "79e67668cb10db97f2f86147c546a79ee9823b108d34bd05ad94df5003400145",
+        "Tests/FiloCoreTests/OutputByteVerificationTests.swift": "1fdac874598b828a7ebe41411b3dd16fe7fd8ab3d2468c690bee533edffb5a35",
+        "Tests/FiloCoreTests/PCMTests.swift": "8c172c629c70dd6d059ec8ce7b8a0e8ea6ba14249f24d10f28a75aec0e0a8725",
+        "Tests/FiloCoreTests/PolicyTests.swift": "8689af25b157c2ea5d0f54ffc2e7bce9c7fbde98a7d88444919dd039b6cd9f6b",
+        "Tests/FiloCoreTests/ReferencePCMTests.swift": "5db858bf5363e1b895976757b17173bab6de60dd678952cd335e393876d32f47",
+        "Tests/FiloCoreTests/SourceProcessingAssessmentTests.swift": "34a895f1c24873d14438b590cbcd6594cf0d5faade9e4e3ace4fcc9c7bedcd38",
+        "Tests/FiloCoreTests/SourceProcessingTests.swift": "3ab11e15ab4a81177cf2a07362f0fd5da06394351f0fb078a79cf9153bc69ce1"
+      },
+      "linkedObjects": [
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/AudioHardware.swift.o",
+          "bytes": 253912,
+          "sha256": "f913c8da0b440724e1e900ae6c7321c6cd7880837e22bdcfba7b41acc6aebb7b"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/AudioSession.swift.o",
+          "bytes": 144088,
+          "sha256": "175edf6ccf71c52649f789ebe3c249f9f92a214a7eddbce7201090c59b73d1f7"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ClockFollower.swift.o",
+          "bytes": 29680,
+          "sha256": "127b41cfb875ac38d5ab690c348e0d66228c266945873949eea919c1fd01af8d"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ConnectionController.swift.o",
+          "bytes": 362168,
+          "sha256": "980ee9cac6a67781d68b33c586a5f7d479fc76d7f970f9fc3318d496cb93031e"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/DecoderMonitor.swift.o",
+          "bytes": 115488,
+          "sha256": "64389fd938876e81fef1162e1009b6e4c3f30419a919f83111b401aa22f3daf1"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/DeviceInspection.swift.o",
+          "bytes": 115072,
+          "sha256": "e03e0d681109245649683267267f34f924c396c2e5101edfc6b5006b8f047d22"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/DeviceLease.swift.o",
+          "bytes": 159312,
+          "sha256": "7a58ee25b5fe63b9db84e2ef2ee99a6fc623516982658f3df2f2a7f8463c625d"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveDevice.swift.o",
+          "bytes": 82360,
+          "sha256": "11c13aecda294684e64fe2b1a2ce6eed677c5399f9d3bcc951fcecabe6f31d03"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRecoveryJournal.swift.o",
+          "bytes": 770240,
+          "sha256": "33da519b0f45c5a146f7988cbb2119d38133ee5b068d5652cc5ec35ce7f18a83"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRelaySession.swift.o",
+          "bytes": 192752,
+          "sha256": "23840d0a72a95b8977b4b73f7bfe499eec754620086097de4088ed9c33e6fa80"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/FormatPolicy.swift.o",
+          "bytes": 194880,
+          "sha256": "bfc4123cafc2e4345084640f6513c7cf141755caf318fe8e7d7853a07ce7e256"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/OutputByteVerification.swift.o",
+          "bytes": 218480,
+          "sha256": "0ead2fb19a04df4864826c0a4e4d466da2cab64dfcb410fce9d6a83bb827a925"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/PCMVerification.swift.o",
+          "bytes": 69136,
+          "sha256": "c7cb7e01c9abbd59df5f80894aa86f2eaa788a73e8572c56d2f30e374d03cb95"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/PlayerReader.swift.o",
+          "bytes": 343720,
+          "sha256": "1b71c0e801389974b1c11370b7dcd60add03691bdc2ee41fad616d3da9712fce"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ReferencePCM.swift.o",
+          "bytes": 208960,
+          "sha256": "b631dfa19e35a9e18ac8bd34c81f7293395d85436d0fc4934b9cbd74a10eb7a5"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/SourceProcessingAssessment.swift.o",
+          "bytes": 84176,
+          "sha256": "857be50f513f43d0fb6b0db593350c5c801ecdf133caad656544df569c028412"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/VirtualClock.swift.o",
+          "bytes": 136744,
+          "sha256": "4b0ff61986d9d251b47550a3d045ee83968fc448b955c2713457beee132e6e79"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloLab.build/main.swift.o",
+          "bytes": 319816,
+          "sha256": "b53e7bcdfdaeda2b5cd6890969c123445bd0a1c62eaa9e287928fea134263c9d"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloPCM.build/Bridge.c.o",
+          "bytes": 34128,
+          "sha256": "5169ec8ac63d99c8780c9b1208cc2b87668ef4fd377440092630d94083ef016a"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloPCM.build/Transport.c.o",
+          "bytes": 17912,
+          "sha256": "1f692327e189763225a74aa2aa77f891f135bf2a2507353968b5b7d6e879b854"
+        }
+      ],
+      "linkFileListSHA256": "c94fa8a89a9035bbe63140f48f99e18f5a3eb3ac61d5d62ba9c9bee37d25fb30",
+      "buildLogSHA256": "46bcf5c7bc855e90c8b9771872c7c5be4b7ad8c014ad11376a1ddf8c61ad7621",
+      "buildStatus": "passed",
+      "buildCommand": [
+        "xcrun",
+        "swift",
+        "build",
+        "--configuration",
+        "debug",
+        "--product",
+        "filo-lab",
+        "-Xcc",
+        "-Wall",
+        "-Xcc",
+        "-Wextra",
+        "-Xcc",
+        "-Werror",
+        "-Xswiftc",
+        "-warnings-as-errors"
+      ],
+      "configuration": "debug"
+    },
+    "muted": {
+      "variant": "muted",
+      "executable": "artifacts/muted/filo-lab",
+      "executableSHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+      "executableBytes": 2098688,
+      "binaryDescription": "Mach-O 64-bit executable arm64",
+      "sourceInputSHA256": {
+        "Package.swift": "7d2149a04076cc3cef57fa8d73d721014b08464060484c503930d02aa84bd04e",
+        "Sources/FiloApp/AppModel.swift": "c9b9787af71c2f6728e0cb3e03820d51e23db889b8fc9b0e120f11289e23d9e3",
+        "Sources/FiloApp/FiloView.swift": "24fb841795ca47f513a9c0b1e20d1098ff6192afec9bdb8c8968cc72463b85da",
+        "Sources/FiloApp/main.swift": "a2668a5fcbd510575f419af8a83765b8e9c2306c17633476b635bf8df8829a56",
+        "Sources/FiloCore/AudioHardware.swift": "89ff1233f8949eef496ee5571ce5bfc5263412d6cf500803dd838117d5ca904e",
+        "Sources/FiloCore/AudioSession.swift": "2e741749cc1ff55c0cc77c1ddb17fb7d16fd1ad406c69b604fa188af0de9c83a",
+        "Sources/FiloCore/ClockFollower.swift": "a5eda8344a83cd00da6e983e9a0a6e06ae69d16ca26424af3432c7ce32d74250",
+        "Sources/FiloCore/ConnectionController.swift": "ff17c6f9b95913366deef3c4415e26267aeb91c43160b153e32b96378430ffde",
+        "Sources/FiloCore/DecoderMonitor.swift": "509e217b5207bc13a5f23f9f5b9eca11c6e9f82ad1690bf20cb2eaddab88cafa",
+        "Sources/FiloCore/DeviceInspection.swift": "5a46875b4a6c2574e0cbdbaffca69d23e5ffd30c06b645dba99f1824cc235e66",
+        "Sources/FiloCore/DeviceLease.swift": "8bc34b208781001b8ee653fa1562f1bade39ac55207123beff8a88a8446b24a5",
+        "Sources/FiloCore/ExclusiveDevice.swift": "6ab664f2240bd10c838d5a98eb3d6ace056e03f0e9cfd1f5c8029511d34cf3d1",
+        "Sources/FiloCore/ExclusiveRecoveryJournal.swift": "0d0a99a97d7db2c2f7c1eb14968833b05ed94fbce70a278a32d53cce54a518cf",
+        "Sources/FiloCore/ExclusiveRelaySession.swift": "80fe18d0affc6b020fa7db71fb8d15a595ffe27fe171175fd46027ef7b1e6b87",
+        "Sources/FiloCore/FormatPolicy.swift": "85fd448a6bcdd32ddc5e83fb6a5fabd7b86231fadf27ade5ff7bc2bd1112f8b7",
+        "Sources/FiloCore/OutputByteVerification.swift": "7196849b55289d1a6ce20b7b86f2e3ae0b7abfd9a7fdc16de0c7ca877ca51096",
+        "Sources/FiloCore/PCMVerification.swift": "f6a19f13a18ae812ab719bae2f9ddd6c4e8f8e58b3d9ce7c951614f56ecd14e2",
+        "Sources/FiloCore/PlayerReader.swift": "4affcf4cd583288c656a37b3d9f79020ac7219f4c57355f724c1168336d73f48",
+        "Sources/FiloCore/ReferencePCM.swift": "95020aca10dad69a2b9a4f1f6e011f933b1f561f121593d85610a772a346aaf0",
+        "Sources/FiloCore/SourceProcessingAssessment.swift": "c99d6681a3dad5a86c7417e17922b65b3f7f2fd31254b2eb026d31e4828e331b",
+        "Sources/FiloCore/VirtualClock.swift": "8438034a0193e1a649790d9cfcb4beff0b66b349d80a436a803a1b9ec461c826",
+        "Sources/FiloLab/main.swift": "c1b2c1f4a368147b0adf89a0eeaab1579f176d92100025e2b0105d686086ffa0",
+        "Sources/FiloPCM/Bridge.c": "3a534aa4776df70c45aab1c43a25e692bc014823fb5b8bd83f227372c873ed42",
+        "Sources/FiloPCM/Transport.c": "2fd436f0615c275b723f25b32b2090b9377fb16579d0fc100cf26d0344978161",
+        "Sources/FiloPCM/include/FiloBridge.h": "421bd7e447c699a6a7e2ade20c5540b89c13e7d7df6ff5cefe7efdd755ff2cb2",
+        "Sources/FiloPCM/include/FiloPCM.h": "e6cc9a0479a2ab5606e78b1a2a2126c2f02b2d1a72eebd8045f85ccd80a42ddc",
+        "Tests/FiloCoreTests/BridgeTests.swift": "03b1b3ae486b9b53a2acb9509243bdc666b53537a6b71eaff678d5934da0869c",
+        "Tests/FiloCoreTests/ClockFollowerTests.swift": "11c8892a7b3a15e522136433f023e2e590c668a499d71f33b8e07e7de5ac3933",
+        "Tests/FiloCoreTests/ExclusivePlaybackPolicyTests.swift": "1e0fea5ef92c1a0cc216ecc47aca4f5a76f14c1e2e09f879650367abb9fd64d6",
+        "Tests/FiloCoreTests/ExclusiveRecoveryJournalTests.swift": "5eff78351f68993819313073544166e6042d707a54bdf6dd5d5fa79706d99249",
+        "Tests/FiloCoreTests/LeaseTests.swift": "79e67668cb10db97f2f86147c546a79ee9823b108d34bd05ad94df5003400145",
+        "Tests/FiloCoreTests/OutputByteVerificationTests.swift": "1fdac874598b828a7ebe41411b3dd16fe7fd8ab3d2468c690bee533edffb5a35",
+        "Tests/FiloCoreTests/PCMTests.swift": "8c172c629c70dd6d059ec8ce7b8a0e8ea6ba14249f24d10f28a75aec0e0a8725",
+        "Tests/FiloCoreTests/PolicyTests.swift": "8689af25b157c2ea5d0f54ffc2e7bce9c7fbde98a7d88444919dd039b6cd9f6b",
+        "Tests/FiloCoreTests/ReferencePCMTests.swift": "5db858bf5363e1b895976757b17173bab6de60dd678952cd335e393876d32f47",
+        "Tests/FiloCoreTests/SourceProcessingAssessmentTests.swift": "34a895f1c24873d14438b590cbcd6594cf0d5faade9e4e3ace4fcc9c7bedcd38",
+        "Tests/FiloCoreTests/SourceProcessingTests.swift": "3ab11e15ab4a81177cf2a07362f0fd5da06394351f0fb078a79cf9153bc69ce1"
+      },
+      "linkedObjects": [
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/AudioHardware.swift.o",
+          "bytes": 253912,
+          "sha256": "f913c8da0b440724e1e900ae6c7321c6cd7880837e22bdcfba7b41acc6aebb7b"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/AudioSession.swift.o",
+          "bytes": 144088,
+          "sha256": "175edf6ccf71c52649f789ebe3c249f9f92a214a7eddbce7201090c59b73d1f7"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ClockFollower.swift.o",
+          "bytes": 29680,
+          "sha256": "127b41cfb875ac38d5ab690c348e0d66228c266945873949eea919c1fd01af8d"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ConnectionController.swift.o",
+          "bytes": 362168,
+          "sha256": "980ee9cac6a67781d68b33c586a5f7d479fc76d7f970f9fc3318d496cb93031e"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/DecoderMonitor.swift.o",
+          "bytes": 115488,
+          "sha256": "64389fd938876e81fef1162e1009b6e4c3f30419a919f83111b401aa22f3daf1"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/DeviceInspection.swift.o",
+          "bytes": 115072,
+          "sha256": "e03e0d681109245649683267267f34f924c396c2e5101edfc6b5006b8f047d22"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/DeviceLease.swift.o",
+          "bytes": 159312,
+          "sha256": "7a58ee25b5fe63b9db84e2ef2ee99a6fc623516982658f3df2f2a7f8463c625d"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveDevice.swift.o",
+          "bytes": 82360,
+          "sha256": "11c13aecda294684e64fe2b1a2ce6eed677c5399f9d3bcc951fcecabe6f31d03"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRecoveryJournal.swift.o",
+          "bytes": 770240,
+          "sha256": "33da519b0f45c5a146f7988cbb2119d38133ee5b068d5652cc5ec35ce7f18a83"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRelaySession.swift.o",
+          "bytes": 192752,
+          "sha256": "5b202d19d6216a19ad609e8db4aa2d91fcdae604b509bf4a7b2615ba69457396"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/FormatPolicy.swift.o",
+          "bytes": 194880,
+          "sha256": "bfc4123cafc2e4345084640f6513c7cf141755caf318fe8e7d7853a07ce7e256"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/OutputByteVerification.swift.o",
+          "bytes": 218480,
+          "sha256": "0ead2fb19a04df4864826c0a4e4d466da2cab64dfcb410fce9d6a83bb827a925"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/PCMVerification.swift.o",
+          "bytes": 69136,
+          "sha256": "c7cb7e01c9abbd59df5f80894aa86f2eaa788a73e8572c56d2f30e374d03cb95"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/PlayerReader.swift.o",
+          "bytes": 343720,
+          "sha256": "1b71c0e801389974b1c11370b7dcd60add03691bdc2ee41fad616d3da9712fce"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/ReferencePCM.swift.o",
+          "bytes": 208960,
+          "sha256": "b631dfa19e35a9e18ac8bd34c81f7293395d85436d0fc4934b9cbd74a10eb7a5"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/SourceProcessingAssessment.swift.o",
+          "bytes": 84176,
+          "sha256": "857be50f513f43d0fb6b0db593350c5c801ecdf133caad656544df569c028412"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloCore.build/VirtualClock.swift.o",
+          "bytes": 136744,
+          "sha256": "4b0ff61986d9d251b47550a3d045ee83968fc448b955c2713457beee132e6e79"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloLab.build/main.swift.o",
+          "bytes": 319816,
+          "sha256": "b53e7bcdfdaeda2b5cd6890969c123445bd0a1c62eaa9e287928fea134263c9d"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloPCM.build/Bridge.c.o",
+          "bytes": 34128,
+          "sha256": "5169ec8ac63d99c8780c9b1208cc2b87668ef4fd377440092630d94083ef016a"
+        },
+        {
+          "path": ".build/arm64-apple-macosx/debug/FiloPCM.build/Transport.c.o",
+          "bytes": 17912,
+          "sha256": "1f692327e189763225a74aa2aa77f891f135bf2a2507353968b5b7d6e879b854"
+        }
+      ],
+      "linkFileListSHA256": "c94fa8a89a9035bbe63140f48f99e18f5a3eb3ac61d5d62ba9c9bee37d25fb30",
+      "buildLogSHA256": "485500ca325f0cb046c0e7b054c25651d63dfa9e78092778e5aa255b8217e8a7",
+      "buildStatus": "passed",
+      "buildCommand": [
+        "xcrun",
+        "swift",
+        "build",
+        "--configuration",
+        "debug",
+        "--product",
+        "filo-lab",
+        "-Xcc",
+        "-Wall",
+        "-Xcc",
+        "-Wextra",
+        "-Xcc",
+        "-Werror",
+        "-Xswiftc",
+        "-warnings-as-errors"
+      ],
+      "configuration": "debug",
+      "elapsedSeconds": 1.381
+    }
+  },
+  "finalSourceVariant": "unmuted",
+  "buildDirectoryVariant": "unmuted",
+  "finalUnmutedBuild": {
+    "exitCode": 0,
+    "log": "build-final-unmuted.log",
+    "logSHA256": "f0563a02984c49c4f728e0971fa28c229d3f00946d4de86f4f168d58de49fbd8",
+    "binarySHA256": "78a26f533b3dbf3e0a88a30749ae958ab3b5d345e27fd050f3931f2613c782e3"
+  },
+  "toolchain": {
+    "swiftVersion": "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)\nTarget: arm64-apple-macosx26.0",
+    "swiftPath": "/Library/Developer/CommandLineTools/usr/bin/swift",
+    "clangVersion": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
+    "sdkPath": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+  },
+  "pairedComparison": {
+    "sourceDifferences": [
+      "Sources/FiloCore/ExclusiveRelaySession.swift"
+    ],
+    "changedLinkedObjects": [
+      ".build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRelaySession.swift.o"
+    ],
+    "identicalLinkedObjects": 19,
+    "sameCompilerAndFlags": true,
+    "strictRepresentationCheckSourceUnchanged": true,
+    "strictRepresentationCheckObjectUnchanged": true
+  },
+  "usage": "Use artifacts/unmuted/filo-lab and artifacts/muted/filo-lab for paired measurements; these preserved executables are immutable snapshots. The rebuilt .build executable has a separate hash and is not the handed-off unmuted artifact."
+}

@@ -1,0 +1,11 @@
+--- a/Sources/FiloCore/ExclusiveRelaySession.swift
++++ b/Sources/FiloCore/ExclusiveRelaySession.swift
+@@ -64,7 +64,7 @@
+             }
+             try outputLease.acquire(output: output, rate: source.rate, minimumBits: sourceBits == 16 ? 16 : 24)
+             let description = CATapDescription(processes: processIDs, deviceUID: source.uid, stream: 0)
+-            description.name = "filo isolated source"; description.isPrivate = true; description.muteBehavior = .mutedWhenTapped
++            description.name = "filo isolated source"; description.isPrivate = true; description.muteBehavior = .unmuted
+             try HAL.check(AudioHardwareCreateProcessTap(description, &tap), "Create isolated source tap")
+             let tapUID = try HAL.string(tap, kAudioTapPropertyUID)
+             let tapFormat = try HAL.value(tap, kAudioTapPropertyFormat, default: AudioStreamBasicDescription())

@@ -1,0 +1,134 @@
+{
+  "scope": "Build-only route-holder helper; never executed here",
+  "source": "work/spotify-held-route.swift",
+  "sourceSHA256": "7f4b99aa7354476957c0966fae5841f858d6acc360f41047fdfb03f10e8685ed",
+  "command": [
+    "xcrun",
+    "swiftc",
+    "-parse-as-library",
+    "-g",
+    "-target",
+    "arm64-apple-macosx14.4",
+    "-I",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/Modules",
+    "-Xcc",
+    "-fmodule-map-file=work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloPCM.build/module.modulemap",
+    "-I",
+    "work/unmuted-prototype/Sources/FiloPCM/include",
+    "-warnings-as-errors",
+    "work/spotify-held-route.swift",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/AudioHardware.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/AudioSession.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ClockFollower.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ConnectionController.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/DecoderMonitor.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/DeviceInspection.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/DeviceLease.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveDevice.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRecoveryJournal.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRelaySession.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/FormatPolicy.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/OutputByteVerification.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/PCMVerification.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/PlayerReader.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ReferencePCM.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/SourceProcessingAssessment.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/VirtualClock.swift.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloPCM.build/Bridge.c.o",
+    "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloPCM.build/Transport.c.o",
+    "-framework",
+    "CoreAudio",
+    "-o",
+    "work/spotify-held-route"
+  ],
+  "buildExitCode": 0,
+  "buildLogSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "linkedObjects": [
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/AudioHardware.swift.o",
+      "sha256": "f913c8da0b440724e1e900ae6c7321c6cd7880837e22bdcfba7b41acc6aebb7b"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/AudioSession.swift.o",
+      "sha256": "175edf6ccf71c52649f789ebe3c249f9f92a214a7eddbce7201090c59b73d1f7"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ClockFollower.swift.o",
+      "sha256": "127b41cfb875ac38d5ab690c348e0d66228c266945873949eea919c1fd01af8d"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ConnectionController.swift.o",
+      "sha256": "980ee9cac6a67781d68b33c586a5f7d479fc76d7f970f9fc3318d496cb93031e"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/DecoderMonitor.swift.o",
+      "sha256": "64389fd938876e81fef1162e1009b6e4c3f30419a919f83111b401aa22f3daf1"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/DeviceInspection.swift.o",
+      "sha256": "e03e0d681109245649683267267f34f924c396c2e5101edfc6b5006b8f047d22"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/DeviceLease.swift.o",
+      "sha256": "7a58ee25b5fe63b9db84e2ef2ee99a6fc623516982658f3df2f2a7f8463c625d"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveDevice.swift.o",
+      "sha256": "11c13aecda294684e64fe2b1a2ce6eed677c5399f9d3bcc951fcecabe6f31d03"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRecoveryJournal.swift.o",
+      "sha256": "33da519b0f45c5a146f7988cbb2119d38133ee5b068d5652cc5ec35ce7f18a83"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ExclusiveRelaySession.swift.o",
+      "sha256": "23840d0a72a95b8977b4b73f7bfe499eec754620086097de4088ed9c33e6fa80"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/FormatPolicy.swift.o",
+      "sha256": "bfc4123cafc2e4345084640f6513c7cf141755caf318fe8e7d7853a07ce7e256"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/OutputByteVerification.swift.o",
+      "sha256": "0ead2fb19a04df4864826c0a4e4d466da2cab64dfcb410fce9d6a83bb827a925"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/PCMVerification.swift.o",
+      "sha256": "c7cb7e01c9abbd59df5f80894aa86f2eaa788a73e8572c56d2f30e374d03cb95"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/PlayerReader.swift.o",
+      "sha256": "1b71c0e801389974b1c11370b7dcd60add03691bdc2ee41fad616d3da9712fce"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/ReferencePCM.swift.o",
+      "sha256": "b631dfa19e35a9e18ac8bd34c81f7293395d85436d0fc4934b9cbd74a10eb7a5"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/SourceProcessingAssessment.swift.o",
+      "sha256": "857be50f513f43d0fb6b0db593350c5c801ecdf133caad656544df569c028412"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloCore.build/VirtualClock.swift.o",
+      "sha256": "4b0ff61986d9d251b47550a3d045ee83968fc448b955c2713457beee132e6e79"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloPCM.build/Bridge.c.o",
+      "sha256": "5169ec8ac63d99c8780c9b1208cc2b87668ef4fd377440092630d94083ef016a"
+    },
+    {
+      "path": "work/unmuted-prototype/.build/arm64-apple-macosx/debug/FiloPCM.build/Transport.c.o",
+      "sha256": "1f692327e189763225a74aa2aa77f891f135bf2a2507353968b5b7d6e879b854"
+    }
+  ],
+  "helperExecuted": false,
+  "executable": "work/spotify-held-route",
+  "executableSHA256": "4202eeb9bbea981356a900bb2e41eca742a23236cdc970452032caf262a5d5c1",
+  "archiveAdaptation": {
+    "originalBuildRecordSHA256": "b65b450e80e58eb2b045340c202b1bac0a68bc415dbd6905fe72735996a797f5",
+    "change": "Absolute project prefix removed from command arguments; compiler options, ordered inputs, source hash, object hashes, and executable hash unchanged.",
+    "commandWorkingDirectory": "Repository root after copying the archived source back to work/spotify-held-route.swift.",
+    "sourceCopyByteIdentical": true,
+    "originalScopeNote": "Build-only and helperExecuted:false describe the build before the operator later launched the helper."
+  }
+}

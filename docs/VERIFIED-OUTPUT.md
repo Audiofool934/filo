@@ -80,6 +80,12 @@ Apple Music does not expose supported exact per-track PCM metadata for every sub
 Spotify's 44.1 kHz option is a policy, not a measurement of the current master.
 A passing local reference cannot certify another subscription track, player version, DSP setting, or rate transition.
 
+Connected Spotify local-file measurements passed entire FLAC, WAV, and ALAC references through the WALKMAN software output callback under recorded conditions.
+Other selections failed the strict integer check, including fixed-clock and unmuted-tap controls.
+Holding the source route unchanged allowed later new-file selections to pass, but did not prevent the first held-route failure.
+See the [connected Spotify observation](research/spotify-exclusive-observation.md) for all outcomes and reproduction conditions.
+The successful runs do not establish a reliable first-play or subscription path.
+
 The tested Apple Music 1.6.6 path did not pass the known-reference check on macOS 26.6.2.
 HTTP-resource and imported local-file playback produced byte-identical changed samples at the process tap, before the exclusive bridge.
 The opening was altered and later samples contained much smaller floating-point differences despite essentially unity gain.
