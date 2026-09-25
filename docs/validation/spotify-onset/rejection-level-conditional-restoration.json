@@ -1,0 +1,22 @@
+{
+  "after" : {
+    "inputDecibels" : -32,
+    "inputMute" : 0,
+    "inputScalar" : 0.5,
+    "outputDecibels" : -32,
+    "outputMute" : 0,
+    "outputScalar" : 0.5
+  },
+  "before" : {
+    "inputDecibels" : 0,
+    "inputMute" : 0,
+    "inputScalar" : 1,
+    "outputDecibels" : 0,
+    "outputMute" : 0,
+    "outputScalar" : 1
+  },
+  "device" : "BlackHole 2ch",
+  "explanation" : "The holder did not retain its mismatched tuple, so its monitor label did not establish an external writer. Parent cleanup verified the task-applied tuple twice, then conditionally restored only the journal's original scalar and verified both aliases twice.",
+  "priorJournalPreserved" : true,
+  "restored" : true
+}

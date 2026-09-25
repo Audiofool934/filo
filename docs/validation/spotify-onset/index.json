@@ -35,6 +35,14 @@
     "spotify-rejection-first-wav.json": "54138b8ad66f61c224247809d1039ed47278380a4d18eb06c77cb00c4069b041",
     "spotify-rejection-onset-model-analysis.json": "3fd7d4075e9db5e6b52680a8020249f79d5645e3085134a8b7bfe0d6244c8f94",
     "spotify-rejection-repeat-wav-analysis.json": "a10a9a1862f41879377cd783a492d347c2d6713b6b3842431227796643697bf4",
-    "spotify-rejection-repeat-wav.json": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925"
+    "spotify-rejection-repeat-wav.json": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925",
+    "rejection-level-conditional-restoration.json": "7247a637e0f57d9e00f5ce9f1630cc45f1c422f4c47124d412f413a5935c4ef5"
+  },
+  "finalRestoration": {
+    "deviceSnapshotEqual": true,
+    "formatSnapshotEqual": true,
+    "clockSnapshotEqual": true,
+    "originalBlackHoleScalarRestored": 0.5,
+    "conditionalLevelRestorationReceipt": "rejection-level-conditional-restoration.json"
   }
 }

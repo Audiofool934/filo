@@ -81,6 +81,10 @@ A temporary unity-gain control passed the formerly failing 44.1 kHz / 24-bit cas
 The universal beta.3 laboratory then passed all eight [rendered-loopback cases](../validation/spotify-onset/rejection-unity-loopback-matrix.json), covering 44.1, 48, 96, and 192 kHz at both 16-bit and 24-bit precision.
 All comparisons had zero mismatches, and the matrix restored BlackHole's original rate.
 This control supports the virtual-device gain explanation for the separate loopback failures.
+The temporary level holder reported an ambiguous control-tuple mismatch and skipped automatic restoration, without retaining the differing tuple.
+That label does not establish an external writer or a user change.
+After stopping all test I/O, parent cleanup twice confirmed that both aliases still matched the task-applied unity state, conditionally restored the original scalar once, and twice verified 0.5 / -32 dB with mute off.
+The [separate restoration receipt](../validation/spotify-onset/rejection-level-conditional-restoration.json) preserves this distinction; the original holder journal remains retained locally.
 
 ## Limits and restoration
 
@@ -90,6 +94,7 @@ Normal application playback does not enable this storage.
 An absent snapshot is not proof that the input was valid.
 
 After the two Spotify runs, independent device, WALKMAN-format, and BlackHole-clock snapshots exactly matched their initial states.
+The same three comparisons passed again after the later loopback matrix and volume restoration.
 Spotify Autoplay, Downloads, and My Music were restored on; the synthetic source was disabled and Show Local Files restored off.
 The player remained paused and the existing processing controls were preserved.
 Neither test measures the USB payload or PCM received inside the Sony device.
