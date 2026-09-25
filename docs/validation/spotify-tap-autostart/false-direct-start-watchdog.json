@@ -1,0 +1,15 @@
+{
+  "startedUTC": "2026-09-25T16:35:52.390314+00:00",
+  "elapsedSeconds": 36.20457375003025,
+  "exitCode": 1,
+  "termination": "normal",
+  "processExited": true,
+  "binarySHA256": "817c8e525c860ecb7a9db5203c0e31941df98d97b1f143e7eed867c510408e0c",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "experimentalTapAutoStart": false,
+  "captureSeconds": 30,
+  "reportFile": "false-direct-start.json",
+  "stderrFile": "false-direct-start.stderr",
+  "requiresRecoveryInspection": false,
+  "scope": "Known synthetic reference only; software callback and bounded rejected input, no receiver proof."
+}

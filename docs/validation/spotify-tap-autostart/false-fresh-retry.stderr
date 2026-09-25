@@ -1,0 +1,3 @@
+Source route and rate prepared. Launch the reference player now if it is closed.
+Reference capture armed. Play the known reference from its beginning within this capture window.
+filo: Whole-reference verification failed. See coverage and byte comparison.

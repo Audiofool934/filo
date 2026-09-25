@@ -1,0 +1,12 @@
+{
+  "recordedUTC": "2026-09-25T16:44:05.295827+00:00",
+  "userCorrection": "USB DAC mode was not enabled; user has now enabled it.",
+  "priorModeInterval": "Unknown for all earlier measurements; no retrospective interval is inferred.",
+  "currentModeEvidence": "User confirmation, not an independently read Sony display/receiver status.",
+  "effect": "Prior callbacks/rejected input remain host-side observations; do not describe them as confirmed active-USB-DAC-mode runs.",
+  "repeatPlan": "Same experimental TapAutoStart=false, one fresh Spotify process, sole unchanged canonical reference, 60-second capture with UI and arming timestamps.",
+  "defaultOutputAfterTesting": "WALKMAN, explicitly selected by user.",
+  "newSpotifyPID": 69239,
+  "restartVerifiedUTC": "2026-09-25T16:45:27.578022+00:00",
+  "modeOnWrapperSHA256": "c13fbf7915c1f43b1143e3acc2736cb38cd404765b41207794521a01341f692d"
+}

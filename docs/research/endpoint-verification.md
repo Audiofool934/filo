@@ -1,7 +1,8 @@
 # Endpoint verification research
 
 Research date: 2026-09-23.
-Scope: an Apple Silicon Mac with the existing Sony NW-ZX706 in USB-DAC mode, without additional test hardware, driver installation, or security-policy changes.
+Scope: an Apple Silicon Mac with the existing Sony NW-ZX706 as the intended USB-DAC endpoint, without additional test hardware, driver installation, or security-policy changes.
+The initial mode description was a setup assumption; see the later [USB DAC mode evidence correction](usb-dac-mode-correction.md).
 This investigation used documentation, source inspection, and read-only host diagnostics.
 It did not play or record audio, change an audio setting, or access a subscription master.
 
