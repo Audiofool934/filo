@@ -1,0 +1,171 @@
+{
+  "binarySHA256" : "6ea88bdbd8072ae41533502ec681a105b348d65110974e36c3e884e427a1d174",
+  "calls" : [
+    {
+      "monotonicSeconds" : 641299.6559377083,
+      "operation" : "newOutput",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6573886251,
+      "operation" : "setCurrentDeviceBlackHole",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.657396125,
+      "operation" : "getCurrentDeviceBlackHole",
+      "selectedDeviceMatches" : true,
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.659144875,
+      "operation" : "beforeOptionalUnity.volume",
+      "status" : 0,
+      "value" : 1
+    },
+    {
+      "monotonicSeconds" : 641299.6591459167,
+      "operation" : "beforeOptionalUnity.rampSeconds",
+      "status" : 0,
+      "value" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6591482917,
+      "operation" : "setVolumeUnityOnce",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6591492083,
+      "operation" : "afterOptionalUnity.volume",
+      "status" : 0,
+      "value" : 1
+    },
+    {
+      "monotonicSeconds" : 641299.659149625,
+      "operation" : "afterOptionalUnity.rampSeconds",
+      "status" : 0,
+      "value" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6591965418,
+      "operation" : "allocate.reference",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6593941667,
+      "operation" : "enqueue.reference",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.659414625,
+      "operation" : "allocate.postrollZeros",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6597196667,
+      "operation" : "enqueue.postrollZeros",
+      "status" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6597379167,
+      "operation" : "beforeDiscovery.isRunning",
+      "status" : 0,
+      "value" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6615948334,
+      "operation" : "afterDiscovery.isRunning",
+      "status" : 0,
+      "value" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6615992917,
+      "operation" : "beforeDispose.volume",
+      "status" : 0,
+      "value" : 1
+    },
+    {
+      "monotonicSeconds" : 641299.6615997084,
+      "operation" : "beforeDispose.rampSeconds",
+      "status" : 0,
+      "value" : 0
+    },
+    {
+      "monotonicSeconds" : 641299.6617665001,
+      "operation" : "disposeImmediate",
+      "status" : 0
+    }
+  ],
+  "canonicalIntegerSamplesChecked" : 441000,
+  "cleanupErrors" : [
+
+  ],
+  "dacAcquired" : false,
+  "defaultRouteChanged" : false,
+  "deviceRateChanged" : false,
+  "discovery" : [
+    {
+      "elapsedSeconds" : 0,
+      "nonzeroObject" : true,
+      "pidMatches" : true,
+      "pidReadStatus" : 0,
+      "runningOutput" : false,
+      "runningOutputReadStatus" : 0,
+      "stage" : "beforeDeviceInspectionAndNewOutput",
+      "translateStatus" : 0
+    },
+    {
+      "elapsedSeconds" : 0,
+      "nonzeroObject" : true,
+      "pidMatches" : true,
+      "pidReadStatus" : 0,
+      "runningOutput" : false,
+      "runningOutputReadStatus" : 0,
+      "stage" : "afterNewOutput",
+      "translateStatus" : 0
+    },
+    {
+      "elapsedSeconds" : 0,
+      "nonzeroObject" : true,
+      "pidMatches" : true,
+      "pidReadStatus" : 0,
+      "runningOutput" : false,
+      "runningOutputReadStatus" : 0,
+      "stage" : "afterExplicitDeviceBinding",
+      "translateStatus" : 0
+    },
+    {
+      "elapsedSeconds" : 7.917406037449837e-07,
+      "nonzeroObject" : true,
+      "pidMatches" : true,
+      "pidReadStatus" : 0,
+      "runningOutput" : false,
+      "runningOutputReadStatus" : 0,
+      "stage" : "afterEnqueuePolling",
+      "translateStatus" : 0
+    }
+  ],
+  "enqueueIsNotRenderingEvidence" : true,
+  "explicitDevice" : "BlackHole 2ch at existing 44100 Hz",
+  "intendedZeroPostrollFrames" : 441000,
+  "mode" : "explicit-unity",
+  "preparationSucceeded" : true,
+  "prestartHALProcessRegistered" : true,
+  "probeSucceeded" : true,
+  "queuePrimeCalls" : 0,
+  "queueRunningAfterDiscovery" : false,
+  "queueRunningBeforeDiscovery" : false,
+  "queueStartCalls" : 0,
+  "referenceFrames" : 220500,
+  "referenceFramesEnqueued" : 220500,
+  "referencePrefixSilenceFrames" : 0,
+  "referenceSHA256" : "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "registrationAttribution" : "Observational readiness only; HAL inspection can itself establish a client connection. Reference parsing uses no AVAudioFile or audio APIs.",
+  "returnedBuffersAreNotPlaybackCompletion" : true,
+  "returnedBuffersBeforeDispose" : 0,
+  "returnedFramesBeforeDispose" : 0,
+  "scope" : "Unstarted AudioQueue preparation and HAL registration only; no playback or fidelity verdict",
+  "separateRendererCreated" : false,
+  "tapCreated" : false,
+  "zeroFramesEnqueued" : 441000
+}

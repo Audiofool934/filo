@@ -1,0 +1,67 @@
+{
+  "binarySHA256": "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+  "checks": [
+    {
+      "exitCode": 0,
+      "name": "help",
+      "output": "Usage: audioqueue-first-start --reference ORIGINAL.wav --output DAC_NAME --mode default|explicit-unity --receipt NEW.json\n       audioqueue-first-start --offline-check --reference ORIGINAL.wav\n       audioqueue-first-start --signal-check\nExperimental scratch FiloCore uses TapAutoStart=false, unlike production main.\nOne unstarted child AudioQueue binds BlackHole and enqueues the original reference\nonce followed by ten seconds of zeros. Parent arms exclusive raw output capture\nbefore one GO. No AudioQueuePrime, source prerender, or separate silent renderer.\nOnly the exact canonical five-second 44.1 kHz 24-bit stereo fixture is accepted.\n--help, --offline-check and --signal-check do not access audio hardware.",
+      "passed": true
+    },
+    {
+      "exitCode": 0,
+      "name": "canonical full integer payload",
+      "output": "OFFLINE_OK: canonical SHA-256 and all 441000 integer/Float32 samples verified; no audio APIs used.",
+      "passed": true
+    },
+    {
+      "exitCode": 0,
+      "name": "signal lifecycle 1",
+      "output": "SIGNAL_CHECK_OK: three null default handlers preserved/restored; SIGTERM delivered; no audio APIs used.",
+      "passed": true
+    },
+    {
+      "exitCode": 0,
+      "name": "signal lifecycle 2",
+      "output": "SIGNAL_CHECK_OK: three null default handlers preserved/restored; SIGTERM delivered; no audio APIs used.",
+      "passed": true
+    },
+    {
+      "exitCode": 0,
+      "name": "signal lifecycle 3",
+      "output": "SIGNAL_CHECK_OK: three null default handlers preserved/restored; SIGTERM delivered; no audio APIs used.",
+      "passed": true
+    },
+    {
+      "exitCode": 1,
+      "name": "invalid mode before audio",
+      "output": "audioqueue-first-start: Usage: audioqueue-first-start --reference ORIGINAL.wav --output DAC_NAME --mode default|explicit-unity --receipt NEW.json\n       audioqueue-first-start --offline-check --reference ORIGINAL.wav\n       audioqueue-first-start --signal-check\nExperimental scratch FiloCore uses TapAutoStart=false, unlike production main.\nOne unstarted child AudioQueue binds BlackHole and enqueues the original reference\nonce followed by ten seconds of zeros. Parent arms exclusive raw output capture\nbefore one GO. No AudioQueuePrime, source prerender, or separate silent renderer.\nOnly the exact canonical five-second 44.1 kHz 24-bit stereo fixture is accepted.\n--help, --offline-check and --signal-check do not access audio hardware.",
+      "passed": true
+    },
+    {
+      "exitCode": 1,
+      "name": "default existing receipt refused before audio",
+      "output": "audioqueue-first-start: Receipt must be new with a writable existing parent (errno 17).",
+      "passed": true
+    },
+    {
+      "exitCode": 1,
+      "name": "explicit-unity existing receipt refused before audio",
+      "output": "audioqueue-first-start: Receipt must be new with a writable existing parent (errno 17).",
+      "passed": true
+    },
+    {
+      "exitCode": 1,
+      "name": "altered final integer rejected before audio",
+      "output": "audioqueue-first-start: Canonical WAV SHA-256 mismatch.",
+      "passed": true
+    },
+    {
+      "details": "No Prime call; exactly one AudioQueueStart, inside GO; no silent renderer.",
+      "name": "static first-start sequencing",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Offline only; no AudioQueue or HAL calls executed.",
+  "sourceSHA256": "f40202e3902cdd811eb6706276f4eda652313ba772cc846b7a4b9ce81ebf9b39"
+}

@@ -1,0 +1,24 @@
+{
+  "scope": "Signal scaffold bug fix and offline controls only; no AudioQueue or HAL calls executed.",
+  "initialFailure": "Parent first live preparation attempt exited133 while storing a null SIG_DFL handler into nonnullable prior storage; no audio APIs had run.",
+  "fix": "Store prior handlers as optional sig_t values, restore null defaults directly, and deliver signal events on a dedicated serial queue with locked state.",
+  "additionalOfflineFinding": "A main-queue source did not deliver the new bounded signal control in an empty CLI run loop; the dedicated queue fixed this.",
+  "strictBuildPassed": true,
+  "sourceSHA256": "3a73ef7c565cfcd5a4d6b8a844a79608c57a5321e32b00190f086ec1703e2914",
+  "binarySHA256": "6ea88bdbd8072ae41533502ec681a105b348d65110974e36c3e884e427a1d174",
+  "buildScriptSHA256": "c03de9e507f6acd3c545184522554e27c70db053a8351c1a99299fabfd029791",
+  "checksPassed": [
+    "Signal lifecycle run 1: null SIG_DFL handlers stored, process-directed SIGTERM observed, all three defaults restored.",
+    "Signal lifecycle run 2: null SIG_DFL handlers stored, process-directed SIGTERM observed, all three defaults restored.",
+    "Signal lifecycle run 3: null SIG_DFL handlers stored, process-directed SIGTERM observed, all three defaults restored.",
+    "Canonical WAV hash and all441000 integer/Float32 samples verified without audio APIs.",
+    "default: existing receipt refused before any audio/HAL API and contents preserved.",
+    "explicit-unity: existing receipt refused before any audio/HAL API and contents preserved."
+  ],
+  "failedReceiptPreserved": {
+    "file": "default-registration.json",
+    "bytes": 0,
+    "SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "temporaryFilesRemoved": true
+}

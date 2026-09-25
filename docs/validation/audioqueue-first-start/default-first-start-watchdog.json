@@ -1,0 +1,12 @@
+{
+  "startedUTC": "2026-09-25T16:06:07.612251+00:00",
+  "elapsedSeconds": 17.132660625036806,
+  "mode": "default",
+  "binarySHA256": "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+  "exitCode": 0,
+  "termination": "normal",
+  "parentExited": true,
+  "receiptPresent": true,
+  "receiptFile": "default-first-start.json",
+  "scope": "Task-owned process group only; separate child-exit and audio-state checks remain required."
+}
