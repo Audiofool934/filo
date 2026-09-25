@@ -51,10 +51,14 @@ public final class ExclusiveRelaySession {
     deinit { stop() }
 
     public func start(processIDs: [AudioObjectID], source: OutputDevice, output: OutputDevice,
-                      sourceBits: UInt32 = 0, captureFrames: UInt64 = 0, followClock: Bool = true) throws {
+                      sourceBits: UInt32 = 0, captureFrames: UInt64 = 0, followClock: Bool = true,
+                      rejectionCaptureFrames: UInt32 = 0) throws {
         stop()
         guard bridge == nil else { throw AudioFailure("A previous audio callback could not be released. Quit filo before retrying.") }
         cleanupErrors = []; clockTargetFrames = 0; clockPitch = 0.5
+        guard rejectionCaptureFrames <= FILO_BRIDGE_MAX_REJECTION_CAPTURE_FRAMES else {
+            throw AudioFailure("Rejected-input inspection is limited to 8192 stereo frames.")
+        }
         guard source.uid != output.uid, !processIDs.isEmpty else { throw AudioFailure("Exclusive relay needs a separate virtual source and an active source process.") }
         self.source = source
         do {
@@ -95,7 +99,8 @@ public final class ExclusiveRelaySession {
             let prime = max(UInt64(2048), UInt64(source.rate * 0.15))
             var bridgeConfig = FiloBridgeConfig(capacityFrames: capacity, primeFrames: prime, renderCaptureFrames: captureFrames,
                 inputFormat: inputASBD, outputFormat: outputLease.virtualFormat,
-                inputBufferOffset: UInt32(channels.count - inputCount), inputBufferCount: UInt32(inputCount), sourceBits: sourceBits)
+                inputBufferOffset: UInt32(channels.count - inputCount), inputBufferCount: UInt32(inputCount),
+                sourceBits: sourceBits, rejectionCaptureFrames: rejectionCaptureFrames)
             guard let bridge = filo_bridge_create(&bridgeConfig) else { throw AudioFailure("Unsupported integer bridge format or buffer allocation failure.") }
             self.bridge = bridge
             inputFormat = PCMFormat(inputASBD); outputFormat = PCMFormat(outputLease.virtualFormat); physicalFormat = PCMFormat(outputLease.physicalFormat)
@@ -170,6 +175,15 @@ public final class ExclusiveRelaySession {
         guard inputProc == nil, outputProc == nil,
               let pointer = filo_bridge_render_bytes(bridge) else { return Data() }
         return Data(bytes: pointer, count: Int(filo_bridge_render_byte_count(bridge)))
+    }
+    /// Returns no sample storage unless explicitly enabled and both callbacks are released.
+    public func finishInputRejection() -> InputRejectionSnapshot? {
+        stopIO()
+        guard inputProc == nil, outputProc == nil else { return nil }
+        let value = filo_bridge_rejection(bridge)
+        guard value.available, let pointer = filo_bridge_rejection_samples(bridge) else { return nil }
+        return InputRejectionSnapshot(value, sampleBits: Array(UnsafeBufferPointer(
+            start: pointer, count: Int(value.capturedFrames) * 2)))
     }
     private func stopIO() {
         if let outputProc, let output = outputLease.device {

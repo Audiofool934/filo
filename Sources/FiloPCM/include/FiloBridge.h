@@ -7,6 +7,7 @@
 // All configuration and allocation happen before either IOProc starts.
 // Exactly one producer calls push/capture_io and one consumer calls render/output_io.
 typedef struct FiloBridge FiloBridge;
+#define FILO_BRIDGE_MAX_REJECTION_CAPTURE_FRAMES 8192u
 typedef enum {
     FiloBridgeFaultNone = 0,
     FiloBridgeFaultInputLayout = 1,
@@ -25,7 +26,19 @@ typedef struct {
     uint32_t inputBufferOffset;    // Skip disabled physical-input buffers before the tap.
     uint32_t inputBufferCount;     // 1 interleaved or 2 planar, must match inputFormat.
     uint32_t sourceBits;           // 0 = no source-depth assertion, otherwise 16 or 24.
+    uint32_t rejectionCaptureFrames; // 0 disables rejected-input storage; otherwise 1...8192.
 } FiloBridgeConfig;
+typedef struct {
+    bool available; // False means no diagnostic was retained, never evidence of acceptable input.
+    uint64_t acceptedFramesBeforeCallback;
+    uint32_t callbackFrames, firstRejectedFrame, firstRejectedChannel;
+    uint32_t rejectedSampleBits;
+    uint32_t captureStartFrame, capturedFrames;
+    uint32_t sourceBits, outputBits;
+    bool finite;
+    bool sourceRepresentable; // False when sourceBits == 0: source depth was not asserted.
+    bool outputRepresentable; // Finite Float32 for float output, otherwise exact output integer depth.
+} FiloBridgeRejection;
 typedef struct {
     uint64_t inputCallbacks, outputCallbacks;
     uint64_t capturedFrames, deliveredFrames, queuedFrames;
@@ -50,6 +63,14 @@ const float * _Nullable filo_bridge_render_capture(const FiloBridge * _Nullable 
 const uint8_t * _Nullable filo_bridge_render_bytes(const FiloBridge * _Nullable state);
 uint64_t filo_bridge_render_byte_count(const FiloBridge * _Nullable state);
 uint32_t filo_bridge_render_bytes_per_frame(const FiloBridge * _Nullable state);
+// Opt-in first rejected input callback only. Neither accessor is safe during callback execution.
+// Stop and destroy BOTH IOProcs before reading; their storage remains owned by the bridge until destroy.
+// Frame offsets are relative to that callback. Retains up to 64 preceding frames, shortened for a
+// capacity below 65 so that the first rejected stereo frame is always inside the retained window.
+FiloBridgeRejection filo_bridge_rejection(const FiloBridge * _Nullable state);
+// Canonical interleaved L/R Float32 bit words copied directly from input memory, including NaN payloads.
+// Returns NULL unless available; read exactly capturedFrames * 2 words, not the allocation capacity.
+const uint32_t * _Nullable filo_bridge_rejection_samples(const FiloBridge * _Nullable state);
 // Return false after a latched fault. Render always silences all provided buffers on failure.
 // Before priming, render returns true, writes silence, and preserves all queued source frames.
 bool filo_bridge_push(FiloBridge * _Nonnull state, const AudioBufferList * _Nullable input);

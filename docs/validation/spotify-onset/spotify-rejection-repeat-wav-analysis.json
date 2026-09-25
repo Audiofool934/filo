@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline, bounded first-rejected-callback diagnostic for the original synthetic reference only.",
+  "reference": {
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "frames": 220500,
+    "rate": 44100,
+    "channels": 2,
+    "bits": 24,
+    "everySampleVerifiedAgainstIndependentGenerator": true
+  },
+  "bitPerfectVerdict": "not assessed; a rejected callback cannot certify complete playback",
+  "fullReferenceCoverageProved": false,
+  "metadataValid": true,
+  "status": "snapshot unavailable",
+  "representationFaultReported": false,
+  "note": "No rejected-callback words were supplied; absence is not evidence of bit-perfect playback.",
+  "inputReportSHA256": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925"
+}

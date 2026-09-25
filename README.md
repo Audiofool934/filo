@@ -81,6 +81,8 @@ A separate [Spotify local-file test](docs/research/spotify-reference-observation
 A subsequent [connected Spotify experiment](docs/research/spotify-exclusive-observation.md) preserved complete FLAC, WAV, and ALAC references through the exclusive WALKMAN output callback under recorded conditions.
 Other runs failed the strict sample check after output-route changes, including fixed-clock and unmuted-tap controls; holding BlackHole as the default allowed later new-file selections to pass, while the first held-route trial still failed.
 This is a conditional local-file result, not reliable arbitrary-track playback, subscription verification, or a measurement inside the DAC.
+Beta.3 adds opt-in rejected-input diagnostics; a [first-start measurement](docs/research/spotify-onset-observation.md) exactly matches a 512-frame exponential gain onset, while its same-file repeat preserves the complete reference.
+The responsible player or system component remains unidentified, and the verifier continues to reject changed samples.
 Read the [exclusive output and verification guide](docs/VERIFIED-OUTPUT.md) before using the preview.
 
 ## Build
@@ -117,6 +119,8 @@ It generates quiet, deterministic synthetic stereo PCM and reports exact sample 
 It also verifies a whole known WAV/AIFF/ALAC reference against actual integer output bytes, including padding, prefix/tail coverage, hashes, and callback timestamps.
 Use reference capture only for known test material you own, never to record subscription audio.
 The app never records music to disk.
+For reference failures, `verify-reference --inspect-rejection` optionally includes a bounded window of exact input Float32 bit words in its JSON receipt.
+This sample-bearing diagnostic is disabled by default and never relaxes the exact comparison or sends rejected samples onward.
 
 ```sh
 swift build

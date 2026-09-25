@@ -20,7 +20,9 @@ For audio-path changes, install BlackHole 2ch separately and run the silent matr
 python3 scripts/verify-pcm.py --loopback
 ```
 
-The script restores the virtual device's original rate if it still owns the last rate it set.
+Rendered BlackHole loopback also includes the virtual device's input/output gain and mute controls.
+Use unity gain and mute off for exact comparison, record the original settings, and restore them after testing.
+The script does not change those controls; it restores the virtual device's original rate if it still owns the last rate it set.
 Do not use a physical listening device for synthetic testing without reducing the listening level.
 Do not record or publish subscription audio as a test fixture.
 

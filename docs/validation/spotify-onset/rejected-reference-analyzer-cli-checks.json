@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "sourceSHA256": "bde2cc4905ade84215ba049a3c318c2c0dcd1fe0344d1234b54c185c2239fa6b",
+  "checks": [
+    "Real CLI report input and output roundtrip, exact anchor at0 and one off-grid word",
+    "Existing output rejected without changing bytes",
+    "Duplicate JSON keys rejected",
+    "Help exits without reference or hardware access"
+  ],
+  "temporaryResourcesRemoved": true,
+  "hardwareOrPlayerAccess": false
+}

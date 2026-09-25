@@ -1,0 +1,26 @@
+{
+  "observationDate": "2026-09-25",
+  "method": "Native Spotify UI observed through accessibility after actions",
+  "spotifyVersion": "1.3.0.277",
+  "referenceSource": "Own synthetic WAV only",
+  "pausedAfterTests": true,
+  "playerVolume": 1,
+  "autoplayRestoredOn": true,
+  "showLocalFilesRestoredOff": true,
+  "downloadsRestoredOn": true,
+  "myMusicRestoredOn": true,
+  "syntheticFolderDisabled": true,
+  "retainedDisabledFolderRow": true,
+  "normalization": false,
+  "equalizer": false,
+  "crossfade": false,
+  "mono": false,
+  "gapless": true,
+  "automix": true,
+  "unrelatedMusicPlayedByTask": false,
+  "hardwareSnapshotsEqualAfterSpotify": {
+    "devices": true,
+    "formats": true,
+    "clock": true
+  }
+}

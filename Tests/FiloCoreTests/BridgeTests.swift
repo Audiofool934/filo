@@ -18,12 +18,13 @@ final class BridgeTests: XCTestCase {
 
     private func config(capacity: UInt64 = 16, prime: UInt64 = 1,
                         output: AudioStreamBasicDescription? = nil, sourceBits: UInt32 = 0,
-                        capture: UInt64 = 0) -> FiloBridgeConfig {
+                        capture: UInt64 = 0, rejectionCapture: UInt32 = 0) -> FiloBridgeConfig {
         var result = FiloBridgeConfig()
         result.capacityFrames = capacity; result.primeFrames = prime
         result.renderCaptureFrames = capture
         result.inputFormat = format(); result.outputFormat = output ?? format()
         result.inputBufferCount = 1; result.sourceBits = sourceBits
+        result.rejectionCaptureFrames = rejectionCapture
         return result
     }
 
@@ -179,6 +180,146 @@ final class BridgeTests: XCTestCase {
         defer { filo_bridge_destroy(bridge) }
         XCTAssertFalse(push([Float(1) / 65536, 0], into: bridge))
         XCTAssertEqual(filo_bridge_metrics(bridge).representationFailures, 1)
+    }
+
+    func testRejectedInputStorageIsOffByDefaultAndUnavailableUntilRejection() throws {
+        let disabled = try create(config(sourceBits: 24))
+        defer { filo_bridge_destroy(disabled) }
+        XCTAssertFalse(push([Float(bitPattern: 1), 0], into: disabled))
+        XCTAssertFalse(filo_bridge_rejection(disabled).available)
+        XCTAssertEqual(filo_bridge_rejection(disabled).capturedFrames, 0)
+        XCTAssertEqual(filo_bridge_rejection(disabled).rejectedSampleBits, 0)
+        XCTAssertNil(filo_bridge_rejection_samples(disabled))
+        XCTAssertEqual(filo_bridge_metrics(disabled).fault, UInt32(FiloBridgeFaultRepresentation.rawValue))
+
+        let enabled = try create(config(sourceBits: 24, rejectionCapture: 32))
+        defer { filo_bridge_destroy(enabled) }
+        XCTAssertTrue(push(pattern(1..<3), into: enabled))
+        XCTAssertFalse(filo_bridge_rejection(enabled).available)
+        XCTAssertNil(filo_bridge_rejection_samples(enabled))
+        XCTAssertFalse(filo_bridge_rejection(nil).available)
+        XCTAssertNil(filo_bridge_rejection_samples(nil))
+    }
+
+    func testRejectionRetainsOriginalNaNBitsRejectsWholeCallbackAndNeverOverwrites() throws {
+        let bridge = try create(config(output: format(bits: 32, floating: false), sourceBits: 24, rejectionCapture: 16))
+        defer { filo_bridge_destroy(bridge) }
+        XCTAssertTrue(push(pattern(1..<3), into: bridge))
+        // The first NaN is signaling; input memory must be copied without canonicalizing its payload.
+        let words: [UInt32] = [0x80000000, 0x3e800000, 0xbe800000, 0x7f812345, 0xffc54321, 1]
+        let input = BufferBank(channels: [2], bytes: words.count * 4)
+        input.setWords(words, buffer: 0)
+        XCTAssertFalse(filo_bridge_push(bridge, input.list))
+        let rejection = filo_bridge_rejection(bridge)
+        XCTAssertTrue(rejection.available)
+        XCTAssertEqual(rejection.acceptedFramesBeforeCallback, 2)
+        XCTAssertEqual(rejection.callbackFrames, 3)
+        XCTAssertEqual(rejection.firstRejectedFrame, 1)
+        XCTAssertEqual(rejection.firstRejectedChannel, 1)
+        XCTAssertEqual(rejection.rejectedSampleBits, 0x7f812345)
+        XCTAssertEqual(rejection.captureStartFrame, 0)
+        XCTAssertEqual(rejection.capturedFrames, 3)
+        XCTAssertEqual(rejection.sourceBits, 24); XCTAssertEqual(rejection.outputBits, 32)
+        XCTAssertFalse(rejection.finite); XCTAssertFalse(rejection.sourceRepresentable)
+        XCTAssertFalse(rejection.outputRepresentable)
+        let retained = try XCTUnwrap(filo_bridge_rejection_samples(bridge))
+        XCTAssertEqual(Array(UnsafeBufferPointer(start: retained, count: 6)), words)
+        input.fill(0xA5)
+        XCTAssertFalse(push([Float.infinity, 0], into: bridge))
+        XCTAssertEqual(Array(UnsafeBufferPointer(start: retained, count: 6)), words)
+        XCTAssertEqual(filo_bridge_rejection(bridge).rejectedSampleBits, 0x7f812345)
+        XCTAssertEqual(filo_bridge_rejection(bridge).acceptedFramesBeforeCallback, 2)
+        let failedOutput = render(2, from: bridge)
+        XCTAssertFalse(failedOutput.0); XCTAssertEqual(failedOutput.1, [0, 0, 0, 0])
+        let metrics = filo_bridge_metrics(bridge)
+        XCTAssertEqual(metrics.fault, UInt32(FiloBridgeFaultRepresentation.rawValue))
+        XCTAssertEqual(metrics.representationFailures, 1)
+        XCTAssertEqual(metrics.capturedFrames, 2); XCTAssertEqual(metrics.deliveredFrames, 0)
+        XCTAssertEqual(metrics.queuedFrames, 2) // No prefix of the rejected callback was published.
+    }
+
+    func testRejectionSeparatesSourceDepthOutputDepthAndFiniteEvidence() throws {
+        let cases: [(UInt32, AudioStreamBasicDescription, Float, Bool, Bool, Bool)] = [
+            (16, format(bits: 24, floating: false), Float(1) / 65536, true, false, true),
+            (24, format(bits: 16, floating: false), Float(1) / 8388608, true, true, false),
+            (0, format(bits: 16, floating: false), Float(1) / 65536, true, false, false),
+            (24, format(), Float(bitPattern: 1), true, false, true),
+            (24, format(), .infinity, false, false, false)
+        ]
+        for (bits, output, value, finite, sourceExact, outputExact) in cases {
+            let bridge = try create(config(output: output, sourceBits: bits, rejectionCapture: 1))
+            defer { filo_bridge_destroy(bridge) }
+            XCTAssertFalse(push([0, value], into: bridge))
+            let result = filo_bridge_rejection(bridge)
+            XCTAssertTrue(result.available)
+            XCTAssertEqual(result.firstRejectedChannel, 1)
+            XCTAssertEqual(result.sourceBits, bits)
+            XCTAssertEqual(result.outputBits, output.mBitsPerChannel)
+            XCTAssertEqual(result.finite, finite)
+            XCTAssertEqual(result.sourceRepresentable, sourceExact)
+            XCTAssertEqual(result.outputRepresentable, outputExact)
+        }
+    }
+
+    func testRejectedPlanarTapCopiesOnlySelectedChannelsInStereoOrder() throws {
+        var settings = config(output: format(bits: 24, floating: false), sourceBits: 24, rejectionCapture: 4)
+        settings.inputFormat = format(planar: true)
+        settings.inputBufferOffset = 1; settings.inputBufferCount = 2
+        let bridge = try create(settings)
+        defer { filo_bridge_destroy(bridge) }
+        let input = BufferBank(channels: [1, 1, 1], bytes: 5 * 4)
+        input.buffers[0] = AudioBuffer(mNumberChannels: 1, mDataByteSize: 20, mData: nil)
+        let left: [UInt32] = [0x80000000, 0x3e800000, 0xbe800000, 0x3f000000, 0xbf000000]
+        let right: [UInt32] = [0, 0xbe000000, 1, 0x7fc12345, 0x3e000000]
+        input.setWords(left, buffer: 1); input.setWords(right, buffer: 2)
+        XCTAssertFalse(filo_bridge_push(bridge, input.list))
+        let result = filo_bridge_rejection(bridge)
+        XCTAssertTrue(result.available)
+        XCTAssertEqual(result.callbackFrames, 5)
+        XCTAssertEqual(result.firstRejectedFrame, 2); XCTAssertEqual(result.firstRejectedChannel, 1)
+        XCTAssertEqual(result.rejectedSampleBits, 1)
+        XCTAssertEqual(result.captureStartFrame, 0); XCTAssertEqual(result.capturedFrames, 4)
+        let retained = try XCTUnwrap(filo_bridge_rejection_samples(bridge))
+        let expected = (0..<4).flatMap { [left[$0], right[$0]] }
+        XCTAssertEqual(Array(UnsafeBufferPointer(start: retained, count: expected.count)), expected)
+        XCTAssertEqual(filo_bridge_metrics(bridge).capturedFrames, 0)
+    }
+
+    func testRejectedWindowAlwaysContainsOffenderAtSmallAndMaximumCapacities() throws {
+        let cases: [(UInt32, Int, UInt32, UInt32)] = [
+            (1, 140, 140, 1), (32, 140, 109, 32), (65, 140, 76, 65),
+            (128, 140, 76, 128), (8192, 140, 76, 224), (8192, 299, 235, 65), (8192, 0, 0, 300)
+        ]
+        for (capacity, badFrame, start, count) in cases {
+            let bridge = try create(config(capacity: 512, sourceBits: 24, rejectionCapture: capacity))
+            defer { filo_bridge_destroy(bridge) }
+            var values = pattern(0..<300)
+            values[badFrame * 2 + 1] = Float(bitPattern: 1)
+            XCTAssertFalse(push(values, into: bridge))
+            let result = filo_bridge_rejection(bridge)
+            XCTAssertTrue(result.available)
+            XCTAssertEqual(result.firstRejectedFrame, UInt32(badFrame))
+            XCTAssertEqual(result.captureStartFrame, start); XCTAssertEqual(result.capturedFrames, count)
+            XCTAssertLessThanOrEqual(result.captureStartFrame, UInt32(badFrame))
+            XCTAssertGreaterThan(result.captureStartFrame + result.capturedFrames, UInt32(badFrame))
+            let retained = try XCTUnwrap(filo_bridge_rejection_samples(bridge))
+            let expected = values[(Int(start) * 2)..<(Int(start + count) * 2)].map(\.bitPattern)
+            XCTAssertEqual(Array(UnsafeBufferPointer(start: retained, count: expected.count)), expected)
+            XCTAssertEqual(filo_bridge_metrics(bridge).capturedFrames, 0)
+        }
+    }
+
+    func testRejectionAllocationCapAndUnrelatedFaultDoNotFabricateEvidence() throws {
+        for capacity: UInt32 in [8193, .max] {
+            var settings = config(rejectionCapture: capacity)
+            XCTAssertNil(filo_bridge_create(&settings))
+        }
+        let bridge = try create(config(capacity: 2, rejectionCapture: 8192))
+        defer { filo_bridge_destroy(bridge) }
+        XCTAssertFalse(push(pattern(0..<3), into: bridge))
+        XCTAssertEqual(filo_bridge_metrics(bridge).fault, UInt32(FiloBridgeFaultOverflow.rawValue))
+        XCTAssertFalse(filo_bridge_rejection(bridge).available)
+        XCTAssertNil(filo_bridge_rejection_samples(bridge))
     }
 
     func testFloatPathPreservesSignedZeroAndCaptureIsBounded() throws {
@@ -434,6 +575,9 @@ private final class BufferBank {
     }
     func setFloats(_ values: [Float], buffer: Int) {
         for (index, value) in values.enumerated() { storage[buffer].storeBytes(of: value, toByteOffset: index * 4, as: Float.self) }
+    }
+    func setWords(_ values: [UInt32], buffer: Int) {
+        for (index, value) in values.enumerated() { storage[buffer].storeBytes(of: value, toByteOffset: index * 4, as: UInt32.self) }
     }
     func bytes(_ buffer: Int, offset: Int, count: Int) -> [UInt8] {
         Array(UnsafeBufferPointer(start: storage[buffer].advanced(by: offset).assumingMemoryBound(to: UInt8.self), count: count))
