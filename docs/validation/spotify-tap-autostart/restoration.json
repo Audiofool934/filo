@@ -1,0 +1,77 @@
+{
+  "observedUTC": "2026-09-25T16:54:40.411Z",
+  "hardwareReadbackUTC": "2026-09-25T16:52:32.123356+00:00",
+  "defaultOutput": "WALKMAN, explicitly selected by the operator after the original Bluetooth output disconnected",
+  "defaultOutputHistory": "Initial snapshot was Bluetooth; after the first attempt that output was absent and BlackHole was default. The time/cause of disconnection and fallback were not established. Final WALKMAN selection was performed in Audio MIDI Setup and read back independently.",
+  "systemAlertOutput": "Built-in speakers retained from the post-disconnect state; final media-output selection did not change alerts.",
+  "WALKMAN": {
+    "rate": 192000,
+    "hogPID": -1,
+    "isDefault": true,
+    "physicalFormat": {
+      "bits": 32,
+      "bytesPerFrame": 8,
+      "channels": 2,
+      "flags": 12,
+      "formatID": 1819304813,
+      "rate": 192000
+    }
+  },
+  "BlackHole": {
+    "rate": 44100,
+    "clock": "Internal Fixed",
+    "scalar": 0.5625,
+    "decibels": -28,
+    "mute": false,
+    "running": false,
+    "hogPID": -1
+  },
+  "sameAsThisExperimentBaseline": {
+    "formats": true,
+    "clock": true,
+    "levels": true
+  },
+  "baselineComparisonExcludedFields": [
+    "id",
+    "stream",
+    "deviceID",
+    "observedUTC",
+    "defaultOutputName",
+    "defaultSystemOutputName"
+  ],
+  "spotify": {
+    "playing": false,
+    "volume": 1,
+    "autoplay": true,
+    "localFiles": false,
+    "downloadsSource": true,
+    "myMusicSource": true,
+    "testSourceEnabled": false,
+    "normalize": false,
+    "equalizer": false,
+    "crossfade": false,
+    "mono": false,
+    "gapless": true,
+    "automix": true,
+    "sourceToggleVerification": "Downloads/My Music on and own source off read back immediately before disabling Local Files; final settings readback confirms Local Files off.",
+    "selection": "Synthetic reference remains selected and stopped at 0:00; prior playback selection/context not reconstructed.",
+    "fixturePreservation": "Canonical source file retained as evidence in ignored work; discovery source disabled."
+  },
+  "musicChangesThisExperiment": false,
+  "allThreeTaskCaptureProcessesExitedNormally": true,
+  "forceTerminationRequired": false,
+  "taskAudioProcessMatchesAtFinalCheck": 0,
+  "localSnapshotSHA256": {
+    "before-devices.json": "e7fe0342b9da5ede3d9135ae0d46300f0d64b7b9a514e46658fdfeb3514b5124",
+    "before-formats.json": "fbe5fd567753bdada16291198a6813df004e50ccd2b7f9c8d4a647901cfb016e",
+    "before-clock.json": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41",
+    "before-levels.json": "e6d63c867cf0a4a2400e61162c282347cd698a4fbbdbcb71a2fec7e6fd7700ea",
+    "mode-on-before-devices.json": "a6e40a2a98347ab168eba8e7c9686a9a24345205bfed3bf4b70a8bc7c92c24bc",
+    "mode-on-before-levels.json": "d6ad2f666619b1f86f5c4be932a84c71d8f6232e84ee37e9b7e28f3dd7f501be",
+    "final-devices.json": "11aa214174d052013c4ae760aeb628401768b7c4e377c166637b69000d1e0c29",
+    "final-formats.json": "9945b08141191b8aae1ddbf622d2b02325fb95651af86e9d306799cd3d240703",
+    "final-clock.json": "f01a86aa7c6493d6e3887fd11b95384858e925c9ccb6b2ec909d530760c8b152",
+    "final-levels.json": "9e10d6d1ed3d1168270bdb748bd4b439af14a8cc90c375d769b6693a776cd539",
+    "final-processes.json": "c512d1e3abb88e93edc009d1cade620a0d0cf11cab2bdc9dd21d34bdfacf0b0f"
+  }
+}

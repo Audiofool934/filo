@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline CLI reproduction and negative controls only; no hardware/player execution.",
+  "analyzerSHA256": "51e1e2c24e43faa8ca5567dc52e47db4b49a0c6322c49a77adcdae4087609427",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "goldenAnalysisSHA256": "6fc6c2bdceeb03a478545654ed207e54746bd3b5ca410c3946cda88604e75981",
+  "checks": [
+    {
+      "name": "golden_analysis_exits_zero",
+      "passed": true
+    },
+    {
+      "name": "second_golden_analysis_exits_zero",
+      "passed": true
+    },
+    {
+      "name": "fresh_runs_identical_to_archived_analysis",
+      "passed": true
+    },
+    {
+      "name": "existing_output_refused_and_preserved",
+      "passed": true
+    },
+    {
+      "name": "corrupted_reference_refused_without_output",
+      "passed": true
+    },
+    {
+      "name": "one_retained_word_bit_change_refused_without_output",
+      "passed": true
+    },
+    {
+      "name": "inconsistent_offender_metadata_refused_without_output",
+      "passed": true
+    },
+    {
+      "name": "incorrect_output_byte_count_refused_without_output",
+      "passed": true
+    },
+    {
+      "name": "help_does_not_need_reference_or_evidence",
+      "passed": true
+    }
+  ],
+  "allPassed": true,
+  "temporaryResources": "Temporary directory removed after all subprocesses exited."
+}

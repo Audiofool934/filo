@@ -1,0 +1,32 @@
+{
+  "startedUTC": "2026-09-25T16:40:55.864141+00:00",
+  "elapsedSeconds": 21.56259200000204,
+  "exitCode": 1,
+  "termination": "normal",
+  "processExited": true,
+  "binarySHA256": "817c8e525c860ecb7a9db5203c0e31941df98d97b1f143e7eed867c510408e0c",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "experimentalTapAutoStart": false,
+  "captureSeconds": 60,
+  "reportFile": "false-fresh-retry.json",
+  "stderrFile": "false-fresh-retry.stderr",
+  "requiresRecoveryInspection": false,
+  "stderrEvents": [
+    {
+      "observedUTC": "2026-09-25T16:40:56.118464+00:00",
+      "monotonicSeconds": 644108.310318916,
+      "message": "Source route and rate prepared. Launch the reference player now if it is closed."
+    },
+    {
+      "observedUTC": "2026-09-25T16:40:57.086062+00:00",
+      "monotonicSeconds": 644109.277913375,
+      "message": "Reference capture armed. Play the known reference from its beginning within this capture window."
+    },
+    {
+      "observedUTC": "2026-09-25T16:41:17.409144+00:00",
+      "monotonicSeconds": 644129.60085975,
+      "message": "filo: Whole-reference verification failed. See coverage and byte comparison."
+    }
+  ],
+  "scope": "Known synthetic reference only; software callback and bounded rejected input, no receiver proof."
+}

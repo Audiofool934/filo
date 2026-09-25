@@ -57,7 +57,8 @@ Actual operating-system callback-destruction failure has not been injected on th
 ## 1.1.0-beta.1 validation record
 
 Validation date: 2026-09-23.
-The following measurements used development `arm64` laboratory builds on macOS 26.6.2, BlackHole 2ch, and a Sony NW-ZX706 in USB DAC mode, exposed as WALKMAN.
+The following measurements used development `arm64` laboratory builds on macOS 26.6.2, BlackHole 2ch, and a Sony NW-ZX706 exposed to the host as WALKMAN.
+The earlier USB DAC mode assertion was a setup assumption; see the later [mode evidence correction](research/usb-dac-mode-correction.md), whose affected earlier interval is unknown.
 They validate the tested exclusive transport to its physical-device callback boundary.
 They do not establish whole-track identity through Apple Music or Spotify, or sample identity at the USB receiver.
 CI and native packaged-app checks for commit `ff6be7c` passed the specific gates recorded below.
@@ -181,7 +182,8 @@ Physical Intel, other DACs, other macOS versions, real unplug/replug, and sleep/
 
 Validation date: 2026-09-23.
 Host: Apple Silicon MacBook Pro, macOS 26.6.2 (25G83), Swift 6.3.3, macOS 26.5 SDK.
-Physical output: Sony NW-ZX706 in USB DAC mode, exposed as WALKMAN.
+Physical output: Sony NW-ZX706 exposed to the host as WALKMAN.
+The earlier mode assertion is subject to the [USB DAC mode evidence correction](research/usb-dac-mode-correction.md); no affected interval has been assigned to this historical run.
 Silent virtual output: BlackHole 2ch.
 The release is universal; Intel execution was checked through Rosetta, not on a physical Intel Mac.
 

@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "scope": "Deterministic offline numerical audit; no hardware calls or source-parameter fitting.",
+  "reference": {
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "frames": 220500,
+    "channels": 2,
+    "bits": 24,
+    "rate": 44100,
+    "all441000IntegerSamplesValidatedAgainstGenerator": true
+  },
+  "inputHashes": {
+    "false-direct-start.json": "52c5ee48adbe6f370f357f50132d620a7ca2aa284fac830da12aec07472f2b60",
+    "false-direct-start-watchdog.json": "661d6894cd1444994b0dd380893cffe1120256526d647c8552492e67fc074f9d",
+    "false-fresh-retry.json": "e37ddb81ec3476929c6f0641b8b449fd41a95d75d6503120c78f82898adc51df",
+    "false-fresh-retry-watchdog.json": "0c548868b8e64a8920084cc58617147a056d0397bc2c5eca4dfdc96b000a87f3",
+    "false-fresh-retry-ui-timing.json": "822d17bff040407424a09353322e5c3519b4b364949762259c46ff4457f0e5f9",
+    "false-mode-on-reference.json": "631184ea077620110f245a07b70aac4e710471026cf0782b71279bbf6a206751",
+    "false-mode-on-reference-watchdog.json": "d51fd6f57ca73824e2d19a80814a5cc96261361dc1d441de876c34331e915653",
+    "false-mode-on-reference-ui-timing.json": "078eb1c7a754677f93e7ce98085c60a07b4b8e33c8ddf85c68749f0e565c8845"
+  },
+  "dependencies": {
+    "analyzerSHA256": "51e1e2c24e43faa8ca5567dc52e47db4b49a0c6322c49a77adcdae4087609427",
+    "rejectionContractSHA256": "bde2cc4905ade84215ba049a3c318c2c0dcd1fe0344d1234b54c185c2239fa6b",
+    "priorOnsetSHA256": "3ce50fa05824420b736c79d1110454dcd71f53b466e5ba5df81683092e80a6f4",
+    "frozenModelReceiptSHA256": "3fd7d4075e9db5e6b52680a8020249f79d5645e3085134a8b7bfe0d6244c8f94"
+  },
+  "scratchBinarySHA256RecordedByAllWatchdogs": "817c8e525c860ecb7a9db5203c0e31941df98d97b1f143e7eed867c510408e0c",
+  "binaryIndependentlyReadByThisOfflineRunner": false,
+  "runs": [
+    {
+      "receipt": "false-direct-start.json",
+      "order": 1,
+      "classification": "Setup/coverage failure",
+      "usbDACMode": "Earlier interval unknown",
+      "checks": {
+        "frameAccounting": true,
+        "outputCoverageAccounting": true,
+        "outputByteAccounting": true,
+        "zeroTimingAndBufferFaults": true,
+        "referenceWasNotCompared": true,
+        "notPassedOrAligned": true,
+        "wholeOutputHashEqualsSilence": true,
+        "cleanupErrorsEmpty": true
+      },
+      "capturedOutputFrames": 1325056,
+      "capturedOutputBytes": 10600448,
+      "actualCaptureSHA256": "d6c739c239be4928351a9c4ce944f7c8c32c971f35d4fbb7a4efb44b27bb6dc2",
+      "independentAllZeroSHA256": "d6c739c239be4928351a9c4ce944f7c8c32c971f35d4fbb7a4efb44b27bb6dc2",
+      "fault": 0,
+      "representationFailures": 0,
+      "unrenderedAcceptedFramesAtStop": 22016,
+      "configuredSeconds": 30,
+      "timing": {
+        "playbackWindowCoverageEstablished": false,
+        "reason": "The first attempt did not record UI dispatch or armed-event timestamps."
+      },
+      "limit": "All-zero output and an absent snapshot do not establish source silence, onset absence, or playback within the window; accepted queued input was not all rendered."
+    },
+    {
+      "receipt": "false-fresh-retry.json",
+      "order": 2,
+      "classification": "Complete-reference failure with an off-grid rejected onset",
+      "usbDACMode": "Earlier interval unknown",
+      "checks": {
+        "frameAccounting": true,
+        "outputCoverageAccounting": true,
+        "outputByteAccounting": true,
+        "zeroTimingAndBufferFaults": true,
+        "referenceWasNotCompared": true,
+        "notPassedOrAligned": true,
+        "wholeOutputHashEqualsSilence": true,
+        "cleanupErrorsEmpty": true
+      },
+      "capturedOutputFrames": 776704,
+      "capturedOutputBytes": 6213632,
+      "actualCaptureSHA256": "08e1c11c095ffbf9fb21f62b4f67e4c209ff1e487bb211db9030b9bc2685af35",
+      "independentAllZeroSHA256": "08e1c11c095ffbf9fb21f62b4f67e4c209ff1e487bb211db9030b9bc2685af35",
+      "fault": 5,
+      "representationFailures": 1,
+      "unrenderedAcceptedFramesAtStop": 20992,
+      "configuredSeconds": 60,
+      "timing": {
+        "armedObservedUTC": "2026-09-25T16:40:57.086062+00:00",
+        "beforeClickUTC": "2026-09-25T16:41:14.312Z",
+        "afterClickUTC": "2026-09-25T16:41:14.579Z",
+        "afterObservationUTC": "2026-09-25T16:41:15.352Z",
+        "observation": "Unique canonical file row changed from Play to Pause; no other local files enabled.",
+        "scope": "Wrapper/UI observations, not source-render timestamps; the nonzero rejected callback independently establishes audio arrived during capture.",
+        "terminalObservedUTC": "2026-09-25T16:41:17.409144+00:00",
+        "beforeClickSecondsAfterArmed": 17.225938,
+        "afterClickSecondsAfterArmed": 17.492938,
+        "UIObservationSecondsAfterArmed": 18.265938,
+        "terminalSecondsAfterArmed": 20.323082
+      },
+      "rejectionDiagnostic": {
+        "schemaVersion": 1,
+        "scope": "Offline, bounded first-rejected-callback diagnostic for the original synthetic reference only.",
+        "reference": {
+          "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+          "frames": 220500,
+          "rate": 44100,
+          "channels": 2,
+          "bits": 24,
+          "everySampleVerifiedAgainstIndependentGenerator": true
+        },
+        "bitPerfectVerdict": "not assessed; a rejected callback cannot certify complete playback",
+        "fullReferenceCoverageProved": false,
+        "metadataValid": true,
+        "status": "rejected callback analyzed",
+        "snapshot": {
+          "acceptedFramesBeforeCallback": 797696,
+          "available": true,
+          "callbackFrames": 512,
+          "captureStartFrame": 0,
+          "capturedFrames": 512,
+          "finite": true,
+          "firstRejectedChannel": 0,
+          "firstRejectedFrame": 1,
+          "outputBits": 32,
+          "outputRepresentable": false,
+          "rejectedSampleBits": 904757511,
+          "sourceBits": 24,
+          "sourceRepresentable": false,
+          "captureFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+          "capturedThroughCallbackEnd": true
+        },
+        "positionNote": "acceptedFramesBeforeCallback counts accepted stream frames, including preroll; it is not a source-file frame index.",
+        "firstRejectedSample": {
+          "rawBits": 904757511,
+          "rawBitsHex": "0x35ed8107",
+          "classification": "normal",
+          "value": 1.76954279140773e-06,
+          "finite": true,
+          "sourceGrid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "reference24Grid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "outputGrid": {
+            "bits": 32,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 3800.064208984375,
+            "fractionalResidueTowardZero": 0.064208984375
+          },
+          "nearest24Diagnostic": {
+            "nearestUnboundedInteger": 15,
+            "signedErrorIn24BitLSB": -0.15599918365478516,
+            "nearestIntegerInSigned24Range": true,
+            "roundingRule": "Nearest integer, ties to even, without clipping; diagnostic only, never used for alignment or equality."
+          },
+          "captureWindowFrame": 1,
+          "callbackFrame": 1,
+          "channel": 0,
+          "referenceFrameFromExactAnchors": null
+        },
+        "firstNotRepresentableAsReference24InWindow": {
+          "rawBits": 904757511,
+          "rawBitsHex": "0x35ed8107",
+          "classification": "normal",
+          "value": 1.76954279140773e-06,
+          "finite": true,
+          "sourceGrid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "reference24Grid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "outputGrid": {
+            "bits": 32,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 3800.064208984375,
+            "fractionalResidueTowardZero": 0.064208984375
+          },
+          "nearest24Diagnostic": {
+            "nearestUnboundedInteger": 15,
+            "signedErrorIn24BitLSB": -0.15599918365478516,
+            "nearestIntegerInSigned24Range": true,
+            "roundingRule": "Nearest integer, ties to even, without clipping; diagnostic only, never used for alignment or equality."
+          },
+          "captureWindowFrame": 1,
+          "callbackFrame": 1,
+          "channel": 0,
+          "referenceFrameFromExactAnchors": null
+        },
+        "windowStatistics": {
+          "sampleWords": 1024,
+          "nonfiniteWords": 0,
+          "negativeZeroWords": 0,
+          "notRepresentableAsReference24Words": 1022,
+          "notRepresentableAtAssertedSourceDepthWords": 1022,
+          "notRepresentableAtOutputDepthWords": 990,
+          "maximumAbsoluteNearest24ErrorLSB": 0.499755859375
+        },
+        "alignment": {
+          "method": "Exact raw Float32 bits in four consecutive stereo frames; no rounding, correlation, gain fit, or time warping.",
+          "anchorFrames": 4,
+          "candidateOffsetCount": 0,
+          "candidateOffsets": [],
+          "candidateListTruncated": false,
+          "anchorExamples": [],
+          "status": "unavailable",
+          "fullReferenceCoverageProved": false,
+          "bitPerfectVerdict": "not assessed by this bounded rejection diagnostic",
+          "windowComparison": null
+        }
+      },
+      "comparisonWithPriorOnset": {
+        "comparedSampleWords": 1024,
+        "mismatchedSampleWords": 0,
+        "firstMismatchWord": null,
+        "leftSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "rightSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "exact": true
+      },
+      "comparisonWithFrozenModel": {
+        "comparedSampleWords": 1024,
+        "mismatchedSampleWords": 0,
+        "firstMismatchWord": null,
+        "leftSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "rightSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "exact": true
+      }
+    },
+    {
+      "receipt": "false-mode-on-reference.json",
+      "order": 3,
+      "classification": "Complete-reference failure with an off-grid rejected onset",
+      "usbDACMode": "User-confirmed enabled before this run; no receiver readback",
+      "checks": {
+        "frameAccounting": true,
+        "outputCoverageAccounting": true,
+        "outputByteAccounting": true,
+        "zeroTimingAndBufferFaults": true,
+        "referenceWasNotCompared": true,
+        "notPassedOrAligned": true,
+        "wholeOutputHashEqualsSilence": true,
+        "cleanupErrorsEmpty": true
+      },
+      "capturedOutputFrames": 1247744,
+      "capturedOutputBytes": 9981952,
+      "actualCaptureSHA256": "5f2200792674d7450a572ddf48abcc79bd6b9d117cac1d1ebe71da19b2ae7b6b",
+      "independentAllZeroSHA256": "5f2200792674d7450a572ddf48abcc79bd6b9d117cac1d1ebe71da19b2ae7b6b",
+      "fault": 5,
+      "representationFailures": 1,
+      "unrenderedAcceptedFramesAtStop": 20992,
+      "configuredSeconds": 60,
+      "timing": {
+        "armedObservedUTC": "2026-09-25T16:45:47.477445+00:00",
+        "beforeClickUTC": "2026-09-25T16:46:15.452Z",
+        "afterClickUTC": "2026-09-25T16:46:15.699Z",
+        "afterObservationUTC": "2026-09-25T16:46:16.218Z",
+        "observation": "Unique canonical reference play button invoked; window title changed to reference title.",
+        "scope": "Wrapper/UI observations, not source-render timestamps; the nonzero rejected callback independently establishes audio arrived during capture.",
+        "terminalObservedUTC": "2026-09-25T16:46:19.455294+00:00",
+        "beforeClickSecondsAfterArmed": 27.974555,
+        "afterClickSecondsAfterArmed": 28.221555,
+        "UIObservationSecondsAfterArmed": 28.740555,
+        "terminalSecondsAfterArmed": 31.977849
+      },
+      "rejectionDiagnostic": {
+        "schemaVersion": 1,
+        "scope": "Offline, bounded first-rejected-callback diagnostic for the original synthetic reference only.",
+        "reference": {
+          "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+          "frames": 220500,
+          "rate": 44100,
+          "channels": 2,
+          "bits": 24,
+          "everySampleVerifiedAgainstIndependentGenerator": true
+        },
+        "bitPerfectVerdict": "not assessed; a rejected callback cannot certify complete playback",
+        "fullReferenceCoverageProved": false,
+        "metadataValid": true,
+        "status": "rejected callback analyzed",
+        "snapshot": {
+          "acceptedFramesBeforeCallback": 1268736,
+          "available": true,
+          "callbackFrames": 512,
+          "captureStartFrame": 0,
+          "capturedFrames": 512,
+          "finite": true,
+          "firstRejectedChannel": 0,
+          "firstRejectedFrame": 1,
+          "outputBits": 32,
+          "outputRepresentable": false,
+          "rejectedSampleBits": 904757511,
+          "sourceBits": 24,
+          "sourceRepresentable": false,
+          "captureFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+          "capturedThroughCallbackEnd": true
+        },
+        "positionNote": "acceptedFramesBeforeCallback counts accepted stream frames, including preroll; it is not a source-file frame index.",
+        "firstRejectedSample": {
+          "rawBits": 904757511,
+          "rawBitsHex": "0x35ed8107",
+          "classification": "normal",
+          "value": 1.76954279140773e-06,
+          "finite": true,
+          "sourceGrid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "reference24Grid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "outputGrid": {
+            "bits": 32,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 3800.064208984375,
+            "fractionalResidueTowardZero": 0.064208984375
+          },
+          "nearest24Diagnostic": {
+            "nearestUnboundedInteger": 15,
+            "signedErrorIn24BitLSB": -0.15599918365478516,
+            "nearestIntegerInSigned24Range": true,
+            "roundingRule": "Nearest integer, ties to even, without clipping; diagnostic only, never used for alignment or equality."
+          },
+          "captureWindowFrame": 1,
+          "callbackFrame": 1,
+          "channel": 0,
+          "referenceFrameFromExactAnchors": null
+        },
+        "firstNotRepresentableAsReference24InWindow": {
+          "rawBits": 904757511,
+          "rawBitsHex": "0x35ed8107",
+          "classification": "normal",
+          "value": 1.76954279140773e-06,
+          "finite": true,
+          "sourceGrid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "reference24Grid": {
+            "bits": 24,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 14.844000816345215,
+            "fractionalResidueTowardZero": 0.8440008163452148
+          },
+          "outputGrid": {
+            "bits": 32,
+            "finite": true,
+            "inSignedNormalizedRange": true,
+            "onUnboundedIntegerGrid": false,
+            "representable": false,
+            "scaledValue": 3800.064208984375,
+            "fractionalResidueTowardZero": 0.064208984375
+          },
+          "nearest24Diagnostic": {
+            "nearestUnboundedInteger": 15,
+            "signedErrorIn24BitLSB": -0.15599918365478516,
+            "nearestIntegerInSigned24Range": true,
+            "roundingRule": "Nearest integer, ties to even, without clipping; diagnostic only, never used for alignment or equality."
+          },
+          "captureWindowFrame": 1,
+          "callbackFrame": 1,
+          "channel": 0,
+          "referenceFrameFromExactAnchors": null
+        },
+        "windowStatistics": {
+          "sampleWords": 1024,
+          "nonfiniteWords": 0,
+          "negativeZeroWords": 0,
+          "notRepresentableAsReference24Words": 1022,
+          "notRepresentableAtAssertedSourceDepthWords": 1022,
+          "notRepresentableAtOutputDepthWords": 990,
+          "maximumAbsoluteNearest24ErrorLSB": 0.499755859375
+        },
+        "alignment": {
+          "method": "Exact raw Float32 bits in four consecutive stereo frames; no rounding, correlation, gain fit, or time warping.",
+          "anchorFrames": 4,
+          "candidateOffsetCount": 0,
+          "candidateOffsets": [],
+          "candidateListTruncated": false,
+          "anchorExamples": [],
+          "status": "unavailable",
+          "fullReferenceCoverageProved": false,
+          "bitPerfectVerdict": "not assessed by this bounded rejection diagnostic",
+          "windowComparison": null
+        }
+      },
+      "comparisonWithPriorOnset": {
+        "comparedSampleWords": 1024,
+        "mismatchedSampleWords": 0,
+        "firstMismatchWord": null,
+        "leftSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "rightSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "exact": true
+      },
+      "comparisonWithFrozenModel": {
+        "comparedSampleWords": 1024,
+        "mismatchedSampleWords": 0,
+        "firstMismatchWord": null,
+        "leftSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "rightSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "exact": true
+      }
+    }
+  ],
+  "betweenRetrySnapshots": {
+    "comparedSampleWords": 1024,
+    "mismatchedSampleWords": 0,
+    "firstMismatchWord": null,
+    "leftSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+    "rightSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+    "exact": true
+  },
+  "frozenModel": {
+    "referenceStartFrame": 0,
+    "initialGain": 0,
+    "alpha": 0.0020000000949949026,
+    "outputRule": "Float32(reference[n,channel] * gain[n])",
+    "updateRule": "Float32(gain[n] + Float32(0.002) * Float32(1 - gain[n]))",
+    "parameterOrOffsetSearchPerformed": false,
+    "arithmetic": "Explicit Float32 conversions use struct; other operations use Python binary64 before the stated final rounding.",
+    "alignmentLimit": "Previously established model-dependent offset zero; no exact untransformed anchor or component identification."
+  },
+  "offlineControls": {
+    "oneBitMutation": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1,
+      "firstMismatchWord": 35,
+      "leftSHA256": "9b48a67649f9594fbfc32bb03d05db8dad89f53ac3b08f39ea3c2ad03d2cd749",
+      "rightSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "exact": false
+    },
+    "inconsistentOffenderMetadataRejected": true
+  },
+  "bitPerfectProofFromModel": false,
+  "conclusion": "TapAutoStart=false was insufficient in the final user-confirmed-mode condition; both retained 512-frame retries reproduce the prior onset exactly.",
+  "limits": [
+    "The first silent attempt is not an onset-absence test.",
+    "Mode intervals for both earlier attempts and historical onset evidence remain unknown.",
+    "No claim is made about samples after the retained 512 frames, responsible component, receiver output, or general player reliability.",
+    "Reconstructed zero hashes use expected bytes and recorded digests, not a second raw capture.",
+    "Empty helper cleanup-error arrays are not a complete settings/default-output restoration audit."
+  ]
+}

@@ -1,6 +1,7 @@
 # Spotify silence and continuous prewarm observations
 
-Measured on 2026-09-25 with Spotify 1.3.0.277, macOS 26.6.2, BlackHole 2ch, and Sony NW-ZX706 in USB DAC mode.
+Measured on 2026-09-25 with Spotify 1.3.0.277, macOS 26.6.2, BlackHole 2ch, and the host-enumerated Sony NW-ZX706 WALKMAN output.
+The earlier USB DAC mode assertion was a setup assumption; see the later [mode evidence correction](usb-dac-mode-correction.md), whose affected earlier interval is unknown.
 One continuous sequence of a silent local file followed by the manually queued canonical reference preserved every original reference sample at filo's physical-device output callback.
 An intervening independently prepared direct start still failed with the previously measured onset signature.
 This establishes a useful experimental condition, not a reliable automatic workaround or receiver-level bit-perfect playback.

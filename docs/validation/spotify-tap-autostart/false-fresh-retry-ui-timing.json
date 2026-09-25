@@ -1,0 +1,7 @@
+{
+  "beforeClickUTC": "2026-09-25T16:41:14.312Z",
+  "afterClickUTC": "2026-09-25T16:41:14.579Z",
+  "afterObservationUTC": "2026-09-25T16:41:15.352Z",
+  "observation": "Unique canonical file row changed from Play to Pause; no other local files enabled.",
+  "scope": "UI dispatch and observation timestamps, not source render timestamps."
+}

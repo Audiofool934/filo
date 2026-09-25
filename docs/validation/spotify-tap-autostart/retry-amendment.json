@@ -1,0 +1,21 @@
+{
+  "recordedUTC": "2026-09-25T16:39:06.107137+00:00",
+  "priorAttempt": "false-direct-start.json",
+  "priorClassification": "Invalid coverage: complete captured bytes equal silence, no rejection and no reference anchor. UI-dispatch timing was not recorded, so window coverage of playback is unproved.",
+  "retryReason": "Establish timestamped playback within a longer capture after a verified player process restart.",
+  "newSpotifyPID": 67693,
+  "oldSpotifyPID": 66526,
+  "oldProcessExitObserved": "retry-after-quit-processes.json",
+  "captureSeconds": 60,
+  "watchdogSeconds": 120,
+  "playerScope": "Same sole canonical file and settings; fresh application process, no deliberate source prewarm. Historical system state remains uncontrolled.",
+  "changes": "Only laboratory duration/instrumentation and Spotify process restart; scratch production-source substitution and binary unchanged.",
+  "defaultRouteChangeBeforeRetry": {
+    "previousUnrelatedDefaultNoLongerEnumerated": true,
+    "currentDefault": "BlackHole 2ch",
+    "observation": "The prior non-test default output was no longer enumerated in intervening read-only observations. Exact transition timing and cause were not established.",
+    "userFallbackPreferenceRequested": true
+  },
+  "retryWrapperSHA256": "9935b9ffb39151eecc46f564b40c0865acbaa0749d8b3be5728dd6a066f9e0db",
+  "usbDACModeForRetry": "Unknown; a subsequent correction led to a separate user-confirmed-mode measurement."
+}

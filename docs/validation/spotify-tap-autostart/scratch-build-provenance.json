@@ -1,0 +1,11 @@
+{
+  "baseCommit": "4e77ac5f65d98359fe8bec4c3c3cb118bae6e822",
+  "scope": "Experimental scratch build only, production files unchanged.",
+  "onlySourceChange": "kAudioAggregateDeviceTapAutoStartKey: true -> false",
+  "reason": "Prearm capture before any first AudioQueueStart without a source silent renderer.",
+  "originalSourceSHA256": "8996bddd5f4a5282c149918503f4e71eb93f716968ab302fa3b4373e3734eb14",
+  "experimentalSourceSHA256": "7bcf5dbbc7e4ff56ca6195c89d851c08285b66b37354194e4757aff9e762b144",
+  "changedFiles": [
+    "Sources/FiloCore/ExclusiveRelaySession.swift"
+  ]
+}

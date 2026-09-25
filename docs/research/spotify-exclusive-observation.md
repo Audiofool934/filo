@@ -1,6 +1,7 @@
 # Spotify connected exclusive-output observation
 
-Measured on 2026-09-24 local time with Spotify 1.3.0.277, macOS 26.6.2 (25G83), and a Sony NW-ZX706 in USB DAC mode.
+Measured on 2026-09-24 local time with Spotify 1.3.0.277, macOS 26.6.2 (25G83), and the host-enumerated Sony NW-ZX706 WALKMAN output.
+The earlier USB DAC mode assertion was a setup assumption; see the later [mode evidence correction](usb-dac-mode-correction.md), whose affected earlier interval is unknown.
 Six connected runs preserved our complete original five-second local reference through Spotify and filo to the actual WALKMAN software output callback.
 Seven other runs stopped when the tap delivered samples that could not pass the exact integer representation check.
 The result is conditional finite-playback success with an unresolved startup or selection failure, not a generally reliable Spotify bit-perfect mode.

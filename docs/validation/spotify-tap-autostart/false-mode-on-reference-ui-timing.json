@@ -1,0 +1,7 @@
+{
+  "beforeClickUTC": "2026-09-25T16:46:15.452Z",
+  "afterClickUTC": "2026-09-25T16:46:15.699Z",
+  "afterObservationUTC": "2026-09-25T16:46:16.218Z",
+  "observation": "Unique canonical reference play button invoked; window title changed to reference title.",
+  "scope": "UI dispatch/observation timestamps, not source rendering timestamps."
+}

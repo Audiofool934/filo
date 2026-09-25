@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "scope": "Exact receipts and wrapper sources plus explicitly sanitized contextual records; raw ignored work files are preserved.",
+  "artifacts": {
+    "false-direct-start.json": {
+      "source": "work/spotify-tap-autostart/false-direct-start.json",
+      "rawSourceSHA256": "52c5ee48adbe6f370f357f50132d620a7ca2aa284fac830da12aec07472f2b60",
+      "transformation": "None; exact bytes."
+    },
+    "false-direct-start-watchdog.json": {
+      "source": "work/spotify-tap-autostart/false-direct-start-watchdog.json",
+      "rawSourceSHA256": "661d6894cd1444994b0dd380893cffe1120256526d647c8552492e67fc074f9d",
+      "transformation": "None; exact bytes."
+    },
+    "false-direct-start.stderr": {
+      "source": "work/spotify-tap-autostart/false-direct-start.stderr",
+      "rawSourceSHA256": "6bee09ee3661753ded61f76e8ba716b6dd377f8b78eae941b2f6b8103177ef0d",
+      "transformation": "None; exact bytes."
+    },
+    "false-fresh-retry.json": {
+      "source": "work/spotify-tap-autostart/false-fresh-retry.json",
+      "rawSourceSHA256": "e37ddb81ec3476929c6f0641b8b449fd41a95d75d6503120c78f82898adc51df",
+      "transformation": "None; exact bytes."
+    },
+    "false-fresh-retry-watchdog.json": {
+      "source": "work/spotify-tap-autostart/false-fresh-retry-watchdog.json",
+      "rawSourceSHA256": "0c548868b8e64a8920084cc58617147a056d0397bc2c5eca4dfdc96b000a87f3",
+      "transformation": "None; exact bytes."
+    },
+    "false-fresh-retry-ui-timing.json": {
+      "source": "work/spotify-tap-autostart/false-fresh-retry-ui-timing.json",
+      "rawSourceSHA256": "822d17bff040407424a09353322e5c3519b4b364949762259c46ff4457f0e5f9",
+      "transformation": "None; exact bytes."
+    },
+    "false-fresh-retry.stderr": {
+      "source": "work/spotify-tap-autostart/false-fresh-retry.stderr",
+      "rawSourceSHA256": "6bee09ee3661753ded61f76e8ba716b6dd377f8b78eae941b2f6b8103177ef0d",
+      "transformation": "None; exact bytes."
+    },
+    "false-mode-on-reference.json": {
+      "source": "work/spotify-tap-autostart/false-mode-on-reference.json",
+      "rawSourceSHA256": "631184ea077620110f245a07b70aac4e710471026cf0782b71279bbf6a206751",
+      "transformation": "None; exact bytes."
+    },
+    "false-mode-on-reference-watchdog.json": {
+      "source": "work/spotify-tap-autostart/false-mode-on-reference-watchdog.json",
+      "rawSourceSHA256": "d51fd6f57ca73824e2d19a80814a5cc96261361dc1d441de876c34331e915653",
+      "transformation": "None; exact bytes."
+    },
+    "false-mode-on-reference-ui-timing.json": {
+      "source": "work/spotify-tap-autostart/false-mode-on-reference-ui-timing.json",
+      "rawSourceSHA256": "078eb1c7a754677f93e7ce98085c60a07b4b8e33c8ddf85c68749f0e565c8845",
+      "transformation": "None; exact bytes."
+    },
+    "false-mode-on-reference.stderr": {
+      "source": "work/spotify-tap-autostart/false-mode-on-reference.stderr",
+      "rawSourceSHA256": "6bee09ee3661753ded61f76e8ba716b6dd377f8b78eae941b2f6b8103177ef0d",
+      "transformation": "None; exact bytes."
+    },
+    "retry-after-quit-processes.json": {
+      "source": "work/spotify-tap-autostart/retry-after-quit-processes.json",
+      "rawSourceSHA256": "f7502cad311d7abce74fa76c3caa9d2d7dfe1cbb95ea39d00872c37608a173b4",
+      "transformation": "None; exact bytes."
+    },
+    "mode-on-after-quit-processes.json": {
+      "source": "work/spotify-tap-autostart/mode-on-after-quit-processes.json",
+      "rawSourceSHA256": "486d76109e473a2ca8e026a19d3d3fa197673a780810600f15bbbd34b890d2c4",
+      "transformation": "None; exact bytes."
+    },
+    "run.py": {
+      "source": "work/spotify-tap-autostart/run.py",
+      "rawSourceSHA256": "bb648ebdda3f10f82c171425f80519ab943d3401255eb680ed615777b3373951",
+      "transformation": "None; exact bytes."
+    },
+    "run-retry.py": {
+      "source": "work/spotify-tap-autostart/run-retry.py",
+      "rawSourceSHA256": "9935b9ffb39151eecc46f564b40c0865acbaa0749d8b3be5728dd6a066f9e0db",
+      "transformation": "None; exact bytes."
+    },
+    "run-dac-mode-on.py": {
+      "source": "work/spotify-tap-autostart/run-dac-mode-on.py",
+      "rawSourceSHA256": "c13fbf7915c1f43b1143e3acc2736cb38cd404765b41207794521a01341f692d",
+      "transformation": "None; exact bytes."
+    },
+    "protocol.json": {
+      "source": "work/spotify-tap-autostart/protocol.json",
+      "rawSourceSHA256": "29f22ef751d8910455498fcd368debaa7be1d31d06d6fe5c8ea403913c529d26",
+      "transformation": "Sanitized contextual fields and added explicit retrospective mode limits; measurement values were not changed."
+    },
+    "retry-amendment.json": {
+      "source": "work/spotify-tap-autostart/retry-amendment.json",
+      "rawSourceSHA256": "9d5591aee5f0d6b7784b75118b8ac57b6fb99ab16d1ff9dbcd4960f817c08cf6",
+      "transformation": "Sanitized contextual fields and added explicit retrospective mode limits; measurement values were not changed."
+    },
+    "usb-dac-mode-correction.json": {
+      "source": "work/spotify-tap-autostart/usb-dac-mode-correction.json",
+      "rawSourceSHA256": "ae6ebdfc1beba6296e379eb2b1947a1c20583e8f1928c9a4cc8cc8b4dab5c0e9",
+      "transformation": "Sanitized contextual fields and added explicit retrospective mode limits; measurement values were not changed."
+    },
+    "scratch-build-provenance.json": {
+      "source": "work/audioqueue-first-start-build/provenance.json",
+      "rawSourceSHA256": "5235825772aa2a215a6ffdcecb0cdc823c0810d5be10c637c4a7590b59b35d6f",
+      "transformation": "None; exact bytes."
+    },
+    "restoration.json": {
+      "source": "work/spotify-tap-autostart/restoration.json",
+      "rawSourceSHA256": "15e578b97e42715fe8f70c9edd9f757a8e6ec048d29d150fb2e0de76e77dd3a4",
+      "transformation": "None; exact already-sanitized restoration record."
+    }
+  },
+  "unpublished": [
+    "Raw device/format/clock/level snapshots containing unrelated identities.",
+    "Audio files and executables."
+  ],
+  "earlierUSBDACModeIntervals": "Unknown; earlier valid host callbacks are not confirmation of USB DAC mode."
+}

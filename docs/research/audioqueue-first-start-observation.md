@@ -5,7 +5,8 @@ Leaving volume at its default and explicitly assigning unity before the first st
 Neither source played a silent prefix, called `AudioQueuePrime`, or started before capture was armed.
 This result uses an experimental tap-start configuration and does not establish Spotify's cause, production first-start behavior, or Sony receiver equality.
 
-The runs occurred on 2026-09-26 in Asia/Singapore, corresponding to 2026-09-25 UTC, with macOS 26.6.2, BlackHole 2ch, and Sony NW-ZX706 in USB DAC mode.
+The runs occurred on 2026-09-26 in Asia/Singapore, corresponding to 2026-09-25 UTC, with macOS 26.6.2, BlackHole 2ch, and the host-enumerated Sony NW-ZX706 WALKMAN output.
+The earlier USB DAC mode assertion was an unverified setup assumption; see the subsequent [mode evidence correction](usb-dac-mode-correction.md).
 The [evidence index](../validation/audioqueue-first-start/index.json) identifies the protocol, binaries, linked objects, receipts, independent analysis, and restoration record.
 The [reproduction directory](experiments/audioqueue-first-start/README.md) contains the frozen helpers and an offline scratch-build preparation script.
 No production source, pass criterion, or released binary changed.
@@ -85,7 +86,8 @@ The scratch preparation script separately reproduced all 39 pinned package/sourc
 
 These two observations show that this prepared AudioQueue path can preserve its complete first reference without explicit source prerendering.
 They do not identify Spotify as the owner of the earlier onset or exclude a shared macOS mechanism triggered by different conditions.
-Changing tap autostart was not tested as a Spotify repair and has not been integrated into production.
+A later [Spotify direct-start experiment](spotify-tap-autostart-observation.md), including a repeat after the operator confirmed USB DAC mode enabled, retained the same changed onset with tap autostart disabled.
+The setting has not been integrated into production as a repair.
 No gain inversion, rounding, trimming, automatic replay, or relaxed acceptance rule follows from this result.
 
 The [restoration record](../validation/audioqueue-first-start/restoration.json) confirms identical before/after device, WALKMAN format, and BlackHole clock snapshots, with BlackHole levels equal after excluding observation time.
