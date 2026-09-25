@@ -1,0 +1,57 @@
+{
+  "purpose": "Distinguish gain evolution during a silent prefix from an onset triggered by active samples. This does not certify arbitrary first-play behavior.",
+  "runs": [
+    {
+      "order": 1,
+      "reference": "silence-prefix WAV",
+      "newSelection": true,
+      "silentFrames": 44100,
+      "activeFrames": 176400
+    },
+    {
+      "order": 2,
+      "reference": "original canonical WAV",
+      "newSelection": true,
+      "priorPlaybackHistory": "Last fixture played in prior turn; selected after silence-prefix trial"
+    },
+    {
+      "order": 3,
+      "reference": "original canonical WAV",
+      "warmup": "separate five-second all-zero owned WAV",
+      "sequence": "Warmup selected with only the canonical reference manually queued; same exclusive connection remains armed across both",
+      "captureWindowSeconds": 70,
+      "comparator": "Only canonical non-silent reference; warmup contributes silent margin, never an accepted reference by itself",
+      "extraVariables": "Queued continuous transition plus source-renderer activation; this is an exploratory composite prewarm condition, not isolated attribution."
+    }
+  ],
+  "commonConditions": {
+    "player": "Spotify 1.3.0.277",
+    "rate": 44100,
+    "sourceBits": 24,
+    "output": "WALKMAN",
+    "source": "BlackHole 2ch",
+    "captureWindowSeconds": 40,
+    "inspectRejection": true,
+    "routePreparation": "Each CLI trial changes and restores the output route independently",
+    "playerVolume": 1,
+    "normalize": false,
+    "EQ": false,
+    "crossfade": false,
+    "mono": false,
+    "gapless": true,
+    "automix": true,
+    "autoplay": false
+  },
+  "hypotheses": [
+    "If the newly selected silence-prefix file preserves all active samples, the captured startup transformation need not affect the later active portion under these conditions.",
+    "If rejection begins with the same gain-onset model at active sample zero, the onset may be tied to active playback rather than elapsed file silence.",
+    "The fitted recurrence alone does not reach exact unity when extended indefinitely in Float32, so a pass would require behavior outside the measured first512-frame model."
+  ],
+  "limits": [
+    "Not randomized; prior player and route history are uncontrolled.",
+    "Silent source-frame duration cannot be distinguished from additional capture margin using samples alone.",
+    "A silent-prefix pass is not a repair or proof for arbitrary non-silent openings.",
+    "No receiver PCM observation."
+  ],
+  "binarySHA256": "78742b32365ee9795909b17c0edc31796e37ade2f7c0a532fcd1abe1417acb7c"
+}

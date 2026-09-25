@@ -99,3 +99,6 @@ Spotify Autoplay, Downloads, and My Music were restored on; the synthetic source
 The player remained paused and the existing processing controls were preserved.
 Neither test measures the USB payload or PCM received inside the Sony device.
 No end-to-end or subscription-master claim follows from these results.
+
+The subsequent [silence and continuous prewarm observations](spotify-prewarm-observation.md) retain this onset signature in a new failed direct start and document one complete original-reference pass after a separate silent file within the same relay session.
+They do not establish a general first-play repair.

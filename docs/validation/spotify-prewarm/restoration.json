@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "observedUTC": "2026-09-25T15:28:35.389398+00:00",
+  "scope": "Sanitized summary of read-only HAL snapshots and separately observed Spotify UI restoration; raw local snapshots retain private unrelated device identities.",
+  "hardware": {
+    "WALKMAN": {
+      "matchedByStableUIDLocally": true,
+      "rate": 192000,
+      "hogPID": -1,
+      "allCurrentAndAvailableFormatsEqualIgnoringStreamObjectID": true,
+      "physicalFormat": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 12,
+        "formatID": 1819304813,
+        "rate": 192000
+      }
+    },
+    "BlackHole2ch": {
+      "matchedByStableUIDLocally": true,
+      "rate": 44100,
+      "hogPID": -1,
+      "isRunning": false,
+      "clock": "Internal Fixed",
+      "allClockControlsEqualIgnoringObjectIDs": true,
+      "masterInputAndOutputAliases": {
+        "scalar": 0.5,
+        "decibels": -32,
+        "mute": false
+      }
+    },
+    "defaultOutput": {
+      "before": "Built-in speakers at 48000 Hz",
+      "final": "New Bluetooth output at 48000 Hz",
+      "preservedFinalExternalSelection": true,
+      "restoredOldDefault": false
+    },
+    "ephemeralHALObjectIDsChanged": true,
+    "wholeDeviceSnapshotEqual": false,
+    "interpretation": "A new Bluetooth default and changed HAL object IDs appeared between snapshots. Their cause and precise timing were not established; no task action selected that Bluetooth output. Final settings were preserved."
+  },
+  "spotify": {
+    "observationMethod": "Native accessibility UI, including source rows before Local Files was hidden; final visible controls rechecked after cleanup.",
+    "paused": true,
+    "volume": 1,
+    "autoplay": true,
+    "showLocalFiles": false,
+    "downloadsSource": true,
+    "myMusicSource": true,
+    "ownSyntheticSourceEnabled": false,
+    "queue": "The sole task-added reference item was consumed; queue observed empty.",
+    "normalization": false,
+    "EQ": false,
+    "crossfade": false,
+    "mono": false,
+    "gapless": true,
+    "automix": true
+  },
+  "audioSessions": {
+    "allThreeExited": true,
+    "allReceiptsCleanupErrorsEmpty": true,
+    "noTaskAudioHelperLeftRunning": true
+  },
+  "sourceSnapshotSHA256": {
+    "onset2-before-devices.json": "d9da46e835375173e506c14f4811c7f3000f2a0ace9db7213120d5c3bd5f5253",
+    "onset2-before-formats.json": "bf253f9f40ad322b107163ec33b36169621c925c580c9bcafa39435e6af127c2",
+    "onset2-before-clock.json": "f01a86aa7c6493d6e3887fd11b95384858e925c9ccb6b2ec909d530760c8b152",
+    "onset2-close-devices.json": "e7fe0342b9da5ede3d9135ae0d46300f0d64b7b9a514e46658fdfeb3514b5124",
+    "onset2-close-formats.json": "fbe5fd567753bdada16291198a6813df004e50ccd2b7f9c8d4a647901cfb016e",
+    "onset2-close-clock.json": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41",
+    "onset2-close-levels.json": "b932c6017c0707974662f3dd07318ea278061716493a73da44e8c764806ec0ac"
+  }
+}

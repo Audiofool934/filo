@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "createdUTC": "2026-09-25T15:09:43.464341+00:00",
+  "scope": "Offline preparation of one original synthetic onset-silence control; no Spotify, UI, audio-device, playback, recording, or subscription access.",
+  "canonical": {
+    "path": "work/reference-server/filo-reference-44100-24.wav",
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "frames": 220500,
+    "pcm24SHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e"
+  },
+  "fixture": {
+    "path": "work/spotify-reference-fixtures/filo onset silence 44100 stereo 24bit WAV.wav",
+    "fileName": "filo onset silence 44100 stereo 24bit WAV.wav",
+    "fileBytes": 1323044,
+    "fileSHA256": "766217b4cb8b3f3e3365b16fcb9ab193031faa63ac26d47543e47d5ec26ed8f9",
+    "formatCode": 1,
+    "channels": 2,
+    "sampleRate": 44100,
+    "bitsPerSample": 24,
+    "blockAlign": 6,
+    "bytesPerSecond": 264600,
+    "frames": 220500,
+    "samples": 441000,
+    "durationSeconds": 5,
+    "riffChunks": [
+      {
+        "type": "fmt ",
+        "bytes": 16
+      },
+      {
+        "type": "data",
+        "bytes": 1323000
+      }
+    ],
+    "pcm24SHA256": "0042bdc73585abb0f5d63e30ed749f1f95b753e36eddc41904111704e4673830",
+    "pcmFloat32SHA256": "eaffb82f285b7a314f37b133c9373ba132569d0aae23b0fd63b80a442e9b7fae",
+    "minimumIntegerSample": -8192,
+    "maximumIntegerSample": 8191,
+    "firstActiveStereoFrame": [
+      3416,
+      7394
+    ],
+    "lastStereoFrame": [
+      825,
+      5500
+    ]
+  },
+  "construction": {
+    "silenceFrames": 44100,
+    "silenceSamples": 88200,
+    "silenceSeconds": 1,
+    "activeFrames": 176400,
+    "activeSourceStartFrame": 0,
+    "activeSourceEndFrameExclusive": 176400,
+    "activeFixtureStartFrame": 44100,
+    "activeFixtureEndFrameExclusive": 220500,
+    "activePCM24SHA256": "ecf60830dfa2da20ef735536b5dbc8a24a8e5b985dff21000d829cb77cb49201",
+    "gainApplied": false,
+    "resamplingApplied": false,
+    "ditherApplied": false,
+    "notes": "The derived five-second file includes the first four seconds of the canonical signal after one second of source silence. It intentionally omits the original final second by construction; relay tests must use this derived reference, not claim coverage of all original canonical frames."
+  },
+  "verification": {
+    "method": "Python wave read/write plus independent RIFF chunk parsing and complete packed signed24 sample decoding; fixed indices, no trimming, rounding, gain fit, alignment search, or resampling.",
+    "riffDeclaredSizeExact": true,
+    "frameCountExact": true,
+    "everySilenceSampleZero": true,
+    "activeSuffixByteIdenticalToCanonicalPrefix": true,
+    "activeSuffixIntegerSamplesIdenticalToCanonicalPrefix": true,
+    "comparedActiveFrames": 176400,
+    "comparedActiveSamples": 352800,
+    "mismatchedActiveSamples": 0,
+    "firstActiveFrameExact": true,
+    "lastActiveFrameExact": true,
+    "missingActiveFrames": 0,
+    "extraActiveFrames": 0,
+    "allSamplesWithinSigned24Range": true,
+    "onlyFmtAndDataChunks": true,
+    "allOriginalFixtureHashesUnchanged": true,
+    "exclusiveAtomicPublication": true
+  },
+  "originalFilesUnchanged": {
+    "work/spotify-reference-fixtures/filo reference 44100 stereo 24bit ALAC.m4a": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+    "work/spotify-reference-fixtures/filo reference 44100 stereo 24bit WAV.wav": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "work/spotify-reference-fixtures/filo reference 44100 stereo 24bit FLAC.flac": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352"
+  },
+  "interpretationLimits": [
+    "This fixture tests whether gain processing settles during one second of source silence; it does not repair or certify arbitrary non-silent openings.",
+    "The measured beta.3 exponential onset model covers only 512 frames. Continued behavior or a later unity-gain clamp is not established by that evidence.",
+    "Capture pre-roll silence is indistinguishable from identical source-leading silence without an independently observed source-start boundary; sample matching alone cannot prove all 44100 silent source frames were delivered.",
+    "An exact active suffix certifies only the complete 176400-frame active sequence at the observed software boundary, not the USB receiver or the subscription catalog.",
+    "A same-file replay pass is a separate conditional observation and cannot replace a failed first-start result."
+  ]
+}
