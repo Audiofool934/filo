@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "localMeasurementDate": "2026-09-26",
+  "localTimezone": "Asia/Singapore",
+  "UTCMeasurementDate": "2026-09-25",
+  "scope": "Unchanged synthetic reference at the physical-device software output callback; no Sony receiver or subscription-master measurement.",
+  "baseCommit": "4e77ac5f65d98359fe8bec4c3c3cb118bae6e822",
+  "productionChanged": false,
+  "productionRelease": "v1.1.0-beta.3",
+  "experimentalSourceChange": "Only kAudioAggregateDeviceTapAutoStartKey: true -> false in a scratch FiloCore copy.",
+  "macOSVersion": "26.6.2",
+  "output": "Sony NW-ZX706, WALKMAN in USB DAC mode",
+  "source": "Task-owned AudioQueue bound to BlackHole 2ch",
+  "reference": {
+    "rate": 44100,
+    "bits": 24,
+    "channels": 2,
+    "frames": 220500,
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "alignedSigned32SHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5"
+  },
+  "registrationHelper": {
+    "sourceSHA256": "3a73ef7c565cfcd5a4d6b8a844a79608c57a5321e32b00190f086ec1703e2914",
+    "binarySHA256": "6ea88bdbd8072ae41533502ec681a105b348d65110974e36c3e884e427a1d174"
+  },
+  "firstStartHelper": "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+  "orderedPlayerRuns": [
+    "default-first-start.json",
+    "unity-first-start.json"
+  ],
+  "liveCommands": [
+    "python3 work/run-audioqueue-first-start.py --mode default --stem default-first-start",
+    "python3 work/run-audioqueue-first-start.py --mode explicit-unity --stem unity-first-start"
+  ],
+  "watchdogPlacement": "Copy the archived run-with-watchdog.py to work/run-audioqueue-first-start.py before invocation; it resolves the repository by its file location.",
+  "protocol": "protocol.json",
+  "buildManifest": "build-manifest.json",
+  "independentAnalysis": "independent-analysis.json",
+  "restoration": "restoration.json",
+  "files": {
+    "build-manifest.json": "0052d24468aa59ecf2cf781091ffa16df54db2cf0284217d83de8413312f1c82",
+    "default-first-start-watchdog.json": "2466b2195463ba897b047f5710688a9d53f9481552bca504a2168c52d7c337d2",
+    "default-first-start.json": "e00f030f517e3c973645b1c6480579186c8155fd74bcd4f5a97bfe8844d40036",
+    "default-registration-retry.json": "97bfd59c9e06653c60d26cbb33cd2f9623e90d97ec1c69dfe211867c830cdf29",
+    "explicit-unity-registration-retry.json": "b8ea4dbba90a5cc6e553c924055a1cc57441390bc27afc45bb2253c6d721b9ae",
+    "first-attempt-scaffold-failure.json": "e031770d3987236369173b44e2af9f2bfdfe98c52344f90ca221d0f38e93893e",
+    "independent-analysis.json": "10a6a08ec7f1176813abcbc45022562ba2af2db534eea9967e783af147326a5e",
+    "offline-checks.json": "26af3de3eeb5c656007848b06098450efd3f25ff0fac74ff6acc49e11d734342",
+    "offline-signal-fix-checks.json": "1122399b1b54ba1cfafc64f6b10bad5532ca4904aa08ce21a6c8c0bca27e59bd",
+    "protocol.json": "e4c5246432d69530c7f1d51749392c53c2f8805a874d30c64b7f308ccd075caf",
+    "restoration.json": "6f78fb97a0bee7165ece700d1888c4ef28615276537fd818a7a2cb698636091b",
+    "scratch-build-provenance.json": "5235825772aa2a215a6ffdcecb0cdc823c0810d5be10c637c4a7590b59b35d6f",
+    "unity-first-start-watchdog.json": "1a3eb471e92726c959df89c5457b96be8970ba625cd351509134708046b0565e",
+    "unity-first-start.json": "98a6d6b62ffab5ba026d2818dbb7b61bed02fdd18d71f2fceff31703de1c63e0"
+  },
+  "reproductionFiles": {
+    "docs/research/experiments/audioqueue-first-start/README.md": "ad16feea064b6a3f11152f9f6494a843ab1cbef21f12a8987b86c494012cd4b7",
+    "docs/research/experiments/audioqueue-first-start/analyze-receipts.py": "4921fac810e3fc98cf02e74c09b61a428719c4e7e3313df9756fc1bde8461ece",
+    "docs/research/experiments/audioqueue-first-start/first-start/build.sh": "9f3865690bfaa6deec4a635b9c44266ce39b6d2fedbf5d461c89f09669dd38f4",
+    "docs/research/experiments/audioqueue-first-start/first-start/check-offline.py": "2b19f053fc40c577cbeeb5008c7d422b4a3e37d8f2b1909541b423cbabfac895",
+    "docs/research/experiments/audioqueue-first-start/first-start/main.swift": "f40202e3902cdd811eb6706276f4eda652313ba772cc846b7a4b9ce81ebf9b39",
+    "docs/research/experiments/audioqueue-first-start/prepare-scratch.py": "2fd88764c0bdf118049b1c80e2e187d2117b672de93a701486e4a92eb16ea770",
+    "docs/research/experiments/audioqueue-first-start/registration/build.sh": "c03de9e507f6acd3c545184522554e27c70db053a8351c1a99299fabfd029791",
+    "docs/research/experiments/audioqueue-first-start/registration/main.swift": "3a73ef7c565cfcd5a4d6b8a844a79608c57a5321e32b00190f086ec1703e2914",
+    "docs/research/experiments/audioqueue-first-start/run-with-watchdog.py": "9fa5f1ce7dbb721756b1878025785408d155c48bc29a3d9b9b64b1b86d6b015b"
+  },
+  "interpretation": "Both fresh-source configurations preserved the whole canonical first reference with no explicit source prerender. Aggregate silence existed before GO. This tap configuration differs from production Spotify tests; no causal attribution, general reliability or receiver claim follows.",
+  "analysisRunnerProvenance": "Adapted after the original inline audit; semantic reproduction with the retained measured binary matched except createdUTC. Optional no-binary mode explicitly records weaker hash provenance."
+}

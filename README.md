@@ -76,6 +76,7 @@ Invalid representation, buffer exhaustion, or timestamp discontinuity stops the 
 The tested Apple Music path altered a known reference before filo's bridge, even with the inspected effects disabled, so Exclusive preview stopped instead of passing it as exact PCM.
 Both HTTP and imported local-file playback produced the same changed samples; see the [reference investigation](docs/research/music-reference-observation.md).
 A separate neutral AVAudioPlayer preserved the complete same ALAC through filo's exclusive bridge to the WALKMAN software output callback; see the [controlled player comparison](docs/research/player-api-reference-observation.md).
+A later [AudioQueue first-start control](docs/research/audioqueue-first-start-observation.md) preserved the complete reference without source prerendering under an experimental tap configuration; it does not establish Spotify's cause or Sony receiver equality.
 That laboratory result does not certify Music, Spotify, or samples received inside the DAC.
 A separate [Spotify local-file test](docs/research/spotify-reference-observation.md) preserved the complete WAV, ALAC, and FLAC reference at its BlackHole process tap.
 A subsequent [connected Spotify experiment](docs/research/spotify-exclusive-observation.md) preserved complete FLAC, WAV, and ALAC references through the exclusive WALKMAN output callback under recorded conditions.

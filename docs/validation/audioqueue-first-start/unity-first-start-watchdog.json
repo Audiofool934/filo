@@ -1,0 +1,12 @@
+{
+  "startedUTC": "2026-09-25T16:07:05.797934+00:00",
+  "elapsedSeconds": 16.4297873750329,
+  "mode": "explicit-unity",
+  "binarySHA256": "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+  "exitCode": 0,
+  "termination": "normal",
+  "parentExited": true,
+  "receiptPresent": true,
+  "receiptFile": "unity-first-start.json",
+  "scope": "Task-owned process group only; separate child-exit and audio-state checks remain required."
+}

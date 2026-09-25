@@ -1,0 +1,49 @@
+{
+  "binarySHA256": "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+  "buildScriptSHA256": "9f3865690bfaa6deec4a635b9c44266ce39b6d2fedbf5d461c89f09669dd38f4",
+  "linkedObjectSHA256": {
+    "FiloCore.build/AudioHardware.swift.o": "095f08a5e5917b383202ca784f6b110839d42665641eca7b1b166df63aae8e5d",
+    "FiloCore.build/AudioSession.swift.o": "d4fc1bb47643dcd95dc7e8a970ef1db539b4eaa3ab07529c51c0bbacebc017a7",
+    "FiloCore.build/ClockFollower.swift.o": "d9c0720fa06560bd13e40e96992ad39230d0827a28b574b1de27d66817ae550f",
+    "FiloCore.build/ConnectionController.swift.o": "87568e6ec0786bf03d12efb32f8bce447e528054c4d9989ddd5e70c13fd81951",
+    "FiloCore.build/DecoderMonitor.swift.o": "793bd474b3ba81f9980d21e20ef27051788b192ddd44590649b18b1243ed39b4",
+    "FiloCore.build/DeviceInspection.swift.o": "d90c5c33fc03abbb8d153def9a94976facf72091e03e827f5edcf6c13ac4bdad",
+    "FiloCore.build/DeviceLease.swift.o": "d982b5d4950c100d4bdd7291f483815b4a10cef194f97b23f3c99531d946d0c9",
+    "FiloCore.build/ExclusiveDevice.swift.o": "9121c3b7d473822197be4bc147f4f454bedd5cab316f497140aa41cf3ff12638",
+    "FiloCore.build/ExclusiveRecoveryJournal.swift.o": "355dd3b3704c4478dd1d528215d6a873b060b76ad109e87ddaca2029c45d138b",
+    "FiloCore.build/ExclusiveRelaySession.swift.o": "253a4ba86de45676a1756c562f9d26dd489fb3fa36b9b618d221555f10102850",
+    "FiloCore.build/FormatPolicy.swift.o": "117682614320bb47dc5071bb9135a76bbe128366918c395f09d11ba6ff11ecd9",
+    "FiloCore.build/InputRejectionSnapshot.swift.o": "e76156c33e0fe2f6046406269db49d890bc66139d1cff2e914a9ede09e069aef",
+    "FiloCore.build/OutputByteVerification.swift.o": "c14bbb0b79afa4b570048df6b813e100e961a9ae3d91fbf40a4299d5aa629c51",
+    "FiloCore.build/PCMVerification.swift.o": "d392de712fc91801af963951deb49c905ccb96b83782510ab478bcc8f50d716c",
+    "FiloCore.build/PlayerReader.swift.o": "3e45b808ec816dd4f47d8ee4c2132fce5ba997a71dd7c3992027712e23ce06b6",
+    "FiloCore.build/ReferencePCM.swift.o": "eaf4f307a3f914e68b5914538dfb00bfe516bce27e0f4b5cfa1c198bc98cc4e2",
+    "FiloCore.build/SourceProcessingAssessment.swift.o": "c7e4168ae264308fc8f0dc8bc6c4ae51447b842066ca41e6dd912e6420275589",
+    "FiloCore.build/VirtualClock.swift.o": "355c4a1ecec0d19febe235ef572147c1361a028508c871b69d8cfe87ec03fe49",
+    "FiloPCM.build/Bridge.c.o": "d3cc4181652f4654d02b46e37dc399117789f9a58ceeb57410de05e55b33f051",
+    "FiloPCM.build/Transport.c.o": "ced479cfa37b6396ad43b08555a20da7f98105327ce17c75382ce6331ba4c4fb"
+  },
+  "moduleSHA256": {
+    "Modules/FiloCore.abi.json": "4277ac6b49f8511196028a5ac20f5b1b1dfa754c24615d34068089f0b1739728",
+    "Modules/FiloCore.swiftdoc": "de2a54c7023364369e117c8966163c04091f264e0901b54e44b67ce3d52c5a17",
+    "Modules/FiloCore.swiftmodule": "0e7c460e0c529e2f7b49a6b860647116a6978d7f7333de2019e4a3e297d51bf1",
+    "Modules/FiloCore.swiftsourceinfo": "fefc556bde13e0ef560e7be50cabd784030066d971a7154ae54d5a2a545e4622"
+  },
+  "scope": "Isolated first-start experiment; TapAutoStart=false in the scratch FiloCore.",
+  "scratchProvenance": {
+    "baseCommit": "4e77ac5f65d98359fe8bec4c3c3cb118bae6e822",
+    "changedFiles": [
+      "Sources/FiloCore/ExclusiveRelaySession.swift"
+    ],
+    "experimentalSourceSHA256": "7bcf5dbbc7e4ff56ca6195c89d851c08285b66b37354194e4757aff9e762b144",
+    "onlySourceChange": "kAudioAggregateDeviceTapAutoStartKey: true -> false",
+    "originalSourceSHA256": "8996bddd5f4a5282c149918503f4e71eb93f716968ab302fa3b4373e3734eb14",
+    "reason": "Prearm capture before any first AudioQueueStart without a source silent renderer.",
+    "scope": "Experimental scratch build only, production files unchanged."
+  },
+  "scratchProvenanceSHA256": "5235825772aa2a215a6ffdcecb0cdc823c0810d5be10c637c4a7590b59b35d6f",
+  "sourceSHA256": "f40202e3902cdd811eb6706276f4eda652313ba772cc846b7a4b9ce81ebf9b39",
+  "swiftVersion": "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)\nTarget: arm64-apple-macosx26.0",
+  "target": "arm64-apple-macosx14.4",
+  "warningsAsErrors": true
+}

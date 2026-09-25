@@ -1,0 +1,32 @@
+{
+  "observedUTC": "2026-09-25T16:08:18.759732+00:00",
+  "deviceSnapshotEqual": true,
+  "WALKMANFormatSnapshotEqual": true,
+  "BlackHoleClockSnapshotEqual": true,
+  "BlackHoleLevelsEqualIgnoringObservationTime": true,
+  "defaultOutput": "Existing Bluetooth output retained",
+  "WALKMAN": {
+    "rate": 192000,
+    "hogPID": -1
+  },
+  "BlackHole": {
+    "rate": 44100,
+    "clock": "Internal Fixed",
+    "scalar": 0.5,
+    "decibels": -32,
+    "mute": false,
+    "running": false
+  },
+  "UIChangesThisExperiment": false,
+  "allTaskAudioSessionsExited": true,
+  "taskOwnedQueuesDisposed": true,
+  "forceTerminationRequired": false,
+  "localSnapshotSHA256": {
+    "audioqueue-first-start-before-devices.json": "e7fe0342b9da5ede3d9135ae0d46300f0d64b7b9a514e46658fdfeb3514b5124",
+    "audioqueue-first-start-final-devices.json": "e7fe0342b9da5ede3d9135ae0d46300f0d64b7b9a514e46658fdfeb3514b5124",
+    "audioqueue-first-start-before-formats.json": "fbe5fd567753bdada16291198a6813df004e50ccd2b7f9c8d4a647901cfb016e",
+    "audioqueue-first-start-final-formats.json": "fbe5fd567753bdada16291198a6813df004e50ccd2b7f9c8d4a647901cfb016e",
+    "audioqueue-first-start-before-clock.json": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41",
+    "audioqueue-first-start-final-clock.json": "9f513f3dda3b01a050ed1cff13cb5deb87d5762786bb1bc4b41a908fd3b74d41"
+  }
+}

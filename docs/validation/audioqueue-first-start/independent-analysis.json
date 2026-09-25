@@ -1,0 +1,579 @@
+{
+  "UTCMeasurementDate": "2026-09-25",
+  "allChecksPassed": true,
+  "analysisType": "Independent offline receipt consistency and canonical-byte reconstruction",
+  "conclusions": [
+    "Both full canonical reference spans independently reconstruct the aligned signed32 hash and each reported full-capture hash when combined with the reported zero margins.",
+    "No source AudioQueue Start or explicit Prime precedes GO in the inspected control flow and receipts; source buffer-return counters remain zero through the acknowledgement emitted after first Start returns.",
+    "Aggregate pre-GO capture is not source prewarm: default captured 18432/delivered 0 frames; unity captured 20992/delivered 512 frames while the source queue remained unstarted.",
+    "The only intended source configuration difference is one explicit unity-volume call; both arms report volume 1 and ramp-time 0 at every successful parameter readback.",
+    "Both arms use experimental TapAutoStart=false; these observations do not establish equivalent first-start behavior in production TapAutoStart=true or in Spotify."
+  ],
+  "createdUTC": "2026-09-25T16:10:39.212482+00:00",
+  "helperProvenance": {
+    "binarySHA256": "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+    "callTimestampsRecordedAfterAPIReturn": true,
+    "matchesExistingBuildManifest": true,
+    "sourceAudioQueueStartCallSites": 1,
+    "sourceEnqueueOrderVerified": "Canonical reference from frame zero first; 441000 all-zero frames second; no preceding source-zero buffer.",
+    "sourceExplicitAudioQueuePrimeCallSites": 0,
+    "sourceSHA256": "f40202e3902cdd811eb6706276f4eda652313ba772cc846b7a4b9ce81ebf9b39"
+  },
+  "independentRawCaptureReReadPerformed": false,
+  "limits": [
+    "Raw capture bytes were not independently available: the full-capture hash is independently reconstructed from canonical WAV bytes and receipt margins, then compared with the logged capture hash. This checks consistency of the evidence, not a second hardware capture.",
+    "Primitive-call timestamps are recorded after return; the exact AudioQueueStart invocation instant and source render-callback timestamps are not recorded. The source control flow bounds the call after GO and the last immediately-before-start parameter read.",
+    "Registration/running snapshots and event timestamps are observations, not a public contract that every fresh AudioQueue exposes a pre-start process.",
+    "The goAccepted metrics carry the last IsRunning read made during readiness; that false value is not a fresh post-Start read. The successful first Start and later running=true status observations are separate evidence.",
+    "Durations derived from frame counts divide by the nominal 44100 Hz rate and are not independently measured wall-clock durations.",
+    "Aggregate callbacks existed before GO in both runs; the no-before-GO-callback claim applies only to source AudioQueue buffer callbacks, not the relay.",
+    "Post-stop buffer-return counts include the zero buffer released during stop/dispose and do not prove it was fully rendered. The retained output tail and full reference comparison are the coverage evidence.",
+    "Ordered single attempts at each setting are a bounded non-reproduction of the onset and do not attribute Spotify behavior or exclude a shared macOS mechanism.",
+    "Watchdog normal exit and cleanup receipts are recorded; separate live resource/device restoration checks belong to the parent and were not repeated here."
+  ],
+  "localMeasurementDate": "2026-09-26",
+  "reference": {
+    "bits": 24,
+    "channels": 2,
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "filename": "filo-reference-44100-24.wav",
+    "firstStereoSigned24Samples": [
+      3416,
+      7394
+    ],
+    "frames": 220500,
+    "generatorSamplesIndependentlyChecked": 441000,
+    "lastStereoSigned24Samples": [
+      704,
+      4096
+    ],
+    "sampleRate": 44100,
+    "signed32LittleEndianAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5"
+  },
+  "runs": [
+    {
+      "allChecksPassed": true,
+      "capturedOutputBytes": 3907584,
+      "capturedOutputFrames": 488448,
+      "checks": {
+        "allRecordedPrimitiveCallsSucceeded": true,
+        "binaryMatchesReceiptAndBuildManifest": true,
+        "canonicalSourceSHA256Matches": true,
+        "captureHasAtLeastTwoSecondsTail": true,
+        "cleanupAndWatchdogNormal": true,
+        "exactlyOneSuccessfulFirstStart": true,
+        "expectedActualAlignedHashesMatch": true,
+        "experimentalTapAutoStartFalse": true,
+        "explicitUnityCallCountMatchesArm": true,
+        "fullCaptureHashMatchesReconstructedReferenceAndZeroMargins": true,
+        "inputFrameAccountingBalances": true,
+        "integerStereo44100PhysicalAndCallbackFormatsMatch": true,
+        "marginAndTotalByteCountsMatch": true,
+        "modeMatches": true,
+        "noExplicitPrimeOrSeparateSilentRenderer": true,
+        "noOtherSetterPresent": true,
+        "parameterReadbacksAllUnityAndZeroRamp": true,
+        "preGOFrameAccountingBalances": true,
+        "queueReadyRelayStartReturnedGOBeforeFirstStartReadbackOrdered": true,
+        "readySourceUnstartedAndNoReturnedBuffers": true,
+        "referenceStartsAtFrameZero": true,
+        "registeredUnrunningSourceBeforeGO": true,
+        "singleReferenceThenPostrollOnly": true,
+        "sourceCallbacksRemainZeroThroughPostStartGoAcknowledgement": true,
+        "wholeReferenceAndFormatPassFieldsTrue": true,
+        "wholeReferenceCountsMatch": true,
+        "zeroBridgeFaultCounts": true,
+        "zeroMismatchAndMissingEdgeCounts": true
+      },
+      "durations": {
+        "GOToLastPreStartReadSeconds": 0.004145874991081655,
+        "GOToStartReturnSeconds": 0.10805754165630788,
+        "preGOAggregateCapturedSeconds": 0.4179591836734694,
+        "readyToGOSeconds": 1.2649210416711867,
+        "referenceLeadingCaptureSeconds": 0.5572789115646258,
+        "relayStartCallSeconds": 1.2047960833879188,
+        "tailSeconds": 5.518639455782313
+      },
+      "failedChecks": [],
+      "finalRelayMetrics": {
+        "capturedFrames": 507392,
+        "deliveredFrames": 488448,
+        "fault": 0,
+        "initialQueuedFrames": 18432,
+        "inputCallbacks": 991,
+        "inputTimestampDiscontinuities": 0,
+        "inputTimestampMissing": 0,
+        "invalidBuffers": 0,
+        "outputCallbacks": 954,
+        "outputTimestampDiscontinuities": 0,
+        "outputTimestampMissing": 0,
+        "overflows": 0,
+        "queuedFrames": 18944,
+        "renderedCaptureFrames": 488448,
+        "representationFailures": 0,
+        "started": true,
+        "startupSilenceFrames": 0,
+        "underflows": 0
+      },
+      "leadingCaptureFrames": 24576,
+      "mode": "default",
+      "monotonicTimes": {
+        "AudioQueueStartCallReturnedAndLogged": 642022.164569625,
+        "firstObservedReferenceBufferReusable": 642027.3536760417,
+        "goAcknowledged": 642022.1645790417,
+        "goSent": 642022.0565120834,
+        "lastPreStartParameterReadReturned": 642022.0606579584,
+        "ready": 642020.7915910417,
+        "relayStartRequested": 642020.8516410417,
+        "relayStartReturned": 642022.0564371251,
+        "sourceStoppedEvent": 642036.5005764167
+      },
+      "preGOAggregateMetrics": {
+        "capturedFrames": 18432,
+        "deliveredFrames": 0,
+        "fault": 0,
+        "initialQueuedFrames": 0,
+        "inputCallbacks": 36,
+        "inputTimestampDiscontinuities": 0,
+        "inputTimestampMissing": 0,
+        "invalidBuffers": 0,
+        "outputCallbacks": 0,
+        "outputTimestampDiscontinuities": 0,
+        "outputTimestampMissing": 0,
+        "overflows": 0,
+        "queuedFrames": 18432,
+        "renderedCaptureFrames": 0,
+        "representationFailures": 0,
+        "started": false,
+        "startupSilenceFrames": 0,
+        "underflows": 0
+      },
+      "receipt": "default-first-start.json",
+      "receiptSHA256": "e00f030f517e3c973645b1c6480579186c8155fd74bcd4f5a97bfe8844d40036",
+      "recomputedAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "reconstructedFullCaptureSHA256": "1736b63bbaaef407ef6caccda36e99fd19ffa1d5757d2a3eca49b0e02415f455",
+      "recordedPrimitiveCalls": [
+        {
+          "monotonicSeconds": 642020.7783872917,
+          "operation": "newOutput",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642020.7801082917,
+          "operation": "setCurrentDeviceBlackHole",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642020.7806059167,
+          "operation": "getCurrentDeviceBlackHole",
+          "selectedDeviceMatches": true,
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642020.7806513334,
+          "operation": "beforeOptionalUnity.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642020.7806520833,
+          "operation": "beforeOptionalUnity.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642020.7806544583,
+          "operation": "afterOptionalUnity.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642020.7806549167,
+          "operation": "afterOptionalUnity.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642020.7807017501,
+          "operation": "allocateBuffer1",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642020.7853865834,
+          "operation": "enqueueBuffer1",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642020.7854095417,
+          "operation": "allocateBuffer2",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642020.791577,
+          "operation": "enqueueBuffer2",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642022.0606488334,
+          "operation": "immediatelyBeforeFirstStart.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642022.0606579584,
+          "operation": "immediatelyBeforeFirstStart.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642022.164569625,
+          "operation": "firstStartAfterGO",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642022.1645778334,
+          "operation": "afterFirstStart.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642022.1645784167,
+          "operation": "afterFirstStart.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642035.9793141667,
+          "operation": "beforeStop.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642035.97931975,
+          "operation": "beforeStop.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642035.9914749167,
+          "operation": "stopImmediate",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642036.5005745001,
+          "operation": "disposeImmediate",
+          "status": 0
+        }
+      ],
+      "referenceFrames": 220500,
+      "sourceStateAtGoAcknowledgement": {
+        "framesReturnedForReuse": 0,
+        "lastRunningReadStatus": 0,
+        "lastRunningReadValue": false,
+        "referenceBuffersReturnedForReuse": 0,
+        "referenceEnqueueCount": 1,
+        "referenceFramesEnqueued": 220500,
+        "startCalls": 1,
+        "startSucceeded": true,
+        "zeroBuffersReturnedForReuse": 0,
+        "zeroFramesEnqueued": 441000
+      },
+      "sourceStateAtReady": {
+        "framesReturnedForReuse": 0,
+        "lastRunningReadStatus": 0,
+        "lastRunningReadValue": false,
+        "referenceBuffersReturnedForReuse": 0,
+        "referenceEnqueueCount": 1,
+        "referenceFramesEnqueued": 220500,
+        "startCalls": 0,
+        "startSucceeded": false,
+        "zeroBuffersReturnedForReuse": 0,
+        "zeroFramesEnqueued": 441000
+      },
+      "sourceStateAtStop": {
+        "framesReturnedBeforeStop": 220500,
+        "framesReturnedForReuse": 661500,
+        "lastRunningReadStatus": 0,
+        "lastRunningReadValue": true,
+        "referenceBuffersReturnedBeforeStop": 1,
+        "referenceBuffersReturnedForReuse": 1,
+        "referenceEnqueueCount": 1,
+        "referenceFramesEnqueued": 220500,
+        "startCalls": 1,
+        "startSucceeded": true,
+        "zeroBuffersReturnedForReuse": 1,
+        "zeroFramesEnqueued": 441000
+      },
+      "startedAsiaSingapore": "2026-09-26T00:06:07.612251+08:00",
+      "startedUTC": "2026-09-25T16:06:07.612251+00:00",
+      "trailingCaptureFrames": 243372,
+      "watchdog": "default-first-start-watchdog.json",
+      "watchdogSHA256": "2466b2195463ba897b047f5710688a9d53f9481552bca504a2168c52d7c337d2"
+    },
+    {
+      "allChecksPassed": true,
+      "capturedOutputBytes": 3887104,
+      "capturedOutputFrames": 485888,
+      "checks": {
+        "allRecordedPrimitiveCallsSucceeded": true,
+        "binaryMatchesReceiptAndBuildManifest": true,
+        "canonicalSourceSHA256Matches": true,
+        "captureHasAtLeastTwoSecondsTail": true,
+        "cleanupAndWatchdogNormal": true,
+        "exactlyOneSuccessfulFirstStart": true,
+        "expectedActualAlignedHashesMatch": true,
+        "experimentalTapAutoStartFalse": true,
+        "explicitUnityCallCountMatchesArm": true,
+        "fullCaptureHashMatchesReconstructedReferenceAndZeroMargins": true,
+        "inputFrameAccountingBalances": true,
+        "integerStereo44100PhysicalAndCallbackFormatsMatch": true,
+        "marginAndTotalByteCountsMatch": true,
+        "modeMatches": true,
+        "noExplicitPrimeOrSeparateSilentRenderer": true,
+        "noOtherSetterPresent": true,
+        "parameterReadbacksAllUnityAndZeroRamp": true,
+        "preGOFrameAccountingBalances": true,
+        "queueReadyRelayStartReturnedGOBeforeFirstStartReadbackOrdered": true,
+        "readySourceUnstartedAndNoReturnedBuffers": true,
+        "referenceStartsAtFrameZero": true,
+        "registeredUnrunningSourceBeforeGO": true,
+        "singleReferenceThenPostrollOnly": true,
+        "sourceCallbacksRemainZeroThroughPostStartGoAcknowledgement": true,
+        "wholeReferenceAndFormatPassFieldsTrue": true,
+        "wholeReferenceCountsMatch": true,
+        "zeroBridgeFaultCounts": true,
+        "zeroMismatchAndMissingEdgeCounts": true
+      },
+      "durations": {
+        "GOToLastPreStartReadSeconds": 0.014563041622750461,
+        "GOToStartReturnSeconds": 0.09119616658426821,
+        "preGOAggregateCapturedSeconds": 0.47600907029478456,
+        "readyToGOSeconds": 1.2211436250945553,
+        "referenceLeadingCaptureSeconds": 0.592108843537415,
+        "relayStartCallSeconds": 1.170679208356887,
+        "tailSeconds": 5.425759637188208
+      },
+      "failedChecks": [],
+      "finalRelayMetrics": {
+        "capturedFrames": 506880,
+        "deliveredFrames": 485888,
+        "fault": 0,
+        "initialQueuedFrames": 20480,
+        "inputCallbacks": 990,
+        "inputTimestampDiscontinuities": 0,
+        "inputTimestampMissing": 0,
+        "invalidBuffers": 0,
+        "outputCallbacks": 949,
+        "outputTimestampDiscontinuities": 0,
+        "outputTimestampMissing": 0,
+        "overflows": 0,
+        "queuedFrames": 20992,
+        "renderedCaptureFrames": 485888,
+        "representationFailures": 0,
+        "started": true,
+        "startupSilenceFrames": 0,
+        "underflows": 0
+      },
+      "leadingCaptureFrames": 26112,
+      "mode": "explicit-unity",
+      "monotonicTimes": {
+        "AudioQueueStartCallReturnedAndLogged": 642080.1241149167,
+        "firstObservedReferenceBufferReusable": 642085.47007575,
+        "goAcknowledged": 642080.1241272917,
+        "goSent": 642080.0329187501,
+        "lastPreStartParameterReadReturned": 642080.0474817917,
+        "ready": 642078.811775125,
+        "relayStartRequested": 642078.862138125,
+        "relayStartReturned": 642080.0328173334,
+        "sourceStoppedEvent": 642093.9969031668
+      },
+      "preGOAggregateMetrics": {
+        "capturedFrames": 20992,
+        "deliveredFrames": 512,
+        "fault": 0,
+        "initialQueuedFrames": 20480,
+        "inputCallbacks": 41,
+        "inputTimestampDiscontinuities": 0,
+        "inputTimestampMissing": 0,
+        "invalidBuffers": 0,
+        "outputCallbacks": 1,
+        "outputTimestampDiscontinuities": 0,
+        "outputTimestampMissing": 0,
+        "overflows": 0,
+        "queuedFrames": 20480,
+        "renderedCaptureFrames": 512,
+        "representationFailures": 0,
+        "started": true,
+        "startupSilenceFrames": 0,
+        "underflows": 0
+      },
+      "receipt": "unity-first-start.json",
+      "receiptSHA256": "98a6d6b62ffab5ba026d2818dbb7b61bed02fdd18d71f2fceff31703de1c63e0",
+      "recomputedAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "reconstructedFullCaptureSHA256": "0616e8f192175df42b4e0e21eb55eec1b2e212f4318a9fc1310d22d7798bf06a",
+      "recordedPrimitiveCalls": [
+        {
+          "monotonicSeconds": 642078.8107888751,
+          "operation": "newOutput",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.810817625,
+          "operation": "setCurrentDeviceBlackHole",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.810821625,
+          "operation": "getCurrentDeviceBlackHole",
+          "selectedDeviceMatches": true,
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.8108443334,
+          "operation": "beforeOptionalUnity.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642078.8108450416,
+          "operation": "beforeOptionalUnity.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642078.8108469167,
+          "operation": "setVolumeUnityOnce",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.810848125,
+          "operation": "afterOptionalUnity.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642078.810848625,
+          "operation": "afterOptionalUnity.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642078.810890625,
+          "operation": "allocateBuffer1",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.8112710834,
+          "operation": "enqueueBuffer1",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.8112877083,
+          "operation": "allocateBuffer2",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642078.8117671667,
+          "operation": "enqueueBuffer2",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642080.0474796667,
+          "operation": "immediatelyBeforeFirstStart.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642080.0474817917,
+          "operation": "immediatelyBeforeFirstStart.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642080.1241149167,
+          "operation": "firstStartAfterGO",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642080.124126125,
+          "operation": "afterFirstStart.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642080.1241266667,
+          "operation": "afterFirstStart.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642093.4793227917,
+          "operation": "beforeStop.volume",
+          "status": 0,
+          "value": 1
+        },
+        {
+          "monotonicSeconds": 642093.47932425,
+          "operation": "beforeStop.rampSeconds",
+          "status": 0,
+          "value": 0
+        },
+        {
+          "monotonicSeconds": 642093.484591875,
+          "operation": "stopImmediate",
+          "status": 0
+        },
+        {
+          "monotonicSeconds": 642093.9968966667,
+          "operation": "disposeImmediate",
+          "status": 0
+        }
+      ],
+      "referenceFrames": 220500,
+      "sourceStateAtGoAcknowledgement": {
+        "framesReturnedForReuse": 0,
+        "lastRunningReadStatus": 0,
+        "lastRunningReadValue": false,
+        "referenceBuffersReturnedForReuse": 0,
+        "referenceEnqueueCount": 1,
+        "referenceFramesEnqueued": 220500,
+        "startCalls": 1,
+        "startSucceeded": true,
+        "zeroBuffersReturnedForReuse": 0,
+        "zeroFramesEnqueued": 441000
+      },
+      "sourceStateAtReady": {
+        "framesReturnedForReuse": 0,
+        "lastRunningReadStatus": 0,
+        "lastRunningReadValue": false,
+        "referenceBuffersReturnedForReuse": 0,
+        "referenceEnqueueCount": 1,
+        "referenceFramesEnqueued": 220500,
+        "startCalls": 0,
+        "startSucceeded": false,
+        "zeroBuffersReturnedForReuse": 0,
+        "zeroFramesEnqueued": 441000
+      },
+      "sourceStateAtStop": {
+        "framesReturnedBeforeStop": 220500,
+        "framesReturnedForReuse": 661500,
+        "lastRunningReadStatus": 0,
+        "lastRunningReadValue": true,
+        "referenceBuffersReturnedBeforeStop": 1,
+        "referenceBuffersReturnedForReuse": 1,
+        "referenceEnqueueCount": 1,
+        "referenceFramesEnqueued": 220500,
+        "startCalls": 1,
+        "startSucceeded": true,
+        "zeroBuffersReturnedForReuse": 1,
+        "zeroFramesEnqueued": 441000
+      },
+      "startedAsiaSingapore": "2026-09-26T00:07:05.797934+08:00",
+      "startedUTC": "2026-09-25T16:07:05.797934+00:00",
+      "trailingCaptureFrames": 239276,
+      "watchdog": "unity-first-start-watchdog.json",
+      "watchdogSHA256": "1a3eb471e92726c959df89c5457b96be8970ba625cd351509134708046b0565e"
+    }
+  ],
+  "schemaVersion": 1
+}

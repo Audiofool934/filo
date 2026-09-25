@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "recordedUTC": "2026-09-25T15:38:30.972219+00:00",
+  "question": "Can a fresh task-owned AudioQueue reproduce the known first-start gain signature, and does an explicit unity assignment before first start change the complete reference result?",
+  "scope": "Original synthetic canonical 44100 Hz stereo 24-bit fixture decoded to exact Float32; no Spotify or Music playback, no subscription material.",
+  "unchangedReferenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "plannedRuns": [
+    {
+      "order": 1,
+      "mode": "default",
+      "variable": "Never set AudioQueue volume; inspect public default readback."
+    },
+    {
+      "order": 2,
+      "mode": "explicit-unity",
+      "variable": "Set volume to exactly 1 once before first Start; inspect return status and readback."
+    }
+  ],
+  "commonSetup": [
+    "New child and queue for each run.",
+    "Explicit BlackHole CurrentDevice; matching 44100 Hz interleaved stereo Float32.",
+    "No AudioQueuePrime, AudioQueueStart, separate zero source or source prerender before the parent tap is armed.",
+    "Bounded wait for a CoreAudio AudioProcess object after queue creation; if unavailable, stop without substituting prewarm.",
+    "Only after capture is armed does GO cause the first AudioQueueStart.",
+    "The unchanged reference begins at the first source frame; zeros may follow it for postroll.",
+    "One continuous exclusive WALKMAN output capture; exact full-reference comparator and bounded rejection diagnostics; no gain fitting in acceptance.",
+    "Record enqueue/completion without claiming a returned buffer independently proves rendering.",
+    "Stop task-owned audio, confirm disposal, and restore only lease-owned state after each run."
+  ],
+  "readbacks": [
+    "Queue volume and volume ramp time before optional assignment.",
+    "SetParameter OSStatus for explicit-unity only.",
+    "Queue volume and ramp time after optional assignment.",
+    "CurrentDevice matches intended BlackHole UID locally; avoid publishing private unrelated device identities."
+  ],
+  "decisionRules": [
+    "If an unstarted queue lacks a HAL process, both attempted variants are blocked as first-start measurements; do not call no capture a pass.",
+    "If either exact known onset is captured, compare all retained raw words with the existing model without refitting.",
+    "If only one assignment variant changes the outcome, run the same two cases in reverse order once to test order sensitivity before attributing the effect.",
+    "If both references pass completely, conclude only that this fresh AudioQueue configuration did not reproduce the Spotify signature; do not attribute the signature to Spotify or exclude shared macOS processing.",
+    "If failures are buffer/timestamp/registration faults, classify the setup failure separately from sample modification.",
+    "No general reliability or receiver claim follows from this bounded pair."
+  ],
+  "baseline": "Read-only work/audioqueue-before-{devices,formats,clock,levels}.json; current external default retained; WALKMAN 192000 Hz and BlackHole 44100 Hz, scalar0.5, mute0.",
+  "softwareChange": "Experimental helper under work only; production unchanged.",
+  "prerequisiteAmendment": {
+    "recordedUTC": "2026-09-25T15:48:40.485153+00:00",
+    "beforeAnyLiveProbe": true,
+    "reason": "Public SDK documents TapAutoStart waiting for first tapped audio, so full capture may have a circular first-start dependency. Establish unstarted process visibility first.",
+    "phase": "Standalone registration-only, no Start or Prime, no tap or aggregate, no default-route or device-rate write, no DAC ownership.",
+    "arms": [
+      "default",
+      "explicit-unity"
+    ],
+    "observations": "Own-process PID translation and running-output state before NewOutput and after each preparation stage; AudioQueue parameters and IsRunning; disposal status.",
+    "interpretation": "Registration is not proof of a tap-usable stream or successful full-reference capture; no playback verdict from this phase.",
+    "fullPlaybackStatus": "Deferred pending prerequisite evidence and a bounded capture-start design."
+  },
+  "captureAmendment": {
+    "recordedUTC": "2026-09-25T15:59:07.405927+00:00",
+    "beforeAnyAudioQueueStart": true,
+    "prerequisiteResult": "Both preparation probes succeeded, with a matching non-running process already visible in the pre-NewOutput observation; volume1/ramp0; no queue playback or callbacks; all state snapshots unchanged.",
+    "experimentalSourceChange": "Scratch copy of current FiloCore with only kAudioAggregateDeviceTapAutoStartKey set false instead of true; production source stays unchanged.",
+    "reason": "Allow the aggregate capture to start before the source receives its first GO, avoiding documented wait-for-first-audio dependency.",
+    "inferenceLimit": "This tests a configured public AudioQueue plus experimental no-wait tap path. It is not a reproduction of the exact production Spotify topology and cannot identify the component responsible for Spotify onset.",
+    "captureDesign": "Full original known reference in one first AudioQueueStart, no explicit Prime or prior silent renderer. Raw physical callback comparison plus existing bounded rejection diagnostics.",
+    "externalWatchdog": "Each task-owned parent/child process group gets a 45-second limit; TERM then bounded KILL only on timeout; verify receipts, child exit and conditional journal recovery before another run."
+  }
+}

@@ -1,0 +1,808 @@
+{
+  "audioQueuePrimeCalls" : 0,
+  "binarySHA256" : "281b57cbacebb467ed03ed683209a8a4c344ee2cc5b5a9dfabcaa5e87e83affe",
+  "childEvents" : [
+    {
+      "calls" : [
+        {
+          "monotonicSeconds" : 642078.8107888751,
+          "operation" : "newOutput",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810817625,
+          "operation" : "setCurrentDeviceBlackHole",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810821625,
+          "operation" : "getCurrentDeviceBlackHole",
+          "selectedDeviceMatches" : true,
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8108443334,
+          "operation" : "beforeOptionalUnity.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642078.8108450416,
+          "operation" : "beforeOptionalUnity.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8108469167,
+          "operation" : "setVolumeUnityOnce",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810848125,
+          "operation" : "afterOptionalUnity.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642078.810848625,
+          "operation" : "afterOptionalUnity.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810890625,
+          "operation" : "allocateBuffer1",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8112710834,
+          "operation" : "enqueueBuffer1",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8112877083,
+          "operation" : "allocateBuffer2",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8117671667,
+          "operation" : "enqueueBuffer2",
+          "status" : 0
+        }
+      ],
+      "event" : "ready",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : false,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 0,
+        "startSucceeded" : false,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642078.811775125,
+      "referenceSHA256" : "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e"
+    },
+    {
+      "calls" : [
+        {
+          "monotonicSeconds" : 642078.8107888751,
+          "operation" : "newOutput",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810817625,
+          "operation" : "setCurrentDeviceBlackHole",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810821625,
+          "operation" : "getCurrentDeviceBlackHole",
+          "selectedDeviceMatches" : true,
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8108443334,
+          "operation" : "beforeOptionalUnity.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642078.8108450416,
+          "operation" : "beforeOptionalUnity.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8108469167,
+          "operation" : "setVolumeUnityOnce",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810848125,
+          "operation" : "afterOptionalUnity.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642078.810848625,
+          "operation" : "afterOptionalUnity.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810890625,
+          "operation" : "allocateBuffer1",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8112710834,
+          "operation" : "enqueueBuffer1",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8112877083,
+          "operation" : "allocateBuffer2",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8117671667,
+          "operation" : "enqueueBuffer2",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642080.0474796667,
+          "operation" : "immediatelyBeforeFirstStart.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642080.0474817917,
+          "operation" : "immediatelyBeforeFirstStart.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642080.1241149167,
+          "operation" : "firstStartAfterGO",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642080.124126125,
+          "operation" : "afterFirstStart.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642080.1241266667,
+          "operation" : "afterFirstStart.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        }
+      ],
+      "event" : "goAccepted",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : false,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642080.1241272917
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : false,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642080.12427575
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642080.5865194583
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642081.0663205417
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642081.6346256667
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642082.1837889167
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642082.7280025
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642083.2787279167
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642083.8213697084
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642084.3668689583
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 0,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 0,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642084.936706
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642085.47007575
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642086.0353962918
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642086.5746509584
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642087.1477319167
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642087.684638125
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642088.2546395417
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642088.7993179167
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642089.3741772084
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642089.887382
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642090.4540921251
+    },
+    {
+      "event" : "status",
+      "metrics" : {
+        "framesReturnedForReuse" : 220500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 0,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642090.994208125
+    },
+    {
+      "calls" : [
+        {
+          "monotonicSeconds" : 642078.8107888751,
+          "operation" : "newOutput",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810817625,
+          "operation" : "setCurrentDeviceBlackHole",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810821625,
+          "operation" : "getCurrentDeviceBlackHole",
+          "selectedDeviceMatches" : true,
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8108443334,
+          "operation" : "beforeOptionalUnity.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642078.8108450416,
+          "operation" : "beforeOptionalUnity.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8108469167,
+          "operation" : "setVolumeUnityOnce",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810848125,
+          "operation" : "afterOptionalUnity.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642078.810848625,
+          "operation" : "afterOptionalUnity.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.810890625,
+          "operation" : "allocateBuffer1",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8112710834,
+          "operation" : "enqueueBuffer1",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8112877083,
+          "operation" : "allocateBuffer2",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642078.8117671667,
+          "operation" : "enqueueBuffer2",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642080.0474796667,
+          "operation" : "immediatelyBeforeFirstStart.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642080.0474817917,
+          "operation" : "immediatelyBeforeFirstStart.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642080.1241149167,
+          "operation" : "firstStartAfterGO",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642080.124126125,
+          "operation" : "afterFirstStart.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642080.1241266667,
+          "operation" : "afterFirstStart.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642093.4793227917,
+          "operation" : "beforeStop.volume",
+          "status" : 0,
+          "value" : 1
+        },
+        {
+          "monotonicSeconds" : 642093.47932425,
+          "operation" : "beforeStop.rampSeconds",
+          "status" : 0,
+          "value" : 0
+        },
+        {
+          "monotonicSeconds" : 642093.484591875,
+          "operation" : "stopImmediate",
+          "status" : 0
+        },
+        {
+          "monotonicSeconds" : 642093.9968966667,
+          "operation" : "disposeImmediate",
+          "status" : 0
+        }
+      ],
+      "cleanupErrors" : [
+
+      ],
+      "event" : "stopped",
+      "metrics" : {
+        "framesReturnedBeforeStop" : 220500,
+        "framesReturnedForReuse" : 661500,
+        "lastRunningReadStatus" : 0,
+        "lastRunningReadValue" : true,
+        "referenceBuffersReturnedBeforeStop" : 1,
+        "referenceBuffersReturnedForReuse" : 1,
+        "referenceEnqueueCount" : 1,
+        "referenceFramesEnqueued" : 220500,
+        "startCalls" : 1,
+        "startSucceeded" : true,
+        "zeroBuffersReturnedForReuse" : 1,
+        "zeroFramesEnqueued" : 441000
+      },
+      "monotonicSeconds" : 642093.9969031668
+    }
+  ],
+  "childProcessObjectsBeforeGO" : 1,
+  "childProcessRunningBeforeGO" : false,
+  "cleanupErrors" : [
+
+  ],
+  "comparison" : {
+    "actualAlignedSHA256" : "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+    "actualCaptureSHA256" : "0616e8f192175df42b4e0e21eb55eec1b2e212f4318a9fc1310d22d7798bf06a",
+    "bytesPerPacket" : 8,
+    "captureWellFormed" : true,
+    "capturedFrames" : 485888,
+    "comparedBytes" : 1764000,
+    "comparedFrames" : 220500,
+    "containerBits" : 32,
+    "exactReferencePrecision" : true,
+    "expectedAlignedSHA256" : "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+    "expectedReferenceSHA256" : "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+    "framesPerPacket" : 1,
+    "mismatchedBytes" : 0,
+    "mismatchedFrames" : 0,
+    "mismatchedSampleWords" : 0,
+    "nonzeroLeadingBytes" : 0,
+    "nonzeroPaddingBytes" : 0,
+    "nonzeroTrailingBytes" : 0,
+    "outputFormat" : {
+      "bits" : 32,
+      "bytesPerFrame" : 8,
+      "channels" : 2,
+      "flags" : 76,
+      "formatID" : 1819304813,
+      "rate" : 44100
+    },
+    "paddingBits" : 0,
+    "passed" : true,
+    "precisionHandling" : "Exact integer widening from 24 to 32 valid bits; 0 container padding bits must be zero.",
+    "rateMatches" : true,
+    "referenceBits" : 24,
+    "referenceFrames" : 220500,
+    "sampleComparison" : {
+      "aligned" : true,
+      "alignmentAmbiguous" : false,
+      "anchorFrames" : 32,
+      "captureStartFrame" : 26112,
+      "capturedFrames" : 485888,
+      "comparedFrames" : 220500,
+      "fullReferenceExact" : true,
+      "leadingCaptureFrames" : 26112,
+      "maxIntegerError" : 0,
+      "mismatchedSamples" : 0,
+      "missingPrefixFrames" : 0,
+      "missingSuffixFrames" : 0,
+      "nonzeroLeadingSamples" : 0,
+      "nonzeroTrailingSamples" : 0,
+      "referenceFrames" : 220500,
+      "referenceStartFrame" : 0,
+      "trailingCaptureFrames" : 239276,
+      "windowExact" : true
+    },
+    "totalOutputBytes" : 3887104,
+    "validFormat" : true
+  },
+  "experimentalDifference" : "Scratch FiloCore changes only aggregate TapAutoStart from production true to false",
+  "experimentalTapAutoStart" : false,
+  "goSentAt" : 642080.0329187501,
+  "measurementBoundary" : "Whole canonical source through child AudioQueue to actual physical-device callback bytes; USB receiver unmeasured",
+  "metrics" : {
+    "capturedFrames" : 506880,
+    "deliveredFrames" : 485888,
+    "fault" : 0,
+    "initialQueuedFrames" : 20480,
+    "inputCallbacks" : 990,
+    "inputTimestampDiscontinuities" : 0,
+    "inputTimestampMissing" : 0,
+    "invalidBuffers" : 0,
+    "outputCallbacks" : 949,
+    "outputTimestampDiscontinuities" : 0,
+    "outputTimestampMissing" : 0,
+    "overflows" : 0,
+    "queuedFrames" : 20992,
+    "renderedCaptureFrames" : 485888,
+    "representationFailures" : 0,
+    "started" : true,
+    "startupSilenceFrames" : 0,
+    "underflows" : 0
+  },
+  "mode" : "explicit-unity",
+  "outputFormat" : {
+    "bits" : 32,
+    "bytesPerFrame" : 8,
+    "channels" : 2,
+    "flags" : 76,
+    "formatID" : 1819304813,
+    "rate" : 44100
+  },
+  "outputName" : "WALKMAN",
+  "passed" : true,
+  "physicalFormat" : {
+    "bits" : 32,
+    "bytesPerFrame" : 8,
+    "channels" : 2,
+    "flags" : 76,
+    "formatID" : 1819304813,
+    "rate" : 44100
+  },
+  "preGOMetrics" : {
+    "capturedFrames" : 20992,
+    "deliveredFrames" : 512,
+    "fault" : 0,
+    "initialQueuedFrames" : 20480,
+    "inputCallbacks" : 41,
+    "inputTimestampDiscontinuities" : 0,
+    "inputTimestampMissing" : 0,
+    "invalidBuffers" : 0,
+    "outputCallbacks" : 1,
+    "outputTimestampDiscontinuities" : 0,
+    "outputTimestampMissing" : 0,
+    "overflows" : 0,
+    "queuedFrames" : 20480,
+    "renderedCaptureFrames" : 512,
+    "representationFailures" : 0,
+    "started" : true,
+    "startupSilenceFrames" : 0,
+    "underflows" : 0
+  },
+  "referenceSHA256" : "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "relayStartRequestedAt" : 642078.862138125,
+  "relayStartReturnedAt" : 642080.0328173334,
+  "separateSilentRenderers" : 0,
+  "sourceName" : "BlackHole 2ch",
+  "sourcePrefixFramesEnqueued" : 0,
+  "sourceSampleHandling" : "Canonical Float32 frames are enqueued once from frame zero, followed by 441000 zero frames; enqueue and returned-for-reuse counters are not rendering evidence"
+}

@@ -1,0 +1,15 @@
+{
+  "observedUTC": "2026-09-25T15:50:51.183294+00:00",
+  "attempt": "default registration-only probe",
+  "binarySHA256": "ac715dbf21ff4236e9db595e4069021753c2d2d33214f07f31bce18de0510cc2",
+  "sourceSHA256": "c79b7655349feca89ca56f6229f05da2fc95ffe7d466393fb2603bd6c05d942f",
+  "exitCode": 133,
+  "error": "Fatal error: Unexpectedly found nil while implicitly unwrapping an Optional value",
+  "sourceLocation": "main.swift:147, Signals.init prior.append(signal(number, SIG_IGN))",
+  "classification": "Probe signal-handler scaffold failure before AudioQueue or HAL API calls in the probe; no registration or playback conclusion.",
+  "receiptFile": "default-registration.json",
+  "receiptBytes": 0,
+  "processExited": true,
+  "freshDeviceSnapshotEqualToBaseline": true,
+  "nextAction": "Preserve failed attempt, fix nullable default handler representation, run offline signal lifecycle check, use new receipt filename."
+}

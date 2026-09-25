@@ -97,3 +97,6 @@ The [sanitized restoration record](../validation/spotify-prewarm/restoration.jso
 
 The Sony USB receiver and subscription masters remain unmeasured.
 This research improves understanding of a conditional software-path pass while the end-to-end objective remains unmet.
+
+A subsequent [AudioQueue first-start control](audioqueue-first-start-observation.md) preserved the complete original in both default-volume and explicit-unity arms without a source-silence prefix.
+It used experimental tap autostart disabled and observed aggregate preroll before GO, so it does not attribute this Spotify onset or establish a production repair.
