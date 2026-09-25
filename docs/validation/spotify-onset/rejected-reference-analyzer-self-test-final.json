@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "offline self-test",
+  "passed": true,
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "referenceFramesVerified": 220500,
+  "testsPassed": 28,
+  "tests": [
+    {
+      "name": "exact anchors locate a single low-bit corruption without accepting the window",
+      "passed": true
+    },
+    {
+      "name": "scaled24 residue and nearest-even diagnostic remain distinct",
+      "passed": true
+    },
+    {
+      "name": "truncated callback window uses its own origin",
+      "passed": true
+    },
+    {
+      "name": "channel1 offender retains stereo alignment",
+      "passed": true
+    },
+    {
+      "name": "gain-altered window has no invented alignment",
+      "passed": true
+    },
+    {
+      "name": "repeated anchors cannot choose a convenient offset",
+      "passed": true
+    },
+    {
+      "name": "two incompatible exact offsets remain ambiguous",
+      "passed": true
+    },
+    {
+      "name": "silence supplies no source-position evidence",
+      "passed": true
+    },
+    {
+      "name": "negative zero is preserved rather than normalized",
+      "passed": true
+    },
+    {
+      "name": "NaN payload remains a rejection with JSON-safe numeric fields",
+      "passed": true
+    },
+    {
+      "name": "infinity remains a rejection with JSON-safe numeric fields",
+      "passed": true
+    },
+    {
+      "name": "out of range remains a rejection with JSON-safe numeric fields",
+      "passed": true
+    },
+    {
+      "name": "subnormal remains a rejection with JSON-safe numeric fields",
+      "passed": true
+    },
+    {
+      "name": "sourceBits0 stays unknown rather than safe",
+      "passed": true
+    },
+    {
+      "name": "reject wrong reference identity",
+      "passed": true
+    },
+    {
+      "name": "reject wrong offender bits",
+      "passed": true
+    },
+    {
+      "name": "reject wrong finite metadata",
+      "passed": true
+    },
+    {
+      "name": "reject wrong source metadata",
+      "passed": true
+    },
+    {
+      "name": "reject partial stereo data",
+      "passed": true
+    },
+    {
+      "name": "reject oversized capture",
+      "passed": true
+    },
+    {
+      "name": "reject offender outside window",
+      "passed": true
+    },
+    {
+      "name": "reject wrong output depth",
+      "passed": true
+    },
+    {
+      "name": "reject wrong output rate",
+      "passed": true
+    },
+    {
+      "name": "reject boolean sample word",
+      "passed": true
+    },
+    {
+      "name": "reject malformed metrics",
+      "passed": true
+    },
+    {
+      "name": "reject boolean fault code",
+      "passed": true
+    },
+    {
+      "name": "reject wrong output representability",
+      "passed": true
+    },
+    {
+      "name": "missing snapshot stays unavailable even with fault5",
+      "passed": true
+    }
+  ],
+  "hardwareOrPlayerAccess": false
+}

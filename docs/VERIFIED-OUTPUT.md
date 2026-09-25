@@ -85,6 +85,8 @@ Other selections failed the strict integer check, including fixed-clock and unmu
 Holding the source route unchanged allowed later new-file selections to pass, but did not prevent the first held-route failure.
 See the [connected Spotify observation](research/spotify-exclusive-observation.md) for all outcomes and reproduction conditions.
 The successful runs do not establish a reliable first-play or subscription path.
+A later [rejected-input observation](research/spotify-onset-observation.md) captured a first-start window whose 1,024 sample words exactly match the original reference multiplied by a particular exponential gain onset.
+This explains the numerical failure in that window without identifying which player or system component caused it; a same-file repeat passed the complete reference.
 
 The tested Apple Music 1.6.6 path did not pass the known-reference check on macOS 26.6.2.
 HTTP-resource and imported local-file playback produced byte-identical changed samples at the process tap, before the exclusive bridge.
@@ -120,8 +122,21 @@ Its source is a synthetic emitter; use the separate `verify-reference` player co
 The reference command first prepares the virtual source rate and route, allows a closed player to be launched, then prints when capture is armed.
 Play the exact known reference from its beginning within the capture window.
 Use only reference material you own; do not use the command to record subscription audio.
-The laboratory holds captured reference data in memory and outputs a structured comparison rather than saving a music recording.
+By default, the laboratory holds captured reference data in memory and outputs a structured comparison.
 The normal app allocates no reference-capture storage.
+
+To investigate a representation failure in your own known reference, add `--inspect-rejection` to `verify-reference`.
+The optional `rejectionSnapshot` contains the exact Float32 bit words of a bounded window around the first rejected input sample, plus its callback position and precision checks.
+It retains at most 8192 stereo frames from that one callback, including up to 64 preceding frames, and does not include audio from subsequent callbacks.
+These sample words are written into the JSON receipt, so share that receipt only when its reference material may be shared.
+Inspection is disabled by default and is unavailable for other laboratory commands.
+The bridge still latches its existing fault immediately, rejects the entire offending callback, and performs no rounding or conversion to make it pass.
+
+`acceptedFramesBeforeCallback` counts previously accepted tap frames, including any preroll; it is not a position in the original file.
+`captureStartFrame` and `firstRejectedFrame` are positions within the rejected callback.
+The declared source precision can be unasserted, in which case `sourceRepresentable` is absent rather than a failed source check.
+A snapshot is unavailable when inspection was disabled, no input representation failure occurred, or callback release could not be confirmed.
+Its presence or absence never establishes whole-reference equality, and the existing pass criteria are unchanged.
 
 The raw verifier independently serializes expected integer words from the decoded reference.
 It checks valid-bit precision, byte order, padding, entire prefix/tail coverage, exact sample order, and SHA-256 hashes.

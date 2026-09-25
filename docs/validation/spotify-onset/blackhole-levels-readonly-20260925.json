@@ -1,0 +1,173 @@
+{
+  "observedUTC": "2026-09-25T14:44:50.637337+00:00",
+  "readOnly": true,
+  "deviceName": "BlackHole 2ch",
+  "deviceID": 61,
+  "defaultOutputName": "BlackHole 2ch",
+  "defaultSystemOutputName": "MacBook Pro Speakers",
+  "nominalSampleRate": 44100.0,
+  "actualSampleRate": 44100.0,
+  "bufferFrames": 512,
+  "isRunning": 0,
+  "hogPID": -1,
+  "deviceLevels": [
+    {
+      "scope": "glob",
+      "element": 0,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    },
+    {
+      "scope": "glob",
+      "element": 1,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    },
+    {
+      "scope": "glob",
+      "element": 2,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    },
+    {
+      "scope": "inpt",
+      "element": 0,
+      "volumeScalar": 0.5,
+      "volumeDecibels": -32.0,
+      "mute": 0,
+      "pan": null
+    },
+    {
+      "scope": "inpt",
+      "element": 1,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    },
+    {
+      "scope": "inpt",
+      "element": 2,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    },
+    {
+      "scope": "outp",
+      "element": 0,
+      "volumeScalar": 0.5,
+      "volumeDecibels": -32.0,
+      "mute": 0,
+      "pan": null
+    },
+    {
+      "scope": "outp",
+      "element": 1,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    },
+    {
+      "scope": "outp",
+      "element": 2,
+      "volumeScalar": null,
+      "volumeDecibels": null,
+      "mute": null,
+      "pan": null
+    }
+  ],
+  "controls": [
+    {
+      "id": 64,
+      "name": null,
+      "class": "vlme",
+      "scope": "inpt",
+      "element": 0,
+      "levelScalar": 0.5,
+      "levelDecibels": -32.0,
+      "booleanValue": null,
+      "currentSelectorItem": null,
+      "panValue": null
+    },
+    {
+      "id": 65,
+      "name": null,
+      "class": "mute",
+      "scope": "inpt",
+      "element": 0,
+      "levelScalar": null,
+      "levelDecibels": null,
+      "booleanValue": 0,
+      "currentSelectorItem": null,
+      "panValue": null
+    },
+    {
+      "id": 66,
+      "name": null,
+      "class": "vlme",
+      "scope": "outp",
+      "element": 0,
+      "levelScalar": 0.5,
+      "levelDecibels": -32.0,
+      "booleanValue": null,
+      "currentSelectorItem": null,
+      "panValue": null
+    },
+    {
+      "id": 67,
+      "name": null,
+      "class": "mute",
+      "scope": "outp",
+      "element": 0,
+      "levelScalar": null,
+      "levelDecibels": null,
+      "booleanValue": 0,
+      "currentSelectorItem": null,
+      "panValue": null
+    },
+    {
+      "id": 68,
+      "name": null,
+      "class": "clck",
+      "scope": "glob",
+      "element": 0,
+      "levelScalar": null,
+      "levelDecibels": null,
+      "booleanValue": null,
+      "currentSelectorItem": 1,
+      "panValue": null
+    },
+    {
+      "id": 69,
+      "name": null,
+      "class": "evis",
+      "scope": "outp",
+      "element": 0,
+      "levelScalar": null,
+      "levelDecibels": null,
+      "booleanValue": 0,
+      "currentSelectorItem": null,
+      "panValue": null
+    },
+    {
+      "id": 0,
+      "name": null,
+      "class": null,
+      "scope": null,
+      "element": null,
+      "levelScalar": null,
+      "levelDecibels": null,
+      "booleanValue": null,
+      "currentSelectorItem": null,
+      "panValue": null
+    }
+  ]
+}

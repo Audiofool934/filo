@@ -1,5 +1,15 @@
 # filo validation record
 
+## 1.1.0-beta.3 rejected-input diagnostics
+
+Beta.3 adds default-off `verify-reference --inspect-rejection` diagnostics for owned test references.
+It retains exact Float32 bits from at most 8192 stereo frames of the first rejected input callback, with no change to strict transport or comparison criteria.
+The normal application leaves diagnostic capture disabled.
+On the connected NW-ZX706, a Spotify first-start trial retained a changed 512-frame window and failed; the same-file repeat passed all 220,500 frames and 1,764,000 output bytes.
+An offline exponential gain model reproduced every retained word, without identifying the responsible player or system component.
+See the [onset investigation](research/spotify-onset-observation.md) for receipts, controls, restoration, and the separate BlackHole loopback-level confound.
+These results do not resolve arbitrary first-play behavior or verify the Sony USB receiver.
+
 ## Post-beta.2 connected Spotify references
 
 After reconnecting the NW-ZX706, one-run measurements connected Spotify 1.3.0.277 through BlackHole and filo's exclusive relay to the actual WALKMAN integer output callback.

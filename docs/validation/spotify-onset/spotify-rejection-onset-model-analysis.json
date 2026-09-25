@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "scope": "Exploratory post-hoc model of one original-synthetic512-frame rejection; no hardware or player access.",
+  "inputReportSHA256": "54138b8ad66f61c224247809d1039ed47278380a4d18eb06c77cb00c4069b041",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "modelSelectionDisclosure": "The0.002 coefficient was hypothesized after inspecting the actual ratios; this is not a preregistered test or a DSP implementation identification.",
+  "model": {
+    "alpha": 0.0020000000949949026,
+    "initialGain": 0,
+    "outputRule": "Float32(reference[n,channel] * gain[n])",
+    "updateRule": "gain[n+1] = Float32(gain[n] + Float32(0.002) * Float32(1 - gain[n]))",
+    "arithmetic": "Each stated Float32 conversion uses Python struct pack/unpack; multiply and addition otherwise use Python binary64 before one final Float32 rounding.",
+    "gain511": 0.6404936909675598,
+    "initialGainAppliesToBothChannels": true
+  },
+  "sourcePositionHypothesis": {
+    "searchedReferenceOffsets": 219989,
+    "probeFrames": [
+      1,
+      2,
+      3,
+      7,
+      31,
+      127,
+      255,
+      511
+    ],
+    "survivingProbeOffsets": [
+      0
+    ],
+    "fullCandidateComparisons": [
+      {
+        "referenceStartFrame": 0,
+        "comparedSampleWords": 1024,
+        "mismatchedSampleWords": 0,
+        "mismatchedFrames": 0,
+        "maximumAbsoluteErrorIn24BitLSB": 0.0,
+        "predictedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+        "firstMismatch": null
+      }
+    ],
+    "scope": "Only nonnegative contiguous reference offsets with a complete512-frame window; model-dependent alignment, not an exact unprocessed-audio anchor."
+  },
+  "modelComparisonsAtReferenceOffset0": {
+    "unity": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1024,
+      "mismatchedFrames": 512,
+      "maximumAbsoluteErrorIn24BitLSB": 7818.835540771484,
+      "predictedFloat32BitsSHA256": "ef23a0fb2ba47545613f21476e67fa861cef5c9a165f5b8d1edaf47528227b9b",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 0,
+        "channel": 0,
+        "predictedBitsHex": "0x39d58000",
+        "capturedBitsHex": "0x00000000"
+      }
+    },
+    "linear": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1020,
+      "mismatchedFrames": 510,
+      "maximumAbsoluteErrorIn24BitLSB": 3034.88330078125,
+      "predictedFloat32BitsSHA256": "f805aa7ecbc8a5fc79821d2ca37b27ff04e503571da645f53636ea3bb57636dc",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 2,
+        "channel": 0,
+        "predictedBitsHex": "0x34dd70a5",
+        "capturedBitsHex": "0x34dd37f4"
+      }
+    },
+    "double_closed_form": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 772,
+      "mismatchedFrames": 431,
+      "maximumAbsoluteErrorIn24BitLSB": 0.001953125,
+      "predictedFloat32BitsSHA256": "ca7b10f2dc1080ac7766ef201132f08f8c670069e65fd03e0c92bc3e06b3f894",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 1,
+        "channel": 0,
+        "predictedBitsHex": "0x35ed8106",
+        "capturedBitsHex": "0x35ed8107"
+      }
+    },
+    "float_closed_form": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 762,
+      "mismatchedFrames": 395,
+      "maximumAbsoluteErrorIn24BitLSB": 0.001953125,
+      "predictedFloat32BitsSHA256": "0768379faab919c07546facb2fdedc62ebc2c0a0c8cceb7b32b6d04237104c25",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 3,
+        "channel": 0,
+        "predictedBitsHex": "0x36a7ffe2",
+        "capturedBitsHex": "0x36a7ffe3"
+      }
+    },
+    "separately_rounded_product": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 135,
+      "mismatchedFrames": 70,
+      "maximumAbsoluteErrorIn24BitLSB": 0.000244140625,
+      "predictedFloat32BitsSHA256": "dccbd93973fea4d1c60a020c428848d6f80d412310330d08efc3f779b895315a",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 137,
+        "channel": 0,
+        "predictedBitsHex": "0x38d26e82",
+        "capturedBitsHex": "0x38d26e83"
+      }
+    },
+    "single_round_update": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 0,
+      "mismatchedFrames": 0,
+      "maximumAbsoluteErrorIn24BitLSB": 0.0,
+      "predictedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": null
+    },
+    "double_difference_update": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 0,
+      "mismatchedFrames": 0,
+      "maximumAbsoluteErrorIn24BitLSB": 0.0,
+      "predictedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": null
+    },
+    "separate_weighted_sum": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1008,
+      "mismatchedFrames": 506,
+      "maximumAbsoluteErrorIn24BitLSB": 0.021240234375,
+      "predictedFloat32BitsSHA256": "0fa8bdd2899e9a9457736e7897cc160bf6f14546813de82453354cf069fb90cf",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 5,
+        "channel": 0,
+        "predictedBitsHex": "0x36c9def5",
+        "capturedBitsHex": "0x36c9def4"
+      }
+    },
+    "single_round_weighted_sum": {
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1014,
+      "mismatchedFrames": 507,
+      "maximumAbsoluteErrorIn24BitLSB": 0.0283203125,
+      "predictedFloat32BitsSHA256": "fd39bd198388c047ac6cddb284cf171adb8781cf3d9e99d731054ffef3960cd1",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 5,
+        "channel": 0,
+        "predictedBitsHex": "0x36c9def5",
+        "capturedBitsHex": "0x36c9def4"
+      }
+    }
+  },
+  "negativeControls": [
+    {
+      "name": "reference_offset_plus1",
+      "expectedMismatchObserved": true,
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1022,
+      "mismatchedFrames": 511,
+      "maximumAbsoluteErrorIn24BitLSB": 8849.533203125,
+      "predictedFloat32BitsSHA256": "1f7fa229338331bd4922839892a79574f163f5f737747bddda85b1d17acf747e",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 1,
+        "channel": 0,
+        "predictedBitsHex": "0x345d70a5",
+        "capturedBitsHex": "0x35ed8107"
+      }
+    },
+    {
+      "name": "alpha0.001999",
+      "expectedMismatchObserved": true,
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1022,
+      "mismatchedFrames": 511,
+      "maximumAbsoluteErrorIn24BitLSB": 1.49560546875,
+      "predictedFloat32BitsSHA256": "8dfae6f0b103518c5b4abae7470ff2bb8e1223bc021b9c23755229c7b2dfbb9e",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 1,
+        "channel": 0,
+        "predictedBitsHex": "0x35ed62a0",
+        "capturedBitsHex": "0x35ed8107"
+      }
+    },
+    {
+      "name": "alpha0.002001",
+      "expectedMismatchObserved": true,
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1022,
+      "mismatchedFrames": 511,
+      "maximumAbsoluteErrorIn24BitLSB": 1.49609375,
+      "predictedFloat32BitsSHA256": "f93ada926873374f94046a94bbf408619c41091031650938c47ffe841a529fdb",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 1,
+        "channel": 0,
+        "predictedBitsHex": "0x35ed9f6d",
+        "capturedBitsHex": "0x35ed8107"
+      }
+    },
+    {
+      "name": "swapped_reference_channels",
+      "expectedMismatchObserved": true,
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1022,
+      "mismatchedFrames": 511,
+      "maximumAbsoluteErrorIn24BitLSB": 9596.20263671875,
+      "predictedFloat32BitsSHA256": "8966edde3f5ce462d81c1d769a4d6dc8dbcf3f28df5265f78034c0fcb21c4663",
+      "capturedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "firstMismatch": {
+        "frame": 1,
+        "channel": 0,
+        "predictedBitsHex": "0x3570d4ff",
+        "capturedBitsHex": "0x35ed8107"
+      }
+    },
+    {
+      "name": "one_bit_change_outside_probe_frames",
+      "expectedMismatchObserved": true,
+      "comparedSampleWords": 1024,
+      "mismatchedSampleWords": 1,
+      "mismatchedFrames": 1,
+      "maximumAbsoluteErrorIn24BitLSB": 7.62939453125e-06,
+      "predictedFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "capturedFloat32BitsSHA256": "9b48a67649f9594fbfc32bb03d05db8dad89f53ac3b08f39ea3c2ad03d2cd749",
+      "firstMismatch": {
+        "frame": 17,
+        "channel": 1,
+        "predictedBitsHex": "0x37173edb",
+        "capturedBitsHex": "0x37173eda"
+      }
+    }
+  ],
+  "sameFileRepeatControl": {
+    "receiptSHA256": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925",
+    "fullReferenceExactAtSoftwareOutput": true,
+    "referenceFrames": 220500,
+    "referenceBytes": 1764000,
+    "actualAlignedSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+    "silentPrefixFrames": 829474,
+    "silentSuffixFrames": 720010,
+    "capturedFrames": 1769984,
+    "rejectionSnapshotAbsent": true,
+    "cleanupErrors": []
+  },
+  "limits": [
+    "The original rejected samples differ from unprocessed reference audio; exact agreement with a transformation model is not bit-perfect playback.",
+    "Multiple arithmetic formulations can reproduce these512 frames; the data do not identify a unique implementation or component.",
+    "The full first playback, waveform after frame511, USB receiver, and analog output are unmeasured by this snapshot.",
+    "Same-file replay success is an independent observation, not proof of startup causality.",
+    "A zero initial gain discards the first frame in this model; this analysis does not propose inverse-gain recovery or rounding as a repair."
+  ],
+  "bitPerfectProofFromModel": false,
+  "analyzerSourceSHA256": "7f21e00b7e72e64b7f114ef2dedfa17249eb3a0554350c02a2d3109dc20a1da5"
+}

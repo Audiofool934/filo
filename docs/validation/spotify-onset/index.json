@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-25",
+  "scope": "Original synthetic reference only; software callback boundary; Sony USB receiver unmeasured",
+  "developmentBinarySHA256": "1415bf023fc299725995fd3c535407f6100c2ee69b08ed551758b215dc505f4c",
+  "unchangedBaselineBinarySHA256": "d81a52d3bde8ba6819b00b5251ce31765b408613be8759317f8cfc20805e3b0b",
+  "universalPackagedLabSHA256": "243e0abd6ee0cdd6f604134ec0d947bce3ff928179fe2636bc0f2ac41cd2cf10",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "spotifyVersion": "1.3.0.277",
+  "macOSVersion": "26.6.2",
+  "physicalDevice": "Sony NW-ZX706 in USB DAC mode, WALKMAN",
+  "initialDefaultOutput": "MacBook Pro Speakers at 48000 Hz",
+  "initialWALKMANRate": 192000,
+  "initialBlackHoleRate": 44100,
+  "initialBlackHoleClock": "Internal Fixed",
+  "initialBlackHoleScalar": 0.5,
+  "referenceCommand": "filo-lab verify-reference --device WALKMAN --source 'BlackHole 2ch' --reference OWN_REFERENCE.wav --player com.spotify.client --seconds 40 --inspect-rejection",
+  "orderedPlayerRuns": [
+    "spotify-rejection-first-wav.json",
+    "spotify-rejection-repeat-wav.json"
+  ],
+  "matrixCommand": "python3 scripts/verify-pcm.py --loopback --binary dist/filo.app/Contents/MacOS/filo-lab --report NEW_REPORT.json",
+  "files": {
+    "analyze-rejected-reference.py": "bde2cc4905ade84215ba049a3c318c2c0dcd1fe0344d1234b54c185c2239fa6b",
+    "analyze-spotify-rejected-onset.py": "7f21e00b7e72e64b7f114ef2dedfa17249eb3a0554350c02a2d3109dc20a1da5",
+    "blackhole-levels-readonly-20260925.json": "9b56dd496e042c904c66502561545a6e277463e12ed2eb55afa556ac86ea61b4",
+    "rejected-reference-analyzer-cli-checks.json": "eb451432167fd8f77a261907a935f66e5ba6fd1fa95f5d7726d85959528eafda",
+    "rejected-reference-analyzer-self-test-final.json": "5212e910d62fae20d837cff0fb0533ec0549b18fb3ffa46d975e8c82e9fcb602",
+    "rejection-diagnostic-loopback-matrix.json": "241a0356434d3a887a158bfd30d658e560fa7b46226843667a7ad72628fb2006",
+    "rejection-loopback-unchanged-baseline.json": "5709752da7218110da7de89831aa2556dc5575e1e82aa9fa02d9ff63275e248a",
+    "rejection-source-tap-control.json": "2ddaa4aac69e08ac11487fcd5f54a910915613118960ab3fe01cf63b05648ea3",
+    "rejection-ui-restoration.json": "202fc9950512f763f8b5e1c50fe5475023905c5f5dc85803a4f93c4a9795912e",
+    "rejection-unity-loopback-matrix.json": "e45adb24bf44f34f51339c13a8753b9f89a24ed3208db2a99f1edacec79a50f9",
+    "rejection-unity-single.json": "784ecf13c29d5f38e94a5ddf20f880411fd1b853e621fec68c0cc7b624dc0653",
+    "spotify-rejection-first-wav-analysis.json": "d9e4728b49f0df6223067af8e4d792a9fd0b63166682db0aa5fd416506818d85",
+    "spotify-rejection-first-wav.json": "54138b8ad66f61c224247809d1039ed47278380a4d18eb06c77cb00c4069b041",
+    "spotify-rejection-onset-model-analysis.json": "3fd7d4075e9db5e6b52680a8020249f79d5645e3085134a8b7bfe0d6244c8f94",
+    "spotify-rejection-repeat-wav-analysis.json": "a10a9a1862f41879377cd783a492d347c2d6713b6b3842431227796643697bf4",
+    "spotify-rejection-repeat-wav.json": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925"
+  }
+}

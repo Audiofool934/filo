@@ -39,11 +39,13 @@ filo-lab clock --device 'BlackHole 2ch'
 filo-lab exclusive-probe --device NAME [--hz RATE]
 filo-lab fixture --file REFERENCE.wav --hz RATE [--bits 16|24] [--seconds 5]
 filo-lab verify-exclusive --device NAME --source 'BlackHole 2ch' [--bits 16|24] [--seconds 5]
-filo-lab verify-reference --device NAME --source 'BlackHole 2ch' --reference FILE [--player com.apple.Music] [--seconds 45]
+filo-lab verify-reference --device NAME --source 'BlackHole 2ch' --reference FILE [--player com.apple.Music] [--seconds 45] [--inspect-rejection]
 
 The reference command captures in memory for comparison with a known local test file.
 Use only a reference you own; never use it to record subscription audio.
 --fixed-clock disables virtual-clock following for short diagnostic experiments.
+--inspect-rejection adds up to 8192 stereo frames of the first rejected input callback as exact Float32 bit words to the reference JSON.
+This optional diagnostic contains sample data; use it only with your known reference. It never relaxes verification.
 The older --exclusive flag belongs to the unsupported same-device aggregate experiment.
 Use BlackHole 2ch for silent synthetic tests. Other outputs may be audible.
 """
@@ -58,7 +60,7 @@ func wait(_ seconds: Double) {
 do {
     let command = args.first ?? "help"
     let valueOptions = ["--device", "--source", "--hz", "--bits", "--seconds", "--pid", "--file", "--reference", "--player"]
-    let flags = ["--relay", "--exclusive", "--loopback", "--fixed-clock"]
+    let flags = ["--relay", "--exclusive", "--loopback", "--fixed-clock", "--inspect-rejection"]
     var cursor = 1
     while cursor < args.count {
         let argument = args[cursor]
@@ -67,6 +69,9 @@ do {
             cursor += 2
         } else if flags.contains(argument) { cursor += 1 }
         else { throw AudioFailure("Unknown option: \(argument).") }
+    }
+    guard !args.contains("--inspect-rejection") || command == "verify-reference" else {
+        throw AudioFailure("--inspect-rejection is available only with verify-reference.")
     }
     switch command {
     case "recover":
@@ -178,8 +183,10 @@ do {
             if !ids.isEmpty { break }
             wait(0.05)
         }
+        let inspectRejection = args.contains("--inspect-rejection")
         try session.start(processIDs: ids, source: source, output: output, sourceBits: reference.bits <= 16 ? 16 : 24,
-                          captureFrames: UInt64(reference.sampleRate * (seconds + 1)), followClock: !args.contains("--fixed-clock"))
+                          captureFrames: UInt64(reference.sampleRate * (seconds + 1)), followClock: !args.contains("--fixed-clock"),
+                          rejectionCaptureFrames: inspectRejection ? UInt32(FILO_BRIDGE_MAX_REJECTION_CAPTURE_FRAMES) : 0)
         fputs("Reference capture armed. Play the known reference from its beginning within this capture window.\n", stderr)
         fflush(stderr)
         let deadline = Date().addingTimeInterval(seconds)
@@ -192,18 +199,21 @@ do {
             } catch { failure = error.localizedDescription; break }
         }
         let capture = session.finishRawCapture()
+        let rejectionSnapshot = session.finishInputRejection()
         let comparison = OutputByteVerification.compare(capture: capture, format: session.outputASBD, reference: reference)
         let metrics = session.metrics
         let cleanupErrors = stopReferenceSession()
         struct ReferenceResult: Encodable {
             let referenceSHA256: String; let input: PCMFormat?; let output: PCMFormat?; let physical: PCMFormat?
             let metrics: ExclusiveRelayMetrics; let comparison: OutputByteComparison; let cleanupErrors: [String]
+            let rejectionInspectionRequested: Bool; let rejectionSnapshot: InputRejectionSnapshot?
             let measurementBoundary: String; let clockPitch: Float; let clockTargetFrames: UInt64; let failure: String?; let passed: Bool
         }
         let passed = cleanupErrors.isEmpty && failure == nil && comparison.passed && metrics.fault == 0
             && metrics.inputTimestampMissing == 0 && metrics.outputTimestampMissing == 0
         try json(ReferenceResult(referenceSHA256: reference.fileSHA256, input: session.inputFormat, output: session.outputFormat,
                                  physical: session.physicalFormat, metrics: metrics, comparison: comparison, cleanupErrors: cleanupErrors,
+                                 rejectionInspectionRequested: inspectRejection, rejectionSnapshot: rejectionSnapshot,
                                  measurementBoundary: "Whole known lossless reference through the named player to actual physical-device IOProc bytes; USB receiver unmeasured",
                                  clockPitch: session.clockPitch, clockTargetFrames: session.clockTargetFrames, failure: failure, passed: passed))
         if !passed { throw AudioFailure("Whole-reference verification failed. See coverage and byte comparison.") }

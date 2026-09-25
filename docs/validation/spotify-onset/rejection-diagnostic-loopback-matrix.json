@@ -1,0 +1,442 @@
+{
+  "date": "2026-09-25T14:37:54.716386+00:00",
+  "os": "26.6.2",
+  "architecture": "arm64",
+  "device": "BlackHole 2ch",
+  "scope": "Synthetic renderer -> filo relay -> digital loopback",
+  "cases": [
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "loopbackMetrics": {
+        "callbacks": 258,
+        "capturedFrames": 132096,
+        "frames": 132096,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 260087
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 261,
+        "capturedFrames": 133632,
+        "frames": 133632,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 263118
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "passed": false,
+      "rate": 44100,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "loopbackMetrics": {
+        "callbacks": 258,
+        "capturedFrames": 132096,
+        "frames": 132096,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 264172
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 261,
+        "capturedFrames": 133632,
+        "frames": 133632,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 267244
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 44100
+      },
+      "passed": false,
+      "rate": 44100,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "loopbackMetrics": {
+        "callbacks": 281,
+        "capturedFrames": 143872,
+        "frames": 143872,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 283256
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 284,
+        "capturedFrames": 145408,
+        "frames": 145408,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 286279
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "passed": false,
+      "rate": 48000,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "loopbackMetrics": {
+        "callbacks": 281,
+        "capturedFrames": 143872,
+        "frames": 143872,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 287720
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 285,
+        "capturedFrames": 145920,
+        "frames": 145920,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 291816
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 48000
+      },
+      "passed": false,
+      "rate": 48000,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "loopbackMetrics": {
+        "callbacks": 563,
+        "capturedFrames": 288256,
+        "frames": 288256,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 567471
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 570,
+        "capturedFrames": 291840,
+        "frames": 291840,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 574523
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "passed": false,
+      "rate": 96000,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "loopbackMetrics": {
+        "callbacks": 564,
+        "capturedFrames": 288768,
+        "frames": 288768,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 577488
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 569,
+        "capturedFrames": 291328,
+        "frames": 291328,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 582608
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 96000
+      },
+      "passed": false,
+      "rate": 96000,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 16,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "loopbackMetrics": {
+        "callbacks": 1126,
+        "capturedFrames": 576512,
+        "frames": 576512,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 1134962
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 1139,
+        "capturedFrames": 583168,
+        "frames": 583168,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 1148043
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "passed": false,
+      "rate": 192000,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    },
+    {
+      "bits": 24,
+      "comparison": {
+        "aligned": false,
+        "comparedFrames": 0,
+        "leadingCaptureFrames": 0,
+        "maxIntegerError": 0,
+        "mismatchedSamples": 0,
+        "sourceFrameOffset": 0
+      },
+      "input": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "loopbackMetrics": {
+        "callbacks": 1126,
+        "capturedFrames": 576512,
+        "frames": 576512,
+        "inputBuffers": 1,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 1152945
+      },
+      "measurementBoundary": "Rendered digital loopback input",
+      "metrics": {
+        "callbacks": 1140,
+        "capturedFrames": 583680,
+        "frames": 583680,
+        "inputBuffers": 2,
+        "inputFirstChannels": 2,
+        "inputLastBytes": 4096,
+        "inputLastChannels": 2,
+        "invalidBuffers": 0,
+        "nonzeroSamples": 1167280
+      },
+      "output": {
+        "bits": 32,
+        "bytesPerFrame": 8,
+        "channels": 2,
+        "flags": 9,
+        "formatID": 1819304813,
+        "rate": 192000
+      },
+      "passed": false,
+      "rate": 192000,
+      "exitCode": 1,
+      "error": "filo: Synthetic PCM verification failed. See the measured comparison."
+    }
+  ],
+  "restored": true
+}

@@ -25,6 +25,8 @@ struct FiloBridge {
     BridgeFormat input, output;
     float *ring, *capture;
     uint8_t *rawCapture;
+    uint32_t *rejectionSamples;
+    FiloBridgeRejection rejection; // Producer-owned until both IOProcs have stopped.
     BridgeTimeline inputTimeline, outputTimeline; // Each timeline has exactly one IOProc writer.
     _Atomic uint64_t writeIndex;
     char producerSeparation[64];
@@ -137,6 +139,40 @@ static void latch_fault(FiloBridge *s, FiloBridgeFault fault) {
                                            memory_order_release, memory_order_relaxed);
 }
 
+static void capture_rejection(FiloBridge *s, const AudioBufferList *input,
+                              uint64_t acceptedFrames, uint32_t frames,
+                              uint32_t rejectedFrame, uint32_t rejectedChannel, float value) {
+    if (!s->rejectionSamples || s->rejection.available) return;
+    uint32_t capacity = s->config.rejectionCaptureFrames;
+    uint32_t preceding = capacity - 1 < 64 ? capacity - 1 : 64;
+    uint32_t start = rejectedFrame > preceding ? rejectedFrame - preceding : 0;
+    uint32_t count = frames - start < capacity ? frames - start : capacity;
+    FiloBridgeRejection result = {0};
+    result.acceptedFramesBeforeCallback = acceptedFrames;
+    result.callbackFrames = frames;
+    result.firstRejectedFrame = rejectedFrame;
+    result.firstRejectedChannel = rejectedChannel;
+    memcpy(&result.rejectedSampleBits,
+           sample_address(input, &s->input, s->config.inputBufferOffset, rejectedFrame, rejectedChannel),
+           sizeof(result.rejectedSampleBits));
+    result.captureStartFrame = start; result.capturedFrames = count;
+    result.sourceBits = s->config.sourceBits; result.outputBits = s->output.bits;
+    result.finite = isfinite(value);
+    int64_t ignored;
+    result.sourceRepresentable = s->config.sourceBits != 0 && exact_integer(value, s->config.sourceBits, &ignored);
+    result.outputRepresentable = result.finite &&
+        (s->output.floating || exact_integer(value, s->output.bits, &ignored));
+    for (uint32_t frame = 0; frame < count; ++frame) {
+        for (uint32_t channel = 0; channel < 2; ++channel) {
+            memcpy(&s->rejectionSamples[(size_t)frame * 2 + channel],
+                   sample_address(input, &s->input, s->config.inputBufferOffset, start + frame, channel),
+                   sizeof(uint32_t));
+        }
+    }
+    result.available = true;
+    s->rejection = result;
+}
+
 static void check_timestamp(FiloBridge *s, BridgeTimeline *timeline,
                             const AudioTimeStamp *timestamp, uint32_t frames,
                             _Atomic uint64_t *missingCount, _Atomic uint64_t *discontinuityCount) {
@@ -202,6 +238,7 @@ FiloBridge *filo_bridge_create(const FiloBridgeConfig *config) {
         !config->primeFrames || config->primeFrames > config->capacityFrames ||
         config->capacityFrames > SIZE_MAX / (2 * sizeof(float)) ||
         config->renderCaptureFrames > SIZE_MAX / (2 * sizeof(float)) ||
+        config->rejectionCaptureFrames > FILO_BRIDGE_MAX_REJECTION_CAPTURE_FRAMES ||
         (config->sourceBits != 0 && config->sourceBits != 16 && config->sourceBits != 24)) return NULL;
     BridgeFormat input, output;
     if (!parse_format(&config->inputFormat, &input) || !input.floating ||
@@ -217,7 +254,10 @@ FiloBridge *filo_bridge_create(const FiloBridgeConfig *config) {
         s->capture = calloc((size_t)config->renderCaptureFrames * 2, sizeof(float));
         s->rawCapture = calloc((size_t)config->renderCaptureFrames * 2, output.bytes);
     }
-    if (!s->ring || (config->renderCaptureFrames && (!s->capture || !s->rawCapture))) {
+    if (config->rejectionCaptureFrames)
+        s->rejectionSamples = calloc((size_t)config->rejectionCaptureFrames * 2, sizeof(uint32_t));
+    if (!s->ring || (config->renderCaptureFrames && (!s->capture || !s->rawCapture)) ||
+        (config->rejectionCaptureFrames && !s->rejectionSamples)) {
         filo_bridge_destroy(s); return NULL;
     }
     touch_storage(s->ring, (size_t)config->capacityFrames * 2 * sizeof(float));
@@ -225,6 +265,8 @@ FiloBridge *filo_bridge_create(const FiloBridgeConfig *config) {
         touch_storage(s->capture, (size_t)config->renderCaptureFrames * 2 * sizeof(float));
         touch_storage(s->rawCapture, (size_t)config->renderCaptureFrames * 2 * output.bytes);
     }
+    if (config->rejectionCaptureFrames)
+        touch_storage(s->rejectionSamples, (size_t)config->rejectionCaptureFrames * 2 * sizeof(uint32_t));
     // calloc initializes atomic scalars to their zero values on supported targets.
     // Explicit initialization also makes their object lifetime clear to C tooling.
     atomic_init(&s->writeIndex, 0); atomic_init(&s->readIndex, 0);
@@ -240,7 +282,7 @@ FiloBridge *filo_bridge_create(const FiloBridgeConfig *config) {
 }
 
 void filo_bridge_destroy(FiloBridge *s) {
-    if (s) { free(s->ring); free(s->capture); free(s->rawCapture); free(s); }
+    if (s) { free(s->ring); free(s->capture); free(s->rawCapture); free(s->rejectionSamples); free(s); }
 }
 
 FiloBridgeMetrics filo_bridge_metrics(const FiloBridge *s) {
@@ -276,6 +318,12 @@ uint64_t filo_bridge_render_byte_count(const FiloBridge *s) {
     return s ? atomic_load_explicit(&s->renderedCaptureFrames, memory_order_acquire) * s->output.bytes * 2 : 0;
 }
 uint32_t filo_bridge_render_bytes_per_frame(const FiloBridge *s) { return s ? s->output.bytes * 2 : 0; }
+FiloBridgeRejection filo_bridge_rejection(const FiloBridge *s) {
+    return s ? s->rejection : (FiloBridgeRejection){0};
+}
+const uint32_t *filo_bridge_rejection_samples(const FiloBridge *s) {
+    return s && s->rejection.available ? s->rejectionSamples : NULL;
+}
 
 bool filo_bridge_push(FiloBridge *s, const AudioBufferList *input) {
     if (!s) return false;
@@ -298,8 +346,10 @@ bool filo_bridge_push(FiloBridge *s, const AudioBufferList *input) {
         for (uint32_t c = 0; c < 2; ++c) {
             float value = read_float(input, &s->input, s->config.inputBufferOffset, f, c);
             if (!representable(s, value)) {
+                latch_fault(s, FiloBridgeFaultRepresentation);
                 atomic_fetch_add_explicit(&s->representationFailures, 1, memory_order_relaxed);
-                latch_fault(s, FiloBridgeFaultRepresentation); return false;
+                capture_rejection(s, input, write, frames, f, c, value);
+                return false;
             }
         }
     }
