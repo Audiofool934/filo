@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "createdUTC": "2026-09-25T15:25:51.757085+00:00",
+  "scope": "Independent offline consistency checks on three synthetic Spotify receipts; no hardware, UI, playback, or fresh capture.",
+  "recordedExecutionBinarySHA256": "78742b32365ee9795909b17c0edc31796e37ade2f7c0a532fcd1abe1417acb7c",
+  "binaryHashEvidence": "Recorded by parent experiment protocol; not inferred from the currently installed binary.",
+  "protocolSHA256": "5cff515acd0fbf8958a9236e748c6036f0de8ab0ac23c63bf2e5fd595b3ee62d",
+  "fixtures": [
+    {
+      "role": "canonical",
+      "fileName": "filo-reference-44100-24.wav",
+      "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "pcm24SHA256": "ab2b3b1b07d3af25b9cb180a050aee8fcc24d9b94abbd952a2a055716777542e",
+      "frames": 220500,
+      "rate": 44100,
+      "bits": 24,
+      "channels": 2
+    },
+    {
+      "role": "silencePrefix",
+      "fileName": "filo onset silence 44100 stereo 24bit WAV.wav",
+      "fileSHA256": "766217b4cb8b3f3e3365b16fcb9ab193031faa63ac26d47543e47d5ec26ed8f9",
+      "pcm24SHA256": "0042bdc73585abb0f5d63e30ed749f1f95b753e36eddc41904111704e4673830",
+      "frames": 220500,
+      "rate": 44100,
+      "bits": 24,
+      "channels": 2
+    },
+    {
+      "role": "zeroWarmup",
+      "fileName": "filo onset warmup zeros 44100 stereo 24bit WAV.wav",
+      "fileSHA256": "9559ec06db5fce8290d5b8923ee3ac6ff57ab16729a1bfe343c8110c9a6cfb21",
+      "pcm24SHA256": "9a484976bf947c9f07e985c50938b801fa416b0ac4de1acc730045d59a7c5f97",
+      "frames": 220500,
+      "rate": 44100,
+      "bits": 24,
+      "channels": 2
+    }
+  ],
+  "runsInOrder": [
+    {
+      "receipt": "onset2-silence-first.json",
+      "receiptSHA256": "52304694233bbdfb7a83909653f0ffd9b9973437be6115dc0dd8af05f902e1f9",
+      "referenceFileSHA256": "766217b4cb8b3f3e3365b16fcb9ab193031faa63ac26d47543e47d5ec26ed8f9",
+      "reportedPass": true,
+      "independentlyEncodedSigned32ReferenceSHA256": "fb32174c2d78c87233c8579aa4d8ac63be4dd512985bffdcfa24faf5cbddde26",
+      "entireCaptureHashMatchesReferencePlusReportedZeroMargins": true,
+      "entireCaptureSHA256": "22a3592663a3c52f4eaebb89719aea19be19661f0641a9989b2ffa15343c7dfe",
+      "reportedComparedFrames": 220500,
+      "reportedComparedBytes": 1764000,
+      "exactActiveSequenceFrames": 176400,
+      "unprovenSourceSilentPrefixFrames": 44100,
+      "leadingCaptureFrames": 816128,
+      "trailingCaptureFrames": 731820,
+      "captureFrames": 1768448,
+      "fault": 0,
+      "allBufferTimestampAndRepresentationFaultCountersZero": true,
+      "cleanupErrors": [],
+      "callbackFramesAndQueueAccountingConsistent": true
+    },
+    {
+      "receipt": "onset2-original-after-silence.json",
+      "receiptSHA256": "3ce50fa05824420b736c79d1110454dcd71f53b466e5ba5df81683092e80a6f4",
+      "referenceFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "reportedPass": false,
+      "fault": 5,
+      "representationFailures": 1,
+      "entireCaptureHashMatchesAllZeroBytes": true,
+      "captureFrames": 1003008,
+      "captureBytes": 8024064,
+      "comparedReferenceFrames": 0,
+      "zeroComparisonCountsDoNotImplyEquality": true,
+      "acceptedStreamFramesBeforeRejection": 1022976,
+      "rejectedFrames": 512,
+      "rejectedSampleWords": 1024,
+      "rejectedWordsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+      "allRejectedWordsIdenticalToBeta3": true,
+      "allRejectedWordsMatchPreviouslyDocumentedModel": true,
+      "modelCoefficientWasOriginallySelectedPostHoc": true,
+      "noNewModelFitting": true,
+      "cleanupErrors": []
+    },
+    {
+      "receipt": "onset2-continuous-zero-warmup.json",
+      "receiptSHA256": "3648eb80b59885bca49b9b0ea436fe47e658ea6cabd1c72b2f2f9816a5f531ef",
+      "referenceFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+      "reportedPass": true,
+      "independentlyEncodedSigned32ReferenceSHA256": "8fd04325bfb401bac8d2700c967453319a12e7ead41dde6ee04505e64e118ea5",
+      "entireCaptureHashMatchesReferencePlusReportedZeroMargins": true,
+      "entireCaptureSHA256": "021d9d451022be54da3a62c7a5fb5fc5136cd58bcd5310502e094f72ce41e2a7",
+      "reportedComparedFrames": 220500,
+      "reportedComparedBytes": 1764000,
+      "exactActiveSequenceFrames": 220500,
+      "unprovenSourceSilentPrefixFrames": 0,
+      "leadingCaptureFrames": 1849172,
+      "trailingCaptureFrames": 1018712,
+      "captureFrames": 3088384,
+      "fault": 0,
+      "allBufferTimestampAndRepresentationFaultCountersZero": true,
+      "cleanupErrors": [],
+      "callbackFramesAndQueueAccountingConsistent": true
+    }
+  ],
+  "generator": {
+    "file": "make-onset-fixtures.py",
+    "fileSHA256": "dd5e87fc044e3100bf6b75e1053d0a7b5b61a821af1c1e3a1f2eb2b5c388562d",
+    "canonicalIntegerSamplesIndependentlyVerified": 441000,
+    "goldenFixtureBytesReproduced": true,
+    "offlineControlsPassed": [
+      "Both generated RIFF files are byte-identical to measured fixtures, including headers and every sample.",
+      "A second invocation refuses the existing directory and preserves both files.",
+      "An existing empty directory is also refused without mutation.",
+      "changed-integer reference is rejected before creating an output directory.",
+      "truncated reference is rejected before creating an output directory.",
+      "Independent RIFF parser rejects incorrect-riff-size.",
+      "Independent RIFF parser rejects wrong-bit-depth."
+    ],
+    "temporaryTestOutputsRemoved": true
+  },
+  "limits": [
+    "Capture sample arrays were not independently re-read; this analysis recomputes reference and complete expected capture hashes and cross-checks the receipt fields.",
+    "Zero margins cannot distinguish source silence from transport or capture padding. Neither 44100 silent-prefix frames nor 220500 warmup source frames are proved delivered by zeros alone.",
+    "The third run preserves the complete 220500-frame canonical active sequence at the reported physical-device callback boundary under one continuous queued transition condition.",
+    "The second failed canonical run remains a failure. The third pass does not substitute for it or establish general first-start behavior.",
+    "Player UI sequencing is supplied by parent observations and protocol, not independently measured by this offline analysis.",
+    "Warmup playback, a manually queued transition, continuous relay lifetime, file history, Automix, and gapless state are not isolated causal variables.",
+    "Run order was not randomized and there is no failure-rate estimate.",
+    "The onset model describes rejected input; no gain reversal, rounding, sample deletion, or weakened acceptance criterion was applied.",
+    "The Sony USB receiver and subscription masters remain unmeasured."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-25",
+  "scope": "Original synthetic references at physical-device software callback; no Sony receiver or subscription-master measurement.",
+  "release": "v1.1.0-beta.3",
+  "sourceCommit": "a95337cd5ae1aba2ef0cc65460b5d25479d523b3",
+  "universalPackagedLabSHA256": "78742b32365ee9795909b17c0edc31796e37ade2f7c0a532fcd1abe1417acb7c",
+  "spotifyVersion": "1.3.0.277",
+  "macOSVersion": "26.6.2",
+  "output": "Sony NW-ZX706, WALKMAN in USB DAC mode",
+  "source": "BlackHole 2ch",
+  "referenceRate": 44100,
+  "referenceBits": 24,
+  "referenceFrames": 220500,
+  "canonicalFileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "orderedPlayerRuns": [
+    "onset2-silence-first.json",
+    "onset2-original-after-silence.json",
+    "onset2-continuous-zero-warmup.json"
+  ],
+  "liveCommands": {
+    "runs1and2": "filo-lab verify-reference --device WALKMAN --source 'BlackHole 2ch' --reference OWN_REFERENCE.wav --player com.spotify.client --seconds 40 --inspect-rejection",
+    "run3": "filo-lab verify-reference --device WALKMAN --source 'BlackHole 2ch' --reference CANONICAL_REFERENCE.wav --player com.spotify.client --seconds 70 --inspect-rejection"
+  },
+  "files": {
+    "make-onset-fixtures.py": "dd5e87fc044e3100bf6b75e1053d0a7b5b61a821af1c1e3a1f2eb2b5c388562d",
+    "onset2-continuous-zero-warmup.json": "3648eb80b59885bca49b9b0ea436fe47e658ea6cabd1c72b2f2f9816a5f531ef",
+    "onset2-offline-controls.json": "330e346b37fa9dad49132556a060b3319eeea11c1b26cfc7326b6690b389812e",
+    "onset2-original-after-silence.json": "3ce50fa05824420b736c79d1110454dcd71f53b466e5ba5df81683092e80a6f4",
+    "onset2-original-rejection-analysis.json": "76b6dc97fc59d43e0692355c88aa1476b40fe49f5e31684b139cb82a982405be",
+    "onset2-protocol.json": "5cff515acd0fbf8958a9236e748c6036f0de8ab0ac23c63bf2e5fd595b3ee62d",
+    "onset2-silence-first.json": "52304694233bbdfb7a83909653f0ffd9b9973437be6115dc0dd8af05f902e1f9",
+    "restoration.json": "b44ed1b200159884b5d0fac7c30706aac11dde4afe2e1417aae436064171a736",
+    "spotify-onset-silence-fixture.json": "d12a34802aa2b00d0a110faf5810d7c0584d7e8a7ef474106749ffc2b6ddc16c",
+    "spotify-onset-zero-fixture.json": "b4544ecb5784604771a79b8926c63d2e6f4910e0737993fe6315b24822039160"
+  },
+  "restoration": "restoration.json",
+  "interpretation": "One composite continuous prewarm and queued transition passed the complete original. A new direct start still failed. Source timing, causal attribution, reliability and receiver equality remain unproved."
+}

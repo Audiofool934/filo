@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline, bounded first-rejected-callback diagnostic for the original synthetic reference only.",
+  "reference": {
+    "fileSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "frames": 220500,
+    "rate": 44100,
+    "channels": 2,
+    "bits": 24,
+    "everySampleVerifiedAgainstIndependentGenerator": true
+  },
+  "bitPerfectVerdict": "not assessed; a rejected callback cannot certify complete playback",
+  "fullReferenceCoverageProved": false,
+  "metadataValid": true,
+  "status": "rejected callback analyzed",
+  "snapshot": {
+    "acceptedFramesBeforeCallback": 1022976,
+    "available": true,
+    "callbackFrames": 512,
+    "captureStartFrame": 0,
+    "capturedFrames": 512,
+    "finite": true,
+    "firstRejectedChannel": 0,
+    "firstRejectedFrame": 1,
+    "outputBits": 32,
+    "outputRepresentable": false,
+    "rejectedSampleBits": 904757511,
+    "sourceBits": 24,
+    "sourceRepresentable": false,
+    "captureFloat32BitsSHA256": "5cf6e080227122d714a40e11f39d91fd8629156e1ef585c93a574678b421c99b",
+    "capturedThroughCallbackEnd": true
+  },
+  "positionNote": "acceptedFramesBeforeCallback counts accepted stream frames, including preroll; it is not a source-file frame index.",
+  "firstRejectedSample": {
+    "rawBits": 904757511,
+    "rawBitsHex": "0x35ed8107",
+    "classification": "normal",
+    "value": 1.76954279140773e-06,
+    "finite": true,
+    "sourceGrid": {
+      "bits": 24,
+      "finite": true,
+      "inSignedNormalizedRange": true,
+      "onUnboundedIntegerGrid": false,
+      "representable": false,
+      "scaledValue": 14.844000816345215,
+      "fractionalResidueTowardZero": 0.8440008163452148
+    },
+    "reference24Grid": {
+      "bits": 24,
+      "finite": true,
+      "inSignedNormalizedRange": true,
+      "onUnboundedIntegerGrid": false,
+      "representable": false,
+      "scaledValue": 14.844000816345215,
+      "fractionalResidueTowardZero": 0.8440008163452148
+    },
+    "outputGrid": {
+      "bits": 32,
+      "finite": true,
+      "inSignedNormalizedRange": true,
+      "onUnboundedIntegerGrid": false,
+      "representable": false,
+      "scaledValue": 3800.064208984375,
+      "fractionalResidueTowardZero": 0.064208984375
+    },
+    "nearest24Diagnostic": {
+      "nearestUnboundedInteger": 15,
+      "signedErrorIn24BitLSB": -0.15599918365478516,
+      "nearestIntegerInSigned24Range": true,
+      "roundingRule": "Nearest integer, ties to even, without clipping; diagnostic only, never used for alignment or equality."
+    },
+    "captureWindowFrame": 1,
+    "callbackFrame": 1,
+    "channel": 0,
+    "referenceFrameFromExactAnchors": null
+  },
+  "firstNotRepresentableAsReference24InWindow": {
+    "rawBits": 904757511,
+    "rawBitsHex": "0x35ed8107",
+    "classification": "normal",
+    "value": 1.76954279140773e-06,
+    "finite": true,
+    "sourceGrid": {
+      "bits": 24,
+      "finite": true,
+      "inSignedNormalizedRange": true,
+      "onUnboundedIntegerGrid": false,
+      "representable": false,
+      "scaledValue": 14.844000816345215,
+      "fractionalResidueTowardZero": 0.8440008163452148
+    },
+    "reference24Grid": {
+      "bits": 24,
+      "finite": true,
+      "inSignedNormalizedRange": true,
+      "onUnboundedIntegerGrid": false,
+      "representable": false,
+      "scaledValue": 14.844000816345215,
+      "fractionalResidueTowardZero": 0.8440008163452148
+    },
+    "outputGrid": {
+      "bits": 32,
+      "finite": true,
+      "inSignedNormalizedRange": true,
+      "onUnboundedIntegerGrid": false,
+      "representable": false,
+      "scaledValue": 3800.064208984375,
+      "fractionalResidueTowardZero": 0.064208984375
+    },
+    "nearest24Diagnostic": {
+      "nearestUnboundedInteger": 15,
+      "signedErrorIn24BitLSB": -0.15599918365478516,
+      "nearestIntegerInSigned24Range": true,
+      "roundingRule": "Nearest integer, ties to even, without clipping; diagnostic only, never used for alignment or equality."
+    },
+    "captureWindowFrame": 1,
+    "callbackFrame": 1,
+    "channel": 0,
+    "referenceFrameFromExactAnchors": null
+  },
+  "windowStatistics": {
+    "sampleWords": 1024,
+    "nonfiniteWords": 0,
+    "negativeZeroWords": 0,
+    "notRepresentableAsReference24Words": 1022,
+    "notRepresentableAtAssertedSourceDepthWords": 1022,
+    "notRepresentableAtOutputDepthWords": 990,
+    "maximumAbsoluteNearest24ErrorLSB": 0.499755859375
+  },
+  "alignment": {
+    "method": "Exact raw Float32 bits in four consecutive stereo frames; no rounding, correlation, gain fit, or time warping.",
+    "anchorFrames": 4,
+    "candidateOffsetCount": 0,
+    "candidateOffsets": [],
+    "candidateListTruncated": false,
+    "anchorExamples": [],
+    "status": "unavailable",
+    "fullReferenceCoverageProved": false,
+    "bitPerfectVerdict": "not assessed by this bounded rejection diagnostic",
+    "windowComparison": null
+  },
+  "inputReportSHA256": "3ce50fa05824420b736c79d1110454dcd71f53b466e5ba5df81683092e80a6f4"
+}

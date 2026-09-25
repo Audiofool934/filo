@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "createdUTC": "2026-09-25T15:15:37.324822+00:00",
+  "scope": "Offline original all-zero experimental prewarm source only; not a music reference, playback repair, or fidelity certificate. No hardware, player, UI, playback, or recording actions.",
+  "fixture": {
+    "path": "work/spotify-reference-fixtures/filo onset warmup zeros 44100 stereo 24bit WAV.wav",
+    "fileName": "filo onset warmup zeros 44100 stereo 24bit WAV.wav",
+    "fileSHA256": "9559ec06db5fce8290d5b8923ee3ac6ff57ab16729a1bfe343c8110c9a6cfb21",
+    "fileBytes": 1323044,
+    "formatCode": 1,
+    "channels": 2,
+    "sampleRate": 44100,
+    "bitsPerSample": 24,
+    "blockAlign": 6,
+    "bytesPerSecond": 264600,
+    "frames": 220500,
+    "samples": 441000,
+    "durationSeconds": 5,
+    "pcm24SHA256": "9a484976bf947c9f07e985c50938b801fa416b0ac4de1acc730045d59a7c5f97",
+    "pcmFloat32SHA256": "2b1f63df409bdeac3c7d15e9a3d30a8ed77d35d1a8397848bb14cadac59affdf",
+    "riffChunks": [
+      {
+        "type": "fmt ",
+        "bytes": 16
+      },
+      {
+        "type": "data",
+        "bytes": 1323000
+      }
+    ]
+  },
+  "verification": {
+    "method": "Python wave writer followed by independent RIFF chunk parsing and complete signed24 integer decoding. No alignment, trimming, gain, rounding, or resampling.",
+    "riffDeclaredSizeExact": true,
+    "frameCountExact": true,
+    "everySampleExactlyZero": true,
+    "nonzeroSamples": 0,
+    "minimumIntegerSample": 0,
+    "maximumIntegerSample": 0,
+    "firstFrameZero": true,
+    "lastFrameZero": true,
+    "onlyFmtAndDataChunks": true,
+    "originalFilesUnchanged": true,
+    "exclusiveAtomicPublication": true
+  },
+  "originalFileHashesUnchanged": {
+    "work/spotify-reference-fixtures/filo onset silence 44100 stereo 24bit WAV.wav": "766217b4cb8b3f3e3365b16fcb9ab193031faa63ac26d47543e47d5ec26ed8f9",
+    "work/spotify-reference-fixtures/filo reference 44100 stereo 24bit ALAC.m4a": "add662b2c40a791ddd0e406ad638848b58254fc4c4a0220f78e36d4b84510022",
+    "work/spotify-reference-fixtures/filo reference 44100 stereo 24bit WAV.wav": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+    "work/spotify-reference-fixtures/filo reference 44100 stereo 24bit FLAC.flac": "b47dc3336055c61a5e6ac442e64f6811a5f44ce2fe61790e0d55cc214f22a352"
+  },
+  "interpretationLimits": [
+    "Zero samples alone cannot identify a source, prove playback began, or demonstrate delivery of all 220500 source frames.",
+    "An onset gain may change while multiplying silence without becoming observable in PCM.",
+    "The subsequent canonical reference must be compared completely and exactly from its first active frame through its tail; silence warmup is only a separate experimental condition.",
+    "A successful warmup trial would not establish a general repair or preservation of arbitrary music starts.",
+    "The measurement boundary remains software callback output, not PCM independently observed at the Sony USB receiver."
+  ]
+}
