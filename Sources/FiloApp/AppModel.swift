@@ -193,8 +193,10 @@ final class AppModel: ObservableObject {
         State: \(snapshot.title)
         Output: \(output?.name ?? "Unavailable")
         Output rate: \(output?.rate.description ?? "Unknown") Hz
-        Source rate: \(snapshot.sourceFormat?.rate.description ?? "Unknown") Hz
+        Selected target rate: \(snapshot.sourceFormat?.rate.description ?? "Unknown") Hz
         Evidence: \(snapshot.sourceFormat?.evidence.rawValue ?? "None")
+        Automatic detection error: \(snapshot.detectionError ?? "None")
+        Unsupported source rate: \(snapshot.unsupportedRate?.description ?? "None") Hz
         Capture rate: \(snapshot.tapFormat?.rate.description ?? "Not active") Hz
         Relay callbacks: \(snapshot.metrics?.callbacks ?? 0)
         Invalid buffers: \(snapshot.metrics?.invalidBuffers ?? 0)
@@ -246,6 +248,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self else { return }
             let rate = self.model.snapshot.output?.rate ?? 0
             self.item.button?.title = self.model.snapshot.connected && rate > 0 ? "ƒ \(rateLabel(rate))" : "ƒ"
+            self.item.button?.toolTip = "filo · \(self.model.snapshot.title)"
         }
         for name in ["com.apple.Music.playerInfo", "com.apple.iTunes.playerInfo", "com.spotify.client.PlaybackStateChanged"] {
             observers.append(DistributedNotificationCenter.default().addObserver(forName: Notification.Name(name), object: nil, queue: .main) { [weak self] _ in self?.model.controller.sourceDidChange() })

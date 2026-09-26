@@ -108,7 +108,8 @@ struct FiloView: View {
     private var signalPath: some View {
         HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("SOURCE").font(.system(size: 9, weight: .semibold)).tracking(1.5).foregroundStyle(.secondary)
+                Text(state.sourceFormat.map { $0.evidence == .manual || $0.evidence == .spotifyPolicy } == true ? "TARGET" : "SOURCE")
+                    .font(.system(size: 9, weight: .semibold)).tracking(1.5).foregroundStyle(.secondary)
                 Text(state.sourceFormat.map { "\(rateLabel($0.rate)) kHz" } ?? "Unknown")
                     .font(.system(size: 21, weight: .medium, design: .monospaced))
                 Text(sourceDescription).font(.system(size: 10)).foregroundStyle(.secondary)
@@ -131,7 +132,7 @@ struct FiloView: View {
     private var status: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack(spacing: 7) {
-                Circle().fill(state.error != nil || (state.connected && model.mode == .exclusive)
+                Circle().fill(state.error != nil || state.needsAttention || (state.connected && model.mode == .exclusive)
                               ? Color.orange : (state.connected ? accent : Color.secondary.opacity(0.4))).frame(width: 6, height: 6)
                 Text(state.title).font(.system(size: 13, weight: .semibold))
                 Spacer()
@@ -168,6 +169,10 @@ struct FiloView: View {
             } else {
                 Text("Format matching lets your player output normally. Direct relay forwards the chosen app without DSP. The output remains shared with other apps.")
                     .fixedSize(horizontal: false, vertical: true)
+                if model.mode == .format {
+                    Text("Automatic mode follows fresh Music decoder observations or a readable local file. Unknown or unsupported source rates leave the output rate unchanged. Manual rates and Spotify's profile appear as a target, not a detected source.")
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             if model.source == .spotify {
                 Text("Spotify uses a fixed 44.1 kHz music profile. filo cannot verify individual Spotify tracks, podcasts, or ads.")

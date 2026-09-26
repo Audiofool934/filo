@@ -7,6 +7,12 @@ public struct AudioFailure: LocalizedError {
     public var errorDescription: String? { message }
 }
 
+public struct UnsupportedSampleRate: LocalizedError {
+    public let rate: Double
+    public init(_ rate: Double) { self.rate = rate }
+    public var errorDescription: String? { "The selected output does not support \(rate / 1000) kHz." }
+}
+
 public struct PCMFormat: Codable, Equatable {
     public let rate: Double
     public let channels: UInt32
@@ -147,7 +153,7 @@ public enum HAL {
         guard target.isFinite && target > 0 else { throw AudioFailure("Invalid sample rate.") }
         let ranges = try array(id, kAudioDevicePropertyAvailableNominalSampleRates, seed: AudioValueRange())
         guard ranges.contains(where: { target >= $0.mMinimum && target <= $0.mMaximum }) else {
-            throw AudioFailure("The selected output does not support \(Int(target)) Hz.")
+            throw UnsupportedSampleRate(target)
         }
         if abs(try rate(id) - target) < 0.01 { return }
         try set(id, kAudioDevicePropertyNominalSampleRate, target)
