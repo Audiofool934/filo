@@ -1,0 +1,17 @@
+{
+  "recordedUTC": "2026-09-26T06:47:24.897870+00:00",
+  "question": "Does the previously observed direct-start change persist with user-disabled Automix and Gapless, Crossfade remaining off?",
+  "scope": "One fresh Spotify process, same quiet canonical reference and TapAutoStart=false scratch binary as preceding mode-confirmed failure. Combined user setting change, not single-factor causal attribution.",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "binarySHA256": "817c8e525c860ecb7a9db5203c0e31941df98d97b1f143e7eed867c510408e0c",
+  "preconditions": "Fresh UI verify all three off, no user playback, sole owned local-file source, volume1, normalization/EQ/mono off, autoplay temporarily off.",
+  "captureSeconds": 60,
+  "decisions": [
+    "Same retained onset means combined settings off is insufficient in this condition; stop this branch without changing production.",
+    "A pass requires every original frame and byte, then separately repeated setup evidence before reliability or attribution claims.",
+    "Missing anchor with no rejection or capture timing/setup faults is inconclusive, never a pass."
+  ],
+  "restore": "Keep user-chosen Automix/Gapless/Crossfade off; restore other task-changed preferences and own source-disabled state. Restore WALKMAN default and pre-test format only if still task owned.",
+  "modeEvidence": "User enabled USB DAC mode earlier in this session; no independent receiver display/readback.",
+  "safety": "Only owned quiet reference. No subscription PCM. Watchdog force termination would require recovery inspection before continuing."
+}

@@ -48,7 +48,8 @@ No inspected official Spotify source identifies the observed recurrence or expos
 ## Controls suggested by the sources
 
 The [subsequent prewarm experiments](spotify-prewarm-observation.md) provide related measurements for the silent-prefix idea below, rather than every matched control described here.
-The AudioQueue and output-unit controls remain unexecuted proposals, not a playback workaround.
+The [AudioQueue default-versus-explicit-unity control](audioqueue-first-start-observation.md) subsequently preserved the complete reference in both arms under the experimental tap configuration.
+The direct output-unit cold-start versus counted-zero-render pair remains unexecuted, and neither proposal is a proven Spotify playback workaround.
 Each should retain the existing strict comparator and compare newly measured raw words with its own validated synthetic reference.
 
 1. Change only the length of leading digital silence within a synthetic WAV while holding the established source and capture setup constant.
