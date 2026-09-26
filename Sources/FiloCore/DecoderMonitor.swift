@@ -1,5 +1,27 @@
 import Foundation
 
+/// Reads the event's wall-clock timestamp instead of making delayed pipe delivery look fresh.
+/// The log process also emits non-event records; malformed or undated records are ignored.
+enum DecoderEventParser {
+    private static let fractionalTimestamp: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+    private static let wholeTimestamp = ISO8601DateFormatter()
+
+    static func parse(_ data: Data) -> SourceFormat? {
+        guard let event = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let message = event["eventMessage"] as? String,
+              let timestamp = event["timestamp"] as? String else { return nil }
+        // log stream uses a space separator and compact offset, e.g.
+        // 2026-09-26 15:19:51.641979+0800. ISO8601 also accepts Z and colon offsets.
+        let normalized = timestamp.replacingOccurrences(of: " ", with: "T")
+        guard let date = fractionalTimestamp.date(from: normalized) ?? wholeTimestamp.date(from: normalized) else { return nil }
+        return DecoderFormatParser.parse(message, at: date)
+    }
+}
+
 /// Streams only Music decoder-input diagnostics; no audio, titles, URLs, or log history are saved.
 /// Start/stop and callbacks run on the caller's serial queue.
 public final class DecoderMonitor {
@@ -51,9 +73,7 @@ public final class DecoderMonitor {
         if buffer.count > 262144 { buffer.removeAll(); return }
         while let newline = buffer.firstIndex(of: 10) {
             let line = buffer[..<newline]
-            if let event = try? JSONSerialization.jsonObject(with: Data(line)) as? [String: Any],
-               let message = event["eventMessage"] as? String,
-               let format = DecoderFormatParser.parse(message) { onFormat?(format) }
+            if let format = DecoderEventParser.parse(Data(line)) { onFormat?(format) }
             buffer.removeSubrange(...newline)
         }
     }

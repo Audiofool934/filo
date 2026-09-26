@@ -5,6 +5,11 @@
 A small, open-source macOS menu bar companion for Apple Music, Spotify, and your DAC.
 Keep your player and let filo manage the output format.
 
+**Format matching is the default:** follow the observed source sample rate and confirm the DAC setting while your player handles playback.
+Unknown or unsupported rates keep the existing output rate, and user changes take priority over automatic matching.
+Manual selections and Spotify's fixed profile are shown as targets, separately from detected source formats.
+Read the [core behavior and validation contract](docs/CORE-FORMAT-MATCHING.md) for supported cases and detection limits.
+
 ## What it does
 
 - **Apple Music:** follows fresh lossless decoder observations around track changes and reads the format of accessible local files.
