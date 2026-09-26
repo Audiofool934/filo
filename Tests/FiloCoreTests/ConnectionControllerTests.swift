@@ -16,7 +16,7 @@ private final class ControllerDevices: DeviceAccess {
                    ControllerDevices.output(id: 2, uid: "dac", rate: 96000)]
     var current: UInt32 = 1
     var writes: [Double] = []
-    let acceptedRates: [Double] = [44100, 48000, 96000, 192000]
+    var acceptedRates: [Double] = [44100, 48000, 96000, 192000]
     enum WriteFailure { case beforeChange, afterChange }
     var nextWriteFailure: WriteFailure?
     func devices() -> [OutputDevice] {
@@ -79,8 +79,8 @@ private final class ControllerFixture {
                                           readerFactory: { _ in reader }, processList: processProbe.processes)
         controller.onSnapshot = { [weak self] in self?.snapshot = $0; self?.snapshots.append($0) }
     }
-    func connect() {
-        controller.connect(source: .appleMusic, outputUID: "dac", mode: .format, manualRate: nil,
+    func connect(source: MusicSource = .appleMusic) {
+        controller.connect(source: source, outputUID: "dac", mode: .format, manualRate: nil,
                            executable: URL(fileURLWithPath: "/unused-fake-player"))
     }
     func send(_ state: PlayerState) {
@@ -232,6 +232,52 @@ final class ConnectionControllerTests: XCTestCase {
         XCTAssertEqual(fixture.snapshot.title, "Format matched")
         XCTAssertEqual(fixture.devices.writes, [192000])
         XCTAssertEqual(try fixture.devices.rate(2), 192000)
+    }
+
+    func testUnsupportedMusicRateStaysVisibleWhenPlaybackPauses() throws {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.connect(); drain(fixture)
+        fixture.send(PlayerState(playing: true, trackID: "unsupported-track", localRate: 88200))
+        drain(fixture)
+        XCTAssertEqual(fixture.snapshot.title, "Source rate not supported")
+        fixture.send(PlayerState(playing: false, trackID: "unsupported-track", localRate: 88200))
+        drain(fixture)
+        fixture.controller.queue.async { fixture.controller.poll() }
+        drain(fixture)
+        XCTAssertTrue(fixture.snapshot.connected)
+        XCTAssertFalse(fixture.snapshot.player.playing)
+        XCTAssertNil(fixture.snapshot.error)
+        XCTAssertEqual(fixture.snapshot.unsupportedRate, 88200)
+        XCTAssertEqual(fixture.snapshot.title, "Source rate not supported")
+        XCTAssertTrue(fixture.snapshot.needsAttention)
+        XCTAssertTrue(fixture.snapshot.detail.contains("The output remains at"))
+        XCTAssertTrue(fixture.snapshot.detail.contains("Automatic matching will resume with a supported track."))
+        XCTAssertTrue(fixture.devices.writes.isEmpty)
+        XCTAssertEqual(try fixture.devices.rate(2), 96000)
+    }
+
+    func testUnsupportedSpotifyProfileIsVisibleBeforePlaybackStarts() throws {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.devices.acceptedRates = [48000]
+        fixture.devices.outputs[1].rate = 48000
+        fixture.devices.outputs[1].supportedRates = [48000]
+        fixture.connect(source: .spotify); drain(fixture)
+        fixture.controller.queue.async { fixture.controller.poll() }
+        drain(fixture)
+        XCTAssertTrue(fixture.snapshot.connected)
+        XCTAssertFalse(fixture.snapshot.player.playing)
+        XCTAssertNil(fixture.snapshot.error)
+        XCTAssertEqual(fixture.snapshot.sourceFormat?.evidence, .spotifyPolicy)
+        XCTAssertEqual(fixture.snapshot.unsupportedRate, 44100)
+        XCTAssertEqual(fixture.snapshot.title, "Source rate not supported")
+        XCTAssertTrue(fixture.snapshot.needsAttention)
+        XCTAssertTrue(fixture.snapshot.detail.contains("The output remains at"))
+        XCTAssertTrue(fixture.snapshot.detail.contains("Disconnect to choose a supported rate."))
+        XCTAssertFalse(fixture.snapshot.detail.contains("Automatic matching will resume"))
+        XCTAssertTrue(fixture.devices.writes.isEmpty)
+        XCTAssertEqual(try fixture.devices.rate(2), 48000)
     }
 
     func testFailedWriteNeverReportsMatchedAndRestoresAnyAppliedChange() throws {

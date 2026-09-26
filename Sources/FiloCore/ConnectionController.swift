@@ -438,6 +438,15 @@ public final class ConnectionController {
             snapshot.title = "Armed at the selected rate"
             snapshot.detail = "Listening at \(format.rate / 1000) kHz. Play a track when ready; source identity and the DAC input remain unverified."
         }
+        else if mode == .format, let format = snapshot.sourceFormat,
+                snapshot.unsupportedRate == format.rate, let output = snapshot.output {
+            snapshot.needsAttention = true
+            snapshot.title = "Source rate not supported"
+            let guidance = format.evidence == .manual || format.evidence == .spotifyPolicy
+                ? "Disconnect to choose a supported rate."
+                : "Automatic matching will resume with a supported track."
+            snapshot.detail = "Your output does not support \(format.rate / 1000) kHz. The output remains at \(output.rate / 1000) kHz. \(guidance)"
+        }
         else if snapshot.sourceFormat == nil, let error = snapshot.detectionError {
             snapshot.needsAttention = true
             snapshot.title = "Automatic detection unavailable"; snapshot.detail = error
@@ -459,12 +468,6 @@ public final class ConnectionController {
                 snapshot.detail = "The exclusive path is preparing. Check recording permission if captured frames do not arrive."
             }
         } else if let format = snapshot.sourceFormat {
-            if mode == .format, snapshot.unsupportedRate == format.rate, let output = snapshot.output {
-                snapshot.needsAttention = true
-                snapshot.title = "Source rate not supported"
-                snapshot.detail = "Your output does not support \(format.rate / 1000) kHz. Playback continues at \(output.rate / 1000) kHz; automatic matching will resume with a supported track."
-                return
-            }
             snapshot.title = format.evidence == .spotifyPolicy ? "Spotify profile active" : (format.evidence == .manual ? "Your rate is set" : "Format matched")
             snapshot.detail = mode == .format
                 ? (format.evidence == .spotifyPolicy ? "Output follows the fixed 44.1 kHz profile. This is not per-track format detection."
