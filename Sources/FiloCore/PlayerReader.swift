@@ -79,6 +79,31 @@ public struct PlayerState: Codable {
     }
 }
 
+/// A local header is tied to the track returned with its location.
+struct LocalFileFormatCache {
+    private(set) var trackID: String?
+    private(set) var rate: Double?
+    private var attemptedAt: Date?
+
+    mutating func shouldRead(trackID: String?, now: Date) -> Bool {
+        if trackID != self.trackID {
+            self.trackID = trackID; rate = nil; attemptedAt = nil
+        }
+        guard trackID != nil, rate == nil else { return false }
+        if let attemptedAt {
+            let elapsed = now.timeIntervalSince(attemptedAt)
+            if elapsed >= 0, elapsed < 5 { return false }
+        }
+        attemptedAt = now
+        return true
+    }
+
+    mutating func record(rate: Double, trackID: String) {
+        guard trackID == self.trackID, rate.isFinite, rate > 0 else { return }
+        self.rate = rate
+    }
+}
+
 /// Entry point for a persistent helper running NSAppleScript on its own main thread.
 /// The GUI remains responsive even while macOS asks for Automation permission.
 public enum PlayerHelper {
@@ -200,8 +225,8 @@ public enum PlayerHelper {
             end tell
         end timeout
         """) : nil
-        var inspectedTrack: String?
-        var cachedLocalRate: Double?
+        var localFormat = LocalFileFormatCache()
+        var inspectedProcessingTrack: String?
         var processing = SourceProcessingState()
         var trackControlsReadAt = Date.distantPast
         while let request = readLine() {
@@ -232,11 +257,22 @@ public enum PlayerHelper {
             guard state.error == nil,
                   !NSRunningApplication.runningApplications(withBundleIdentifier: source.bundleID).isEmpty else {
                 processing = SourceProcessingState()
-                inspectedTrack = nil; cachedLocalRate = nil
+                localFormat = LocalFileFormatCache(); inspectedProcessingTrack = nil
                 send(state)
                 continue
             }
-            if source == .appleMusic {
+            let readFile = source == .appleMusic && localFormat.shouldRead(trackID: state.trackID, now: Date())
+            if readFile, let track = state.trackID {
+                // A header attempt owns this response so optional DSP requests cannot
+                // delay it. The next poll reads DSP while the header is cached or cooling down.
+                var error: NSDictionary?
+                if let descriptor = fileScript?.executeAndReturnError(&error), error == nil,
+                   descriptor.atIndex(1)?.stringValue == track,
+                   let path = descriptor.atIndex(2)?.stringValue, !path.isEmpty,
+                   let file = try? AVAudioFile(forReading: URL(fileURLWithPath: path)) {
+                    localFormat.record(rate: file.fileFormat.sampleRate, trackID: track)
+                }
+            } else if source == .appleMusic {
                 processing.muted = nil; processing.equalizerEnabled = nil; processing.observedAt = nil
                 var error: NSDictionary?
                 if let descriptor = processingScript?.executeAndReturnError(&error), error == nil {
@@ -244,41 +280,29 @@ public enum PlayerHelper {
                     processing.equalizerEnabled = SourceProcessingState.boolean(descriptor.atIndex(2)?.stringValue)
                     if processing.muted != nil || processing.equalizerEnabled != nil { processing.observedAt = Date() }
                 }
-            }
-            // Retry optional track controls at a bounded cadence so a user edit
-            // does not remain hidden for an entire track. Failed reads stay unknown.
-            let changedTrack = state.trackID != inspectedTrack
-            if source == .appleMusic, let track = state.trackID,
-               changedTrack || Date().timeIntervalSince(trackControlsReadAt) >= 5 {
-                trackControlsReadAt = Date()
-                processing.trackID = nil; processing.trackVolumeAdjustment = nil
-                processing.trackEqualizerPreset = nil; processing.trackObservedAt = nil
-                var processingError: NSDictionary?
-                if let descriptor = trackProcessingScript?.executeAndReturnError(&processingError), processingError == nil,
-                   descriptor.atIndex(1)?.stringValue == track {
-                    processing.trackID = track
-                    processing.trackVolumeAdjustment = SourceProcessingState.integer(descriptor.atIndex(2)?.stringValue, in: -100...100)
-                    // AppleScript missing value is a type descriptor, not an empty
-                    // text preset. Preserve that distinction when an item is unreadable.
-                    if let preset = descriptor.atIndex(3), preset.descriptorType == typeUnicodeText || preset.descriptorType == typeUTF8Text || preset.descriptorType == typeChar {
-                        processing.trackEqualizerPreset = preset.stringValue
+                // Track controls have their own identity/cadence because a header
+                // attempt can intentionally defer them to the following request.
+                let changedTrack = state.trackID != inspectedProcessingTrack
+                if let track = state.trackID,
+                   changedTrack || Date().timeIntervalSince(trackControlsReadAt) >= 5 {
+                    inspectedProcessingTrack = track; trackControlsReadAt = Date()
+                    processing.trackID = nil; processing.trackVolumeAdjustment = nil
+                    processing.trackEqualizerPreset = nil; processing.trackObservedAt = nil
+                    var processingError: NSDictionary?
+                    if let descriptor = trackProcessingScript?.executeAndReturnError(&processingError), processingError == nil,
+                       descriptor.atIndex(1)?.stringValue == track {
+                        processing.trackID = track
+                        processing.trackVolumeAdjustment = SourceProcessingState.integer(descriptor.atIndex(2)?.stringValue, in: -100...100)
+                        // AppleScript missing value is a type descriptor, not an empty
+                        // text preset. Preserve that distinction when an item is unreadable.
+                        if let preset = descriptor.atIndex(3), preset.descriptorType == typeUnicodeText || preset.descriptorType == typeUTF8Text || preset.descriptorType == typeChar {
+                            processing.trackEqualizerPreset = preset.stringValue
+                        }
+                        processing.trackObservedAt = Date()
                     }
-                    processing.trackObservedAt = Date()
                 }
             }
-            // File-location requests can time out for cloud tracks. This separate
-            // helper tries once per track and cannot hold up essential state reads.
-            if source == .appleMusic, let track = state.trackID, changedTrack {
-                inspectedTrack = track; cachedLocalRate = nil
-                var error: NSDictionary?
-                if let descriptor = fileScript?.executeAndReturnError(&error), error == nil,
-                   descriptor.atIndex(1)?.stringValue == track,
-                   let path = descriptor.atIndex(2)?.stringValue, !path.isEmpty,
-                   let file = try? AVAudioFile(forReading: URL(fileURLWithPath: path)) {
-                    cachedLocalRate = file.fileFormat.sampleRate
-                }
-            }
-            if state.trackID == inspectedTrack { state.localRate = cachedLocalRate }
+            if state.trackID == localFormat.trackID { state.localRate = localFormat.rate }
             state.processing = processing.matching(trackID: state.trackID)
             state.processing?.volume = state.volume
             send(state)
