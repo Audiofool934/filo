@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "artifacts": {
+    "combined-off.json": {
+      "source": "work/spotify-effects-off/combined-off.json",
+      "originalSHA256": "f551e8fe54cffc0a3d8a8de18e74ab59146b65666ba0329929baa3e4d12186e3",
+      "transformation": "None; exact original bytes."
+    },
+    "combined-off-watchdog.json": {
+      "source": "work/spotify-effects-off/combined-off-watchdog.json",
+      "originalSHA256": "ddcf9c2c664a09f193f052ade34a53a0663697a26183ac2312e8d220de99ac16",
+      "transformation": "None; exact original bytes."
+    },
+    "combined-off-ui-timing.json": {
+      "source": "work/spotify-effects-off/combined-off-ui-timing.json",
+      "originalSHA256": "7cc565e08f2522e22aa09a4585493ec0477a1f77001b57cb152ed4f377b36784",
+      "transformation": "None; exact original bytes."
+    },
+    "combined-off.stderr": {
+      "source": "work/spotify-effects-off/combined-off.stderr",
+      "originalSHA256": "6bee09ee3661753ded61f76e8ba716b6dd377f8b78eae941b2f6b8103177ef0d",
+      "transformation": "None; exact original bytes."
+    },
+    "protocol.json": {
+      "source": "work/spotify-effects-off/protocol.json",
+      "originalSHA256": "e04a87625cd0c8eb8a8c4a0747d113edb6ec6b23bf3aa7ade48180fed7db10da",
+      "transformation": "None; exact original bytes."
+    },
+    "restart-amendment.json": {
+      "source": "work/spotify-effects-off/restart-amendment.json",
+      "originalSHA256": "22bd92ee360747f92008a9ceb8c9b9fa07c53bcb1ad419d3d9ab522cfd9e1de9",
+      "transformation": "None; exact original bytes."
+    },
+    "measurement-process.json": {
+      "source": "work/spotify-effects-off/measurement-process.json",
+      "originalSHA256": "9a409f09b2854af6e17c479aeda08543fbc54d19abf12f21093435cf71cfe3bf",
+      "transformation": "None; exact original bytes."
+    },
+    "final-after-quit.json": {
+      "source": "work/spotify-effects-off/final-after-quit.json",
+      "originalSHA256": "63a830aa6968de5248e27e3abef8bbd0236a0bf5ef99ce183eb3dcb1f6c19038",
+      "transformation": "None; exact original bytes."
+    },
+    "run.py": {
+      "source": "work/spotify-effects-off/run.py",
+      "originalSHA256": "a45a6765ab53e53f3277a058d6e74b825fe693f7855d79799647c542bf952826",
+      "transformation": "None; exact original bytes."
+    },
+    "analyze.py": {
+      "source": "work/spotify-effects-off-analysis/analyze.py",
+      "originalSHA256": "f72cd1d979701aa15e6ca84555c9b2415406da1ef8f882aaaed7c332bf635dc0",
+      "transformation": "Adapted repository-root depth from parents[2] to parents[3] for archive location; clarified that Crossfade was already OFF while Gapless and Automix changed. No numeric analysis or acceptance logic changed."
+    },
+    "restoration.json": {
+      "source": "Recorded work/spotify-effects-off final snapshots and supervising UI observations",
+      "transformation": "New sanitized summary; raw snapshot hashes are recorded within restoration.json. No raw device identities published."
+    }
+  },
+  "frozenTaskOnlyAnalysis": {
+    "source": "work/spotify-effects-off-analysis/combined-off-analysis.json",
+    "sha256": "007883b74e40c5d0ca0d512f1397727fc7365ba85503e3f23fbba30b4853f25a",
+    "scope": "Original result retained unchanged; public analysis differs only in adapted analyzer hash and clarified effectCondition text."
+  },
+  "unpublished": [
+    "Raw device, format, clock and level snapshots containing private or unrelated hardware identity.",
+    "Original synthetic audio file and executable."
+  ],
+  "modeEvidence": "Prior user confirmation within the session; no new receiver display or PCM readback for this trial."
+}

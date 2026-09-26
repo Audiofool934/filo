@@ -1,0 +1,22 @@
+{
+  "observedUTC": "2026-09-26T06:53:30.631297+00:00",
+  "reason": "User began ordinary streaming playback during first post-restart setup; no capture was running. Playback paused and another fresh process will be used before the reference test.",
+  "previousNewProcess": [
+    "11445 /Applications/Spotify.app/Contents/MacOS/Spotify"
+  ],
+  "verifiedSettings": {
+    "automix": false,
+    "gapless": false,
+    "crossfade": false,
+    "normalize": false,
+    "equalizer": false,
+    "mono": false,
+    "autoplay": false,
+    "localFiles": true,
+    "downloads": false,
+    "myMusic": false,
+    "ownedFixtureSource": true,
+    "volume": 1
+  },
+  "initialDefaultOutput": "Built-in speakers; user-preferred WALKMAN will be explicitly restored at the end."
+}

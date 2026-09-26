@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "scope": "Sanitized restoration summary from recorded read-only snapshots and supervising UI observations; no receiver sample readback.",
+  "lastProcessCheckUTC": "2026-09-26T06:59:06.775634+00:00",
+  "defaultOutput": {
+    "before": "Built-in speakers",
+    "after": "WALKMAN",
+    "reason": "Explicitly selected after testing according to the user preference.",
+    "systemAlerts": "Built-in speakers unchanged."
+  },
+  "WALKMAN": {
+    "rate": 192000,
+    "hogPID": -1,
+    "isDefault": true
+  },
+  "BlackHole": {
+    "rate": 44100,
+    "clock": "Internal Fixed",
+    "scalar": 0.5625,
+    "decibels": -28,
+    "mute": false,
+    "running": false,
+    "hogPID": -1
+  },
+  "sameAsThisExperimentBaseline": {
+    "formats": true,
+    "clock": true,
+    "levels": true
+  },
+  "baselineComparisonExcludedFields": [
+    "defaultOutputName",
+    "defaultSystemOutputName",
+    "deviceID",
+    "id",
+    "observedUTC",
+    "stream"
+  ],
+  "spotify": {
+    "playing": false,
+    "volume": 1,
+    "autoplay": true,
+    "localFiles": false,
+    "downloadsSource": true,
+    "myMusicSource": true,
+    "testSourceEnabled": false,
+    "crossfade": false,
+    "gapless": false,
+    "automix": false,
+    "normalize": false,
+    "equalizer": false,
+    "mono": false,
+    "sourceToggleVerification": "Downloads and My Music on and own source off observed immediately before Local Files was disabled.",
+    "userPreferencePreserved": "Crossfade, Gapless and Automix remain OFF.",
+    "selection": "Synthetic reference remains selected and stopped at 0:00; prior listening context was not reconstructed."
+  },
+  "musicChanged": false,
+  "captureProcessExitedNormally": true,
+  "forcedTermination": false,
+  "taskAudioProcessMatchesAtFinalCheck": 0,
+  "localSnapshotSHA256": {
+    "before-clock.json": "f01a86aa7c6493d6e3887fd11b95384858e925c9ccb6b2ec909d530760c8b152",
+    "before-devices.json": "853ad4fa37fcf84b7aa5d222496619ad1752382b37aaa922cefc64c3365d8f6c",
+    "before-formats.json": "9945b08141191b8aae1ddbf622d2b02325fb95651af86e9d306799cd3d240703",
+    "before-levels.json": "4695682e1bc176526974252f31a57f70c52d65b70aafb09ce343a97beb5e99df",
+    "before-process.json": "8f8fd331325c996a6d0765c99c796228e123bc21425b52357a06dfecb82bd028",
+    "final-after-quit.json": "63a830aa6968de5248e27e3abef8bbd0236a0bf5ef99ce183eb3dcb1f6c19038",
+    "final-clock.json": "f01a86aa7c6493d6e3887fd11b95384858e925c9ccb6b2ec909d530760c8b152",
+    "final-devices.json": "11aa214174d052013c4ae760aeb628401768b7c4e377c166637b69000d1e0c29",
+    "final-formats.json": "9945b08141191b8aae1ddbf622d2b02325fb95651af86e9d306799cd3d240703",
+    "final-levels.json": "bc0930d184c860a421b89cbe8fe73654d6fe32f301ef9162339e324c1975ecbf",
+    "final-processes.json": "777ad06f2f7e337fd80cea7520c42d64f2e7708923196dfc78066f5c6a2adc33",
+    "restoration-comparison.json": "75fbd4d8c48c40d48bfb765f5568656053ee2b54fa8cbbeabda9fd9e29603168"
+  }
+}

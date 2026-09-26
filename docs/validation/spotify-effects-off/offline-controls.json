@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline analysis branch, negative and reproducibility controls only; historical receipts are not additional combined-OFF live trials.",
+  "analyzerSHA256": "d3a34b88af7f525d488173a1602a3fd6a75e945a2b5da284ff9348715d3b3a03",
+  "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
+  "controlReceiptSHA256": {
+    "docs/validation/spotify-onset/spotify-rejection-repeat-wav.json": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925",
+    "docs/validation/spotify-tap-autostart/false-mode-on-reference.json": "631184ea077620110f245a07b70aac4e710471026cf0782b71279bbf6a206751"
+  },
+  "allPassed": true,
+  "checks": [
+    {
+      "name": "wrong_aligned_hash",
+      "passed": true
+    },
+    {
+      "name": "missing_prefix",
+      "passed": true
+    },
+    {
+      "name": "missing_suffix",
+      "passed": true
+    },
+    {
+      "name": "changed_onset_reported_without_refit_or_forced_equality",
+      "passed": true
+    },
+    {
+      "name": "inconsistent_offender_rejected",
+      "passed": true
+    },
+    {
+      "name": "historical_full_pass_control",
+      "passed": true
+    },
+    {
+      "name": "historical_rejection_control",
+      "passed": true
+    },
+    {
+      "name": "actual_receipt_deterministic_reproduction",
+      "passed": true
+    },
+    {
+      "name": "existing_output_refused_and_preserved",
+      "passed": true
+    },
+    {
+      "name": "public_adaptation_changes_only_hash_and_context_sentence",
+      "passed": true
+    }
+  ],
+  "temporaryResources": "Temporary directory removed and all analysis subprocesses exited."
+}

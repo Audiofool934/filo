@@ -85,6 +85,7 @@ This is a conditional local-file result, not reliable arbitrary-track playback, 
 Beta.3 adds opt-in rejected-input diagnostics; a [first-start measurement](docs/research/spotify-onset-observation.md) exactly matches a 512-frame exponential gain onset, while its same-file repeat preserves the complete reference.
 The responsible player or system component remains unidentified, and the verifier continues to reject changed samples.
 A [Spotify tap-autostart repeat](docs/research/spotify-tap-autostart-observation.md) retained the same onset with the experimental setting disabled, including after the operator confirmed USB DAC mode enabled.
+A subsequent [combined-settings test](docs/research/spotify-effects-off-observation.md) retained the identical opening after Automix and Gapless were disabled, with Crossfade still off; this did not resolve the measured direct-start failure.
 Earlier mode labels are qualified by a [setup evidence correction](docs/research/usb-dac-mode-correction.md); the host sample comparisons remain separate from Sony receiver evidence.
 Read the [exclusive output and verification guide](docs/VERIFIED-OUTPUT.md) before using the preview.
 
