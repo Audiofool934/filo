@@ -1,4 +1,4 @@
-# Core sample-rate matching
+# Core format matching
 
 The core product goal is to follow usable source-rate evidence, manage the selected output predictably, and preserve external device changes.
 Format matching leaves audio on the player's ordinary path; it neither creates a process tap nor depends on audio-process discovery, BlackHole, Hog Mode, or recording permission.
@@ -23,10 +23,28 @@ Freshness and ambiguity checks reduce known mistakes but do not make every subsc
 Rate changes may arrive after the opening of a track and may interrupt playback briefly.
 Neither matching rates nor a hardware bit-depth display proves unchanged samples, source precision, zero-gap transitions, or receiver equality.
 
+## Integer precision and device containers
+
+Format matching uses known integer source depth from a Music decoder observation or the original local-file header.
+ALAC flags supply its source depth; integer PCM uses its valid bit count rather than the decoder's working container.
+Floating-point local files do not imply an equivalent integer source depth.
+Unknown depth, manual selections, and Spotify's profile do not request a new physical depth.
+
+Only advertised shared stereo PCM formats at the target rate are considered.
+The policy prefers exact integer depth, then the smallest adequate precision, keeping an already selected equivalent container where possible.
+A 32-bit float format has 24 bits of significand precision; it is adequate for 24-bit integer PCM but not every 32-bit integer value.
+If no adequate format exists, playback continues at the matched rate with a visible depth limitation.
+A non-mixable format is rejected before changing its rate.
+The app reads back the resulting physical format and does not treat a selected menu label as proof of a hardware write.
+
+The lease journals both rate and physical representation, including depth-only changes.
+An external physical-format change ends ownership just as an external rate change does.
+Restoration retries preserve journal state when the rate has already returned but restoring the original representation fails.
+
 ## Device ownership and restoration
 
 Resolve the selected device from its persistent UID using a fresh device list before changing its route or rate.
-Validate the current default route and rate before every requested match, including a request that would otherwise require no write.
+Validate the current default route, rate, and physical representation before every requested match, including a request that would otherwise require no write.
 An external change before the first write must not be overwritten or hidden because it happens to equal the newly detected source rate.
 Track successful or possibly effective writes for recovery, without treating an untouched already-matching rate as an owned change.
 On disconnect or quit, restore only still-owned changes; retain recovery information when a disconnected device prevents restoration.
@@ -46,6 +64,7 @@ Automated tests use fake device access or fixture/helper processes and do not es
 | Decoder observer fails at startup or while connected | Failure stays visible, late callbacks are ignored, and a readable current local file can still match. | `ConnectionControllerTests` |
 | Unsupported source followed by a supported source | The unsupported rate is not written, the connection remains usable, and the next supported rate matches. | `ConnectionControllerTests`, `LeaseTests` |
 | External route/rate change before first write or during a no-op match | Stop management and preserve that change instead of silently taking ownership. | `ConnectionControllerTests`, `LeaseTests` |
+| Known depth, duplicate containers, unsupported precision, external depth changes, partial format restoration | Select only adequate advertised formats, avoid repeated writes, and preserve external changes. | `PhysicalFormatTests`, `ConnectionControllerTests`, `LocalFileFormatCacheTests` |
 | Disconnect, failed rate write, stale selection, ID reuse, orphaned recovery | Restore only owned settings, resolve by UID, and preserve unresolved recovery information. | `LeaseTests` |
 | Manual rate and Spotify profile | Display their distinct evidence labels without implying automatic track-format detection. | Controller checks plus packaged UI acceptance. |
 
@@ -108,3 +127,25 @@ Automatic matching across multiple local-file sample rates, local-file fallback,
 Fake-device and fixture tests cover applicable policy and ownership cases, without converting unperformed hardware scenarios into live passes.
 No subscription stream, PCM comparison, or receiver capture was tested in this acceptance sequence.
 Matching device rates therefore establishes neither source sample identity nor zero-gap transitions or end-to-end bit-perfect playback.
+
+## Menu bar and precision follow-up
+
+The `feat/liquid-glass-menubar` implementation adds advertised physical-format negotiation, current-track local-file depth, external depth ownership, and retryable format restoration.
+It removes disconnected polling timers and enables the 100 ms clock timer only for an active exclusive relay.
+Hardware property listeners coalesce changes for 100 ms; connected format matching checks playback every two seconds with a ten-second hardware refresh fallback.
+Every requested match still checks fresh ownership, including repeated source metadata that requires no write.
+Visible snapshots ignore observation-only timestamp changes, and the closed panel does not request artwork.
+These are implementation properties, not measured energy or latency guarantees.
+
+On 2026-09-26, the local strict Swift build and hardware-free finite-reference compile/help check passed on macOS 26.6.2.
+A standalone assertion adapter executed all 133 current XCTest test bodies with zero assertion failures, including rate/depth transitions, external changes, partial restoration, source-header precision, and snapshot deduplication.
+The adapter linked the actual debug FiloCore and FiloPCM objects; it did not execute Apple's XCTest framework.
+Local `swift test` could not compile because this Command Line Tools installation does not include XCTest.
+CI is configured to select Xcode 26.3, listed in the [GitHub macOS 15 runner image](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode), for the macOS 26 SDK and full XCTest.
+No CI result for this follow-up is claimed here.
+
+The new native UI has not yet been launched or visually validated because the desktop is locked.
+The NW-ZX706 is absent from the current hardware list, so the new physical-format negotiation has not been verified on that receiver.
+Read-only inspection confirmed that the built-in speakers advertise Float32 stereo at 44.1, 48, 88.2, and 96 kHz.
+No live rate, depth, route, player setting, or library changes were made during this follow-up's software checks.
+The native comparison and remaining acceptance work are tracked in `design-qa.md`.

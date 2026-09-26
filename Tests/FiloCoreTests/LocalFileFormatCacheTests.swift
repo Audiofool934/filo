@@ -1,7 +1,36 @@
 import XCTest
+import CoreAudio
 @testable import FiloCore
 
 final class LocalFileFormatCacheTests: XCTestCase {
+    func testFilePrecisionUsesLosslessHeaderRatherThanDecodedFloatContainer() {
+        var description = AudioStreamBasicDescription()
+        description.mFormatID = kAudioFormatAppleLossless
+        description.mFormatFlags = 3
+        XCTAssertEqual(LocalFileDepth.integerBits(description), 24)
+        description.mFormatID = kAudioFormatLinearPCM
+        description.mFormatFlags = kAudioFormatFlagIsSignedInteger
+        description.mBitsPerChannel = 24
+        XCTAssertEqual(LocalFileDepth.integerBits(description), 24)
+        description.mFormatFlags = kAudioFormatFlagIsFloat
+        description.mBitsPerChannel = 32
+        XCTAssertNil(LocalFileDepth.integerBits(description))
+        description.mFormatID = kAudioFormatMPEG4AAC
+        XCTAssertNil(LocalFileDepth.integerBits(description))
+    }
+    func testDepthStaysWithItsTrackAndDoesNotLeakAcrossTransitions() {
+        var cache = LocalFileFormatCache()
+        let now = Date()
+        XCTAssertTrue(cache.shouldRead(trackID: "A", now: now))
+        cache.record(rate: 48000, bits: 24, trackID: "A")
+        XCTAssertEqual(cache.bits, 24)
+        XCTAssertTrue(cache.shouldRead(trackID: "B", now: now))
+        XCTAssertNil(cache.bits)
+        cache.record(rate: 48000, bits: 24, trackID: "A")
+        XCTAssertNil(cache.bits)
+        cache.record(rate: 44100, bits: 16, trackID: "B")
+        XCTAssertEqual(cache.bits, 16)
+    }
     func testTransientFailureRetriesAndRecoversWithoutChangingTrack() {
         let now = Date(timeIntervalSince1970: 100)
         var cache = LocalFileFormatCache()

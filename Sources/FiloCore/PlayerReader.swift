@@ -48,7 +48,7 @@ public struct SourceProcessingState: Codable, Equatable {
     }
 }
 
-public struct PlayerState: Codable {
+public struct PlayerState: Codable, Equatable {
     public var playing: Bool
     public var trackID: String?
     public var title: String?
@@ -56,15 +56,17 @@ public struct PlayerState: Codable {
     /// Start of the successful essential observation, never refreshed by optional reads.
     public var primaryObservedAt: Date?
     public var localRate: Double?
+    public var localBits: Int?
     public var processing: SourceProcessingState?
     public var error: String?
     public init(playing: Bool = false, trackID: String? = nil, title: String? = nil,
-                volume: Int? = nil, localRate: Double? = nil,
+                volume: Int? = nil, localRate: Double? = nil, localBits: Int? = nil,
                 processing: SourceProcessingState? = nil, error: String? = nil,
                 primaryObservedAt: Date? = nil) {
         self.playing = playing; self.trackID = trackID; self.title = title
         self.volume = volume; self.localRate = localRate; self.processing = processing; self.error = error
         self.primaryObservedAt = primaryObservedAt
+        self.localBits = localBits
     }
 
     func mergingSupplemental(_ supplemental: PlayerState?) -> PlayerState {
@@ -74,6 +76,7 @@ public struct PlayerState: Codable {
         result.processing?.volume = volume
         if let trackID, supplemental?.trackID == trackID {
             result.localRate = supplemental?.localRate
+            result.localBits = supplemental?.localBits
         }
         return result
     }
@@ -83,11 +86,12 @@ public struct PlayerState: Codable {
 struct LocalFileFormatCache {
     private(set) var trackID: String?
     private(set) var rate: Double?
+    private(set) var bits: Int?
     private var attemptedAt: Date?
 
     mutating func shouldRead(trackID: String?, now: Date) -> Bool {
         if trackID != self.trackID {
-            self.trackID = trackID; rate = nil; attemptedAt = nil
+            self.trackID = trackID; rate = nil; bits = nil; attemptedAt = nil
         }
         guard trackID != nil, rate == nil else { return false }
         if let attemptedAt {
@@ -98,9 +102,23 @@ struct LocalFileFormatCache {
         return true
     }
 
-    mutating func record(rate: Double, trackID: String) {
+    mutating func record(rate: Double, bits: Int? = nil, trackID: String) {
         guard trackID == self.trackID, rate.isFinite, rate > 0 else { return }
         self.rate = rate
+        self.bits = bits.flatMap { (1...32).contains($0) ? $0 : nil }
+    }
+}
+
+/// Integer source precision, not the size of a decoder's floating-point container.
+enum LocalFileDepth {
+    static func integerBits(_ description: AudioStreamBasicDescription) -> Int? {
+        if description.mFormatID == kAudioFormatAppleLossless {
+            return [1: 16, 2: 20, 3: 24, 4: 32][Int(description.mFormatFlags)]
+        }
+        guard description.mFormatID == kAudioFormatLinearPCM,
+              description.mFormatFlags & kAudioFormatFlagIsFloat == 0,
+              (1...32).contains(description.mBitsPerChannel) else { return nil }
+        return Int(description.mBitsPerChannel)
     }
 }
 
@@ -270,7 +288,9 @@ public enum PlayerHelper {
                    descriptor.atIndex(1)?.stringValue == track,
                    let path = descriptor.atIndex(2)?.stringValue, !path.isEmpty,
                    let file = try? AVAudioFile(forReading: URL(fileURLWithPath: path)) {
-                    localFormat.record(rate: file.fileFormat.sampleRate, trackID: track)
+                    let description = file.fileFormat.streamDescription.pointee
+                    let bits = LocalFileDepth.integerBits(description)
+                    localFormat.record(rate: file.fileFormat.sampleRate, bits: bits, trackID: track)
                 }
             } else if source == .appleMusic {
                 processing.muted = nil; processing.equalizerEnabled = nil; processing.observedAt = nil
@@ -302,7 +322,7 @@ public enum PlayerHelper {
                     }
                 }
             }
-            if state.trackID == localFormat.trackID { state.localRate = localFormat.rate }
+            if state.trackID == localFormat.trackID { state.localRate = localFormat.rate; state.localBits = localFormat.bits }
             state.processing = processing.matching(trackID: state.trackID)
             state.processing?.volume = state.volume
             send(state)

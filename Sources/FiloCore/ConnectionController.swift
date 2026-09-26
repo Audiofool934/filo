@@ -45,7 +45,7 @@ enum ExclusivePlaybackPolicy {
     }
 }
 
-public struct ConnectionSnapshot {
+public struct ConnectionSnapshot: Equatable {
     public var devices: [OutputDevice] = []
     public var connected = false
     public var busy = false
@@ -68,6 +68,7 @@ public struct ConnectionSnapshot {
     public var needsAttention = false
     public var detectionError: String?
     public var unsupportedRate: Double?
+    public var depthLimited = false
     public var error: String?
     public init() {}
 }
@@ -85,6 +86,10 @@ public final class ConnectionController {
     private var reader: PlaybackReading!
     private var timer: DispatchSourceTimer?
     private var clockTimer: DispatchSourceTimer?
+    private let automaticallyPoll: Bool
+    private var hardwareMonitor: HardwareMonitor?
+    private var lastHardwareRead = Date.distantPast
+    private var lastPublished: ConnectionSnapshot?
     private var source: MusicSource = .appleMusic
     private var mode: ConnectionMode = .format
     private var selectedUID: String?
@@ -117,6 +122,7 @@ public final class ConnectionController {
          processList: @escaping () throws -> [AudioProcess] = { [] },
          recoverExclusive: @escaping () -> [String] = { [] }, automaticallyPoll: Bool = false) {
         self.access = access
+        self.automaticallyPoll = automaticallyPoll
         self.lease = DeviceLease(access: access, journalURL: journalURL)
         self.processList = processList
         self.recoverExclusive = recoverExclusive
@@ -137,26 +143,49 @@ public final class ConnectionController {
             self.updateStatus(); self.publish()
         }
         reader.onState = { [weak self] state in self?.received(state) }
-        if automaticallyPoll {
-            let timer = DispatchSource.makeTimerSource(queue: queue)
-            timer.schedule(deadline: .now(), repeating: 1, leeway: .milliseconds(150))
-            timer.setEventHandler { [weak self] in self?.poll() }
-            self.timer = timer
-            let clockTimer = DispatchSource.makeTimerSource(queue: queue)
-            clockTimer.schedule(deadline: .now(), repeating: .milliseconds(100), leeway: .milliseconds(10))
-            clockTimer.setEventHandler { [weak self] in self?.clockTick() }
-            self.clockTimer = clockTimer
-            timer.resume(); clockTimer.resume()
-        }
         queue.async { [weak self] in
             guard let self else { return }
+            if automaticallyPoll, access is SystemDeviceAccess {
+                self.hardwareMonitor = HardwareMonitor(queue: self.queue) { [weak self] in
+                    self?.poll(requestPlayback: false)
+                }
+            }
             self.recoverOrphaned()
-            self.publish()
+            self.poll(requestPlayback: false)
         }
     }
     private func publish() {
+        // Observation timestamps are evidence for policy, not changes to the visible UI.
+        var visible = snapshot
+        visible.player.primaryObservedAt = nil
+        visible.player.processing?.observedAt = nil
+        visible.player.processing?.trackObservedAt = nil
+        visible.sourceFormat?.observedAt = .distantPast
+        guard visible != lastPublished else { return }
+        lastPublished = visible
         let value = snapshot
         DispatchQueue.main.async { [weak self] in self?.onSnapshot?(value) }
+    }
+    private func startPolling() {
+        guard automaticallyPoll, timer == nil else { return }
+        let timer = DispatchSource.makeTimerSource(queue: queue)
+        timer.schedule(deadline: .now() + 2, repeating: mode == .format ? 2 : 1, leeway: .milliseconds(250))
+        timer.setEventHandler { [weak self] in
+            guard let self else { return }
+            // Device callbacks are immediate; this slow refresh also covers drivers that miss notifications.
+            self.poll(refreshHardware: Date().timeIntervalSince(self.lastHardwareRead) >= 10)
+        }
+        self.timer = timer; timer.resume()
+    }
+    private func updateClockTimer() {
+        guard automaticallyPoll, snapshot.connected, mode == .exclusive, exclusive.running else {
+            clockTimer?.cancel(); clockTimer = nil; return
+        }
+        guard clockTimer == nil else { return }
+        let timer = DispatchSource.makeTimerSource(queue: queue)
+        timer.schedule(deadline: .now(), repeating: .milliseconds(100), leeway: .milliseconds(10))
+        timer.setEventHandler { [weak self] in self?.clockTick() }
+        clockTimer = timer; timer.resume()
     }
     private func recoverOrphaned() {
         // A route must not return to a DAC whose non-mixable format is still leased.
@@ -192,6 +221,7 @@ public final class ConnectionController {
                 // Exclusive mode leases the virtual source route. The session separately owns the DAC.
                 try self.lease.begin(output: route)
                 self.snapshot.connected = true; self.snapshot.output = output
+                self.startPolling()
                 self.policy.reset(); self.lastRate = route.rate
                 if source == .appleMusic && manualRate == nil {
                     do { try self.monitor.start() }
@@ -208,13 +238,18 @@ public final class ConnectionController {
     }
     public func disconnect() { queue.async { self.stopConnection(); self.poll(requestPlayback: false) } }
     public func sourceDidChange() { queue.async { if self.snapshot.connected { self.reader.request() } } }
+    public func refreshDevices() { queue.async { self.poll(requestPlayback: false) } }
     public func sleep() { queue.async { self.stopConnection(); self.snapshot.detail = "Disconnected for sleep. Reconnect when you are ready."; self.publish() } }
     public func shutdown() {
-        queue.sync { timer?.cancel(); timer = nil; clockTimer?.cancel(); clockTimer = nil; stopConnection() }
+        queue.sync {
+            hardwareMonitor?.stop(); hardwareMonitor = nil
+            stopConnection()
+        }
     }
     private func stopAudio() -> [String] {
         // Release the physical output and virtual clock before restoring the route/rate lease.
         exclusive.stop(); audio.stop()
+        clockTimer?.cancel(); clockTimer = nil
         snapshot.relayRunning = false; lastProcesses = []
         snapshot.tapFormat = nil; snapshot.exclusiveOutputFormat = nil; snapshot.exclusivePhysicalFormat = nil
         snapshot.clockPitch = nil
@@ -234,6 +269,7 @@ public final class ConnectionController {
         snapshot.exclusiveMetrics = nil
     }
     private func stopConnection() {
+        timer?.cancel(); timer = nil
         var restorationErrors = stopAudio()
         monitor.stop(); reader.stop()
         if restorationErrors.isEmpty { restorationErrors += lease.restore() }
@@ -242,6 +278,7 @@ public final class ConnectionController {
         snapshot.virtualSource = nil; snapshot.player = PlayerState()
         snapshot.processingSummary = nil; snapshot.unverifiedControls = []; snapshot.segmentNote = nil
         snapshot.detectionError = nil; snapshot.needsAttention = false; snapshot.unsupportedRate = nil
+        snapshot.depthLimited = false
         snapshot.title = "Ready when you are"; snapshot.detail = "Choose your music app and output, then connect."
         snapshot.error = restorationErrors.isEmpty ? nil : restorationErrors.joined(separator: " ")
         if !restorationErrors.isEmpty { snapshot.title = "Recovery needed" }
@@ -286,16 +323,16 @@ public final class ConnectionController {
             }
             policy.trackChanged(id: state.trackID, playing: state.playing, observedAt: state.primaryObservedAt)
             if source == .appleMusic, manualRate == nil {
-                if let detected = policy.current, detected.evidence != .decoder || snapshot.detectionError == nil {
-                    try apply(detected)
-                }
-                else { snapshot.sourceFormat = nil }
                 if let rate = state.localRate, state.playing {
-                    let format = SourceFormat(rate: rate, evidence: .localFile)
+                    let format = SourceFormat(rate: rate, bits: state.localBits, evidence: .localFile)
                     policy.useLocal(format); try apply(format)
+                } else if let detected = policy.current, detected.evidence != .decoder || snapshot.detectionError == nil {
+                    try apply(detected)
+                } else {
+                    snapshot.sourceFormat = nil
                 }
             }
-            poll(requestPlayback: false)
+            poll(requestPlayback: false, refreshHardware: false)
         } catch { fail(error.localizedDescription) }
     }
     private func received(_ format: SourceFormat) {
@@ -334,7 +371,10 @@ public final class ConnectionController {
             if mode != .exclusive { _ = stopAudio() }
         }
         // Even a no-op match must validate route/rate ownership before reporting success.
-        do { try lease.apply(rate: format.rate) }
+        do {
+            if mode == .format { try lease.apply(rate: format.rate, sourceBits: format.bits) }
+            else { try lease.apply(rate: format.rate) }
+        }
         catch let error as UnsupportedSampleRate where mode == .format {
             // Use the device's actual rate ranges, not the menu's conventional-rate shortlist.
             // Ordinary playback continues unchanged; a later supported track can resume matching.
@@ -344,6 +384,10 @@ public final class ConnectionController {
         lastRate = format.rate
         snapshot.unsupportedRate = nil
         snapshot.sourceFormat = format; snapshot.busy = false
+        // Physical-format writes may not produce a new device event on every driver.
+        snapshot.devices = try access.devices()
+        snapshot.output = snapshot.devices.first { $0.uid == selectedUID }
+        lastHardwareRead = Date()
     }
     private func refreshExclusiveSnapshot() {
         snapshot.exclusiveMetrics = exclusive.metrics
@@ -352,6 +396,7 @@ public final class ConnectionController {
         snapshot.exclusivePhysicalFormat = exclusive.physicalFormat
         snapshot.clockPitch = exclusive.clockPitch
         snapshot.relayRunning = exclusive.running
+        updateClockTimer()
     }
     private func clockTick() {
         guard snapshot.connected, mode == .exclusive, exclusive.running else { return }
@@ -368,9 +413,13 @@ public final class ConnectionController {
             }
         } catch { fail(error.localizedDescription) }
     }
-    func poll(requestPlayback: Bool = true) {
+    func poll(requestPlayback: Bool = true, refreshHardware: Bool = true) {
         do {
-            snapshot.devices = try access.devices()
+            if refreshHardware {
+                snapshot.devices = try access.devices()
+                lastHardwareRead = Date()
+                hardwareMonitor?.watch(snapshot.devices)
+            }
             guard snapshot.connected else { publish(); return }
             guard let output = snapshot.devices.first(where: { $0.uid == selectedUID }) else {
                 fail("The output was disconnected. Reconnect the device, then connect filo again."); return
@@ -380,6 +429,7 @@ public final class ConnectionController {
                 fail("The music source route was disconnected. Reconnect filo after the device returns."); return
             }
             if mode == .exclusive { snapshot.virtualSource = route }
+            try lease.validateRepresentation(route)
             guard route.isDefault else { fail("The system output changed outside filo. Your new selection has been preserved."); return }
             if let lastRate, abs(route.rate - lastRate) > 0.01 {
                 fail("The source route's rate changed outside filo. Your new rate has been preserved."); return
@@ -432,6 +482,10 @@ public final class ConnectionController {
     }
     private func updateStatus() {
         snapshot.needsAttention = snapshot.player.error != nil
+        snapshot.depthLimited = mode == .format && snapshot.sourceFormat?.bits.map { bits in
+            guard let pcm = snapshot.output?.formats.first else { return true }
+            return pcm.precisionBits < bits
+        } == true
         if let error = snapshot.player.error { snapshot.title = "Playback access needed"; snapshot.detail = error }
         else if mode == .exclusive, exclusive.running, !snapshot.player.playing,
                 let format = snapshot.sourceFormat, ExclusivePlaybackPolicy.hasExplicitRate(format) {
@@ -450,6 +504,11 @@ public final class ConnectionController {
         else if snapshot.sourceFormat == nil, let error = snapshot.detectionError {
             snapshot.needsAttention = true
             snapshot.title = "Automatic detection unavailable"; snapshot.detail = error
+        }
+        else if snapshot.depthLimited {
+            snapshot.needsAttention = true
+            snapshot.title = "Output depth limited"
+            snapshot.detail = "The sample rate is matched, but the output format cannot preserve the observed source's full bit depth. Playback continues."
         }
         else if !snapshot.player.playing {
             snapshot.title = "Waiting for music"; snapshot.detail = "Play a track in \(source.name)."
