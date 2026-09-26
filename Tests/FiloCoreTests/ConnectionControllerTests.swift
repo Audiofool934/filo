@@ -121,6 +121,7 @@ final class ConnectionControllerTests: XCTestCase {
         XCTAssertEqual(fixture.devices.writes, [192000, 44100, 48000, 96000])
         XCTAssertEqual(try fixture.devices.rate(2), 96000)
         XCTAssertEqual(fixture.devices.current, 1)
+        XCTAssertEqual(fixture.snapshot.devices.first { $0.id == 2 }?.rate, 96000)
     }
 
     func testExternalRateBeforeFirstMetadataIsPreservedEvenIfItMatchesTheSource() throws {

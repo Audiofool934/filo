@@ -206,7 +206,7 @@ public final class ConnectionController {
             } catch { self.fail(error.localizedDescription) }
         }
     }
-    public func disconnect() { queue.async { self.stopConnection(); self.publish() } }
+    public func disconnect() { queue.async { self.stopConnection(); self.poll(requestPlayback: false) } }
     public func sourceDidChange() { queue.async { if self.snapshot.connected { self.reader.request() } } }
     public func sleep() { queue.async { self.stopConnection(); self.snapshot.detail = "Disconnected for sleep. Reconnect when you are ready."; self.publish() } }
     public func shutdown() {
