@@ -5,7 +5,7 @@ The [observation](../../research/spotify-effects-off-observation.md) states the 
 The result is a failed complete-reference comparison with the same retained onset, not a pass or an attribution to an individual setting.
 Mode evidence relies on prior user confirmation during the session, with no new Sony receiver readback.
 
-The [archive provenance](archive-provenance.json) identifies exact original receipt and wrapper copies and the two explicit public-analyzer adaptations.
+The [archive provenance](archive-provenance.json) identifies exact original receipt and wrapper copies, the initial public-analyzer adaptations, and the later failed-receipt consistency fix.
 The original task-only analysis remains unchanged in ignored work.
 The public analysis differs from it only in analyzer hash and the context sentence stating that Crossfade was already off.
 
@@ -29,6 +29,8 @@ No onset parameter or source offset is fitted.
 If a supplied receipt reports a pass, a separate branch requires complete 220,500-frame and 1,764,000-byte coverage, exact alignment and hashes, zero missing endpoints, zero padding or extra audio, and no faults.
 An absent rejection snapshot never implies success.
 The analyzer exit code describes audit consistency, so the archived failed playback correctly yields a successful offline audit.
+The corrected failed-receipt path rejects contradictory nested pass flags, nonboolean verdicts, invalid or inconsistent compared counts, out-of-bounds spans, and unaligned comparisons claiming compared frames or exact coverage.
+These checks also apply when a failed receipt has no rejection snapshot.
 
 If the canonical WAV is absent, the existing fixture subcommand generates it without playback:
 
@@ -39,8 +41,17 @@ dist/filo.app/Contents/MacOS/filo-lab fixture \
 
 Use that new path as `--reference` above.
 The required file hash is `43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e`.
-The [offline controls](offline-controls.json) cover complete-pass and rejection branches, wrong hashes, missing endpoints, changed onset, inconsistent offender metadata, deterministic reruns, and existing-output refusal.
+The [offline controls](offline-controls.json) cover complete-pass and failure branches, wrong hashes, missing endpoints, changed onset, inconsistent offender metadata, contradictory failed comparisons, deterministic reruns, and existing-output refusal.
 Their historical control receipts are numerical checks, not additional combined-OFF live measurements.
+The bounded [control runner](check-offline.py) reproduces those checks with a fresh output path:
+
+```sh
+python3 docs/validation/spotify-effects-off/check-offline.py \
+  --reference work/reference-server/filo-reference-44100-24.wav \
+  --output work/spotify-effects-off-controls.json
+cmp docs/validation/spotify-effects-off/offline-controls.json \
+  work/spotify-effects-off-controls.json
+```
 
 ## Live measurement provenance
 

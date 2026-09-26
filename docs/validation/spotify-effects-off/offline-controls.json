@@ -1,11 +1,13 @@
 {
-  "schemaVersion": 1,
-  "scope": "Offline analysis branch, negative and reproducibility controls only; historical receipts are not additional combined-OFF live trials.",
-  "analyzerSHA256": "d3a34b88af7f525d488173a1602a3fd6a75e945a2b5da284ff9348715d3b3a03",
+  "schemaVersion": 2,
+  "scope": "Offline analyzer controls only; no new playback or hardware evidence.",
+  "analyzerSHA256": "cfc665ac71a55d17eef9fc96acbf7e19b297faff53beb11495fc0123e08073f6",
+  "controlRunnerSHA256": "cb405cd1ac300ae8f3905779f3715161de3419fa5610b2416b3990eaa9bf7a5c",
   "referenceSHA256": "43728e416e9d6c4b27f03a46aecc604e3353ee1d51dec8b0fcb2037a2f2cd58e",
   "controlReceiptSHA256": {
     "docs/validation/spotify-onset/spotify-rejection-repeat-wav.json": "3b0fc2ecb7b90016067158e92830b282ef5f428421be37c0b58abed73581d925",
-    "docs/validation/spotify-tap-autostart/false-mode-on-reference.json": "631184ea077620110f245a07b70aac4e710471026cf0782b71279bbf6a206751"
+    "docs/validation/spotify-effects-off/combined-off.json": "f551e8fe54cffc0a3d8a8de18e74ab59146b65666ba0329929baa3e4d12186e3",
+    "docs/validation/spotify-tap-autostart/false-direct-start.json": "52c5ee48adbe6f370f357f50132d620a7ca2aa284fac830da12aec07472f2b60"
   },
   "allPassed": true,
   "checks": [
@@ -22,31 +24,63 @@
       "passed": true
     },
     {
-      "name": "changed_onset_reported_without_refit_or_forced_equality",
+      "name": "changed_onset_reported_without_refit",
       "passed": true
     },
     {
-      "name": "inconsistent_offender_rejected",
+      "name": "inconsistent_offender",
       "passed": true
     },
     {
-      "name": "historical_full_pass_control",
+      "name": "failed_receipt_nested_pass_true",
       "passed": true
     },
     {
-      "name": "historical_rejection_control",
+      "name": "failed_receipt_compared_frames_disagree",
       "passed": true
     },
     {
-      "name": "actual_receipt_deterministic_reproduction",
+      "name": "failed_receipt_compared_bytes_disagree",
+      "passed": true
+    },
+    {
+      "name": "unaligned_failure_claims_comparison",
+      "passed": true
+    },
+    {
+      "name": "unaligned_failure_claims_exact_coverage",
+      "passed": true
+    },
+    {
+      "name": "nonboolean_top_verdict",
+      "passed": true
+    },
+    {
+      "name": "negative_compared_counts",
+      "passed": true
+    },
+    {
+      "name": "historical_complete_pass",
+      "passed": true
+    },
+    {
+      "name": "unaligned_zero_comparison_failure_remains_valid",
+      "passed": true
+    },
+    {
+      "name": "failure_without_snapshot_remains_valid",
+      "passed": true
+    },
+    {
+      "name": "failed_receipt_nested_pass_true_without_snapshot",
+      "passed": true
+    },
+    {
+      "name": "deterministic_public_result",
       "passed": true
     },
     {
       "name": "existing_output_refused_and_preserved",
-      "passed": true
-    },
-    {
-      "name": "public_adaptation_changes_only_hash_and_context_sentence",
       "passed": true
     }
   ],

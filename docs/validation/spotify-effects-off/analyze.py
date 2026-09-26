@@ -21,12 +21,40 @@ MODEL = ROOT / "docs/validation/spotify-onset/spotify-rejection-onset-model-anal
 FORMAT = {"bits": 32, "bytesPerFrame": 8, "channels": 2, "flags": 76, "formatID": 1819304813, "rate": 44100}
 
 
+def validate_failed_comparison(report, reference_frames):
+    c, s = report["comparison"], report["comparison"]["sampleComparison"]
+    contract.require(type(report["passed"]) is bool and type(c["passed"]) is bool,
+                     "Receipt and comparison verdicts must be booleans.")
+    if report["passed"]:
+        return
+    contract.require(c["passed"] is False, "Failed receipt contradicts comparison.passed.")
+    for field in ("aligned", "windowExact", "fullReferenceExact"):
+        contract.require(type(s[field]) is bool, f"sampleComparison.{field} must be boolean.")
+    for obj, fields in ((c, ("referenceFrames", "capturedFrames", "comparedFrames", "comparedBytes")),
+                        (s, ("referenceFrames", "capturedFrames", "comparedFrames", "referenceStartFrame", "captureStartFrame"))):
+        for field in fields:
+            contract.require(type(obj[field]) is int and obj[field] >= 0,
+                             f"Invalid nonnegative integer comparison field: {field}.")
+    contract.require(c["referenceFrames"] == s["referenceFrames"] == reference_frames,
+                     "Failed comparison reference counts differ.")
+    contract.require(c["comparedFrames"] == s["comparedFrames"]
+                     and c["comparedBytes"] == c["comparedFrames"] * FORMAT["bytesPerFrame"],
+                     "Failed comparison frame/byte counts disagree.")
+    contract.require(s["referenceStartFrame"] + s["comparedFrames"] <= reference_frames
+                     and s["captureStartFrame"] + s["comparedFrames"] <= s["capturedFrames"],
+                     "Failed comparison span exceeds reference or capture bounds.")
+    if not s["aligned"]:
+        contract.require(c["comparedFrames"] == 0 and s["windowExact"] is False and s["fullReferenceExact"] is False,
+                         "Unaligned failed comparison cannot claim compared frames or exact coverage.")
+
+
 def analyze(report_path, reference_path):
     reference = contract.load_reference(reference_path)
     report, baseline, frozen = audit.load(report_path), audit.load(BASELINE), audit.load(MODEL)
     snapshot = contract.parse_snapshot(report)
     baseline_snapshot = contract.parse_snapshot(baseline)
     c, s, m = report["comparison"], report["comparison"]["sampleComparison"], report["metrics"]
+    validate_failed_comparison(report, reference.frames)
     expected = b"".join(struct.pack("<i", int(contract.float_from_bits(word) * (1 << 23)) << 8) for word in reference.words)
     expected_sha = hashlib.sha256(expected).hexdigest()
     contract.require(expected_sha == c["expectedReferenceSHA256"], "Expected signed32 reference differs.")

@@ -72,7 +72,8 @@ No rounding, gain inversion, omitted opening, automatic replay, or fidelity clai
 
 The [bundle README](../validation/spotify-effects-off/README.md) gives deterministic offline reproduction commands and the exact original watchdog source.
 The frozen task-only analyzer handled both a historical full-reference pass and rejection before the new receipt arrived, and its negative controls distinguished changed onset words from exact recurrence.
-The public adaptation changes only repository-root resolution and context wording clarifying that Crossfade was already off.
+The initial public adaptation changed repository-root resolution and context wording clarifying that Crossfade was already off.
+A later offline consistency fix rejects contradictory failed-receipt flags and comparison counts, including unaligned receipts that claim compared frames; the original measured receipt and numerical onset result remain unchanged.
 Original ignored work artifacts are preserved, and no private hardware snapshots, audio files, or executables are published.
 The watchdog records normal termination with verification exit code 1, and the [restoration record](../validation/spotify-effects-off/restoration.json) confirms that no task capture process remained.
 Spotify was stopped with its synthetic reference selected at 0:00; its prior listening context was not reconstructed.
