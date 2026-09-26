@@ -78,14 +78,18 @@ public final class DeviceLease {
         let recoveryErrors = recoverOrphaned()
         guard recoveryErrors.isEmpty else { throw AudioFailure(recoveryErrors.joined(separator: " ")) }
         let devices = try access.devices()
-        originalDefaultUID = devices.first { $0.id == (try? access.defaultOutput()) }?.uid
-        originalRate = try access.rate(output.id)
-        outputUID = output.uid
+        guard let device = devices.first(where: { $0.uid == output.uid }) else {
+            throw AudioFailure("The selected output was disconnected.")
+        }
+        let originalDefaultID = try access.defaultOutput()
+        originalDefaultUID = devices.first { $0.id == originalDefaultID }?.uid
+        originalRate = try access.rate(device.id)
+        outputUID = device.uid
         do {
-            if try access.defaultOutput() != output.id {
+            if originalDefaultID != device.id {
                 changedDefault = true
                 try persist()
-                try access.setDefaultOutput(output.id)
+                try access.setDefaultOutput(device.id)
             }
             try persist()
         } catch { _ = restore(); throw error }
@@ -98,7 +102,7 @@ public final class DeviceLease {
             throw AudioFailure("The system output changed. Reconnect filo to manage this output again.")
         }
         let before = try access.rate(device.id)
-        if let lastRate, abs(before - lastRate) > 0.01 {
+        if let expectedRate = lastRate ?? originalRate, abs(before - expectedRate) > 0.01 {
             throw AudioFailure("The output rate was changed outside filo. Reconnect to continue.")
         }
         guard abs(before - rate) > 0.01 else { return }
