@@ -1,0 +1,604 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-26",
+  "status": "bounded_acceptance_completed_with_limitations",
+  "scope": "Core sample-rate matching, evidence labels, device ownership, and restoration.",
+  "pullRequest": "https://github.com/Audiofool934/filo/pull/13",
+  "softwareValidation": {
+    "verifiedHead": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+    "ci": {
+      "directHead": {
+        "url": "https://github.com/Audiofool934/filo/actions/runs/36228174173/job/108366097069",
+        "checkedOutRevision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "conclusion": "success",
+        "completedUTC": "2026-09-26T07:55:50Z"
+      },
+      "pullRequestMerge": {
+        "url": "https://github.com/Audiofool934/filo/actions/runs/36228177173/job/108366105093",
+        "checkedOutRevision": "e847238f2edd97456837fa7b526544f150cc7fe6",
+        "conclusion": "success",
+        "completedUTC": "2026-09-26T07:56:33Z"
+      },
+      "runner": {
+        "operatingSystem": "macOS 15.7.9",
+        "architecture": "arm64",
+        "image": "macos-15-arm64",
+        "imageVersion": "20260907.0337.1"
+      },
+      "xctest": {
+        "executed": 116,
+        "failures": 0,
+        "unexpectedFailures": 0
+      },
+      "affectedSuiteCounts": {
+        "PolicyTests": 16,
+        "DecoderEventParserTests": 3,
+        "LeaseTests": 12,
+        "ConnectionControllerTests": 7,
+        "LocalFileFormatCacheTests": 4
+      },
+      "passedChecks": [
+        "swift build -Xswiftc -warnings-as-errors",
+        "swift test",
+        "bash scripts/verify-finite-reference.sh --check",
+        "bash scripts/build.sh --universal",
+        "plutil -lint dist/filo.app/Contents/Info.plist",
+        "codesign --verify --deep --strict dist/filo.app",
+        "lipo dist/filo.app/Contents/MacOS/filo -verify_arch arm64 x86_64",
+        "lipo dist/filo.app/Contents/MacOS/filo-lab -verify_arch arm64 x86_64",
+        "dist/filo.app/Contents/MacOS/filo-lab help"
+      ],
+      "packagedArchitectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "intelExecutionTested": false,
+      "audioHardwareExercised": false,
+      "finiteReferenceCheckBoundary": "Compile and help only; no laboratory audio run."
+    },
+    "localCommandLineToolsAdapters": {
+      "provenance": "Reported local standalone executions recorded before the completed CI runs; not rerun when authoring this record.",
+      "revision": null,
+      "policyAndParserBodiesPassed": 19,
+      "leaseBodiesPassed": 12,
+      "controllerBodiesPassed": 7,
+      "realXCTestRun": false,
+      "limitation": "The local Command Line Tools environment could not load XCTest; the linked CI supplied the real XCTest run.",
+      "revisionLimitation": "The available local summary records body counts but does not preserve an exact executed revision or binary hash; the CI results above are revision-pinned."
+    },
+    "revisionBoundary": "CI is pinned to c3204fa and its recorded PR merge revision; earlier live observations retain their own build revisions, and later commits are not automatically validated.",
+    "previousCI": [
+      {
+        "verifiedHead": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "directHead": {
+          "url": "https://github.com/Audiofool934/filo/actions/runs/36227685902/job/108364747046",
+          "checkedOutRevision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+          "conclusion": "success",
+          "completedUTC": "2026-09-26T07:46:57Z"
+        },
+        "pullRequestMerge": {
+          "url": "https://github.com/Audiofool934/filo/actions/runs/36227687602/job/108364751869",
+          "checkedOutRevision": "9b48a8fd7bb66672f7365274c990460f88b0ac66",
+          "conclusion": "success",
+          "completedUTC": "2026-09-26T07:46:43Z"
+        },
+        "xctest": {
+          "executed": 112,
+          "failures": 0,
+          "unexpectedFailures": 0
+        }
+      }
+    ],
+    "localHeaderRetryStandaloneCheck": {
+      "provenance": "Reported standalone execution of eight new and existing test bodies for the change delivered in c3204fa; not rerun when authoring this record.",
+      "implementationRevision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+      "testBodiesPassed": 8,
+      "realXCTestRun": false,
+      "binaryHashRecorded": false
+    },
+    "localHeaderRetry": {
+      "status": "implemented_and_software_tested",
+      "revision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+      "newCacheTestsPassed": 4,
+      "liveHeaderFallbackVerified": false,
+      "liveFirstPlayCausalFixEstablished": false
+    }
+  },
+  "liveValidation": {
+    "deviceModel": "Sony NW-ZX706",
+    "deviceDisplayName": "WALKMAN",
+    "mode": "Format matching",
+    "provenance": {
+      "uiObservations": "Operator observations of the packaged app, Music, and Audio MIDI Setup; no UI timestamp is inferred from a HAL timestamp.",
+      "outputReadbacks": "Independent sanitized HAL output snapshots embedded below, with their original labels and timestamps.",
+      "sourceReadbacksSHA256": "2b5aa461ab3fbcfc4fd3473c768a584152c6bc95e8cdb7525f18e396528e4c14",
+      "sourceReadbackCount": 14,
+      "readbackRevisionByLabel": {
+        "manual-44100": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "external-48000-preserved": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "manual-96000": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "restored-after-96000": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "manual-192000-updated-build": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "spotify-profile-44100": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "apple-music-local-44100": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "apple-music-reference-44100": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "restored-after-reference": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "before-quit-96000": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "restored-after-quit": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "restored-task-baseline-192000": null,
+        "header-retry-build-first-play-44100": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "final-after-retry-build-192000": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a"
+      },
+      "baselineRestorationSequence": "The intermediate restored-task-baseline-192000 readback followed a manual Audio MIDI Setup change after the earlier build exited; the final final-after-retry-build-192000 readback followed the c3204fa acceptance sequence and app exit."
+    },
+    "observations": [
+      {
+        "id": "manual-44100",
+        "revision": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "result": "observed",
+        "ui": "Manual target 44.1 kHz.",
+        "readbackLabels": [
+          "manual-44100"
+        ]
+      },
+      {
+        "id": "external-rate-change",
+        "revision": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "result": "observed",
+        "action": "Change output rate to 48 kHz in Audio MIDI Setup while filo manages the output.",
+        "ui": "Connection ended and the externally selected rate was preserved.",
+        "readbackLabels": [
+          "external-48000-preserved"
+        ]
+      },
+      {
+        "id": "manual-96000-disconnect",
+        "revision": "acaf1fe17f8addea929b9898e3e14ed07872e0a8",
+        "result": "observed",
+        "ui": "Manual target 96 kHz, followed by disconnect.",
+        "restoration": "HAL restored the session baseline of 48 kHz.",
+        "readbackLabels": [
+          "manual-96000",
+          "restored-after-96000"
+        ]
+      },
+      {
+        "id": "manual-192000-updated-build",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "observed",
+        "ui": "Manual target 192 kHz; disconnect immediately displayed the restored 48 kHz.",
+        "readbackLabels": [
+          "manual-192000-updated-build"
+        ],
+        "limitation": "The immediate 48 kHz display was an operator UI observation, not a separately timestamped HAL readback in this record."
+      },
+      {
+        "id": "spotify-profile",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "observed",
+        "ui": "TARGET 44.1 kHz with Spotify music profile labeling.",
+        "readbackLabels": [
+          "spotify-profile-44100"
+        ],
+        "limitation": "This is a fixed profile check, not per-track Spotify source-format detection or subscription playback evidence."
+      },
+      {
+        "id": "music-reference-first-play",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "detection_missed",
+        "source": "Owned five-second 44.1 kHz ALAC imported into Music.",
+        "ui": "Source format unknown.",
+        "readbackLabels": [
+          "apple-music-local-44100"
+        ],
+        "interpretation": "Output stayed at 48 kHz; this is not a local-file fallback pass."
+      },
+      {
+        "id": "music-reference-replay",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "decoder_match_observed",
+        "ui": "Music decoder evidence at 44.1 kHz.",
+        "readbackLabels": [
+          "apple-music-reference-44100"
+        ],
+        "interpretation": "The replay matched the observed decoder rate; reliable first-play detection and local-file header fallback remain unverified."
+      },
+      {
+        "id": "reference-ended-unknown",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "ui_observed",
+        "ui": "Unknown source after the reference ended; output remained at 44.1 kHz.",
+        "readbackLabels": [],
+        "limitation": "No separate post-end HAL timestamp is present for this UI observation."
+      },
+      {
+        "id": "disconnect-after-reference",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "restoration_observed",
+        "restoration": "Disconnect restored the session baseline of 48 kHz.",
+        "readbackLabels": [
+          "restored-after-reference"
+        ]
+      },
+      {
+        "id": "quit-restoration",
+        "revision": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
+        "result": "restoration_observed",
+        "action": "Quit while connected with a manual 96 kHz target.",
+        "restoration": "The independent post-exit readback was 48 kHz.",
+        "readbackLabels": [
+          "before-quit-96000",
+          "restored-after-quit"
+        ]
+      },
+      {
+        "id": "task-baseline-restoration",
+        "revision": null,
+        "result": "restoration_observed",
+        "action": "Manually restore the task baseline in Audio MIDI Setup after filo exited.",
+        "restoration": "WALKMAN default output at 192 kHz with no Hog Mode owner.",
+        "readbackLabels": [
+          "restored-task-baseline-192000"
+        ]
+      },
+      {
+        "id": "header-retry-build-first-alac-play",
+        "revision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "result": "decoder_match_observed",
+        "initialOutputRate": 192000,
+        "source": "Freshly imported owned five-second 44.1 kHz ALAC; Music Song Info verified its identity and rate.",
+        "ui": "First ALAC playback showed Music decoder evidence at 44.1 kHz and output at 44.1 kHz.",
+        "readbackLabels": [
+          "header-retry-build-first-play-44100"
+        ],
+        "interpretation": "This is a first-play decoder observation, not a local-header fallback observation or proof that the header change caused the success."
+      },
+      {
+        "id": "header-retry-build-wav-unknown",
+        "revision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "result": "ui_observed_unknown",
+        "source": "The reimport dialog copied both owned five-second ALAC and WAV fixtures into Music.",
+        "ui": "Both files played once as a list; an explicit subsequent WAV selection remained unknown, and no local-file header label was observed.",
+        "readbackLabels": [],
+        "interpretation": "Live local-file header fallback and consistent detection of these short fixtures remain unverified."
+      },
+      {
+        "id": "header-retry-build-final-cleanup",
+        "revision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "result": "restoration_observed",
+        "action": "Remove both imported entries and Music-managed copies, stop Music, and quit filo.",
+        "restoration": "The final independent readback confirmed the 192 kHz baseline, default output, and no Hog Mode owner after filo and its helpers exited.",
+        "readbackLabels": [
+          "final-after-retry-build-192000"
+        ]
+      }
+    ],
+    "outputReadbacks": [
+      {
+        "label": "manual-44100",
+        "observedUTC": "2026-09-26T07:37:24.858491+00:00",
+        "rate": 44100,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        ]
+      },
+      {
+        "label": "external-48000-preserved",
+        "observedUTC": "2026-09-26T07:38:38.791858+00:00",
+        "rate": 48000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 48000
+          }
+        ]
+      },
+      {
+        "label": "manual-96000",
+        "observedUTC": "2026-09-26T07:39:03.484292+00:00",
+        "rate": 96000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 96000
+          }
+        ]
+      },
+      {
+        "label": "restored-after-96000",
+        "observedUTC": "2026-09-26T07:42:46.435514+00:00",
+        "rate": 48000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 48000
+          }
+        ]
+      },
+      {
+        "label": "manual-192000-updated-build",
+        "observedUTC": "2026-09-26T07:44:41.768649+00:00",
+        "rate": 192000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        ]
+      },
+      {
+        "label": "spotify-profile-44100",
+        "observedUTC": "2026-09-26T07:45:03.151100+00:00",
+        "rate": 44100,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        ]
+      },
+      {
+        "label": "apple-music-local-44100",
+        "observedUTC": "2026-09-26T07:46:26.339035+00:00",
+        "rate": 48000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 48000
+          }
+        ]
+      },
+      {
+        "label": "apple-music-reference-44100",
+        "observedUTC": "2026-09-26T07:46:59.473776+00:00",
+        "rate": 44100,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        ]
+      },
+      {
+        "label": "restored-after-reference",
+        "observedUTC": "2026-09-26T07:47:49.089100+00:00",
+        "rate": 48000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 48000
+          }
+        ]
+      },
+      {
+        "label": "before-quit-96000",
+        "observedUTC": "2026-09-26T07:48:31.008133+00:00",
+        "rate": 96000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 96000
+          }
+        ]
+      },
+      {
+        "label": "restored-after-quit",
+        "observedUTC": "2026-09-26T07:49:30.724979+00:00",
+        "rate": 48000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 48000
+          }
+        ]
+      },
+      {
+        "label": "restored-task-baseline-192000",
+        "observedUTC": "2026-09-26T07:50:03.759206+00:00",
+        "rate": 192000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        ]
+      },
+      {
+        "label": "header-retry-build-first-play-44100",
+        "observedUTC": "2026-09-26T07:54:20.512877+00:00",
+        "rate": 44100,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 44100
+          }
+        ]
+      },
+      {
+        "label": "final-after-retry-build-192000",
+        "observedUTC": "2026-09-26T07:56:03.335686+00:00",
+        "rate": 192000,
+        "isDefault": true,
+        "hogPID": -1,
+        "physicalFormats": [
+          {
+            "bits": 32,
+            "bytesPerFrame": 8,
+            "channels": 2,
+            "flags": 12,
+            "formatID": 1819304813,
+            "rate": 192000
+          }
+        ]
+      }
+    ],
+    "cleanup": {
+      "status": "completed_after_final_recorded_sequence",
+      "filoAndHelpersExited": true,
+      "processCheck": "A process-command check scoped to filo returned no app or helper processes.",
+      "musicStopped": true,
+      "musicStopObservation": "Music showed no current track and the Play control was disabled.",
+      "emptyImportResultObserved": true,
+      "finalOutputRate": 192000,
+      "finalOutputIsDefault": true,
+      "finalHogPID": -1,
+      "revision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+      "importedLibraryItemsRemoved": 2,
+      "musicManagedCopiesRemoved": 2,
+      "originalReferenceFixturesPreserved": [
+        "ALAC",
+        "WAV"
+      ],
+      "emptyImportResultObservation": "The filtered Music library showed no items after removal.",
+      "readbackLabels": [
+        "final-after-retry-build-192000"
+      ]
+    }
+  },
+  "claimLimits": [
+    "Manual rate selection and the Spotify fixed profile are not automatic source-format detection.",
+    "On dcf8e66 the first ALAC play remained unknown and the replay matched decoder evidence; on c3204fa first playback after fresh import matched decoder evidence, while the WAV attempt remained unknown, so no causal header-fix or general first-play guarantee is established.",
+    "This sequence did not test a subscription stream, compare PCM, or capture receiver input.",
+    "HAL rate and physical-format readbacks do not prove unchanged samples, source precision, zero-gap transitions, or end-to-end bit-perfect playback.",
+    "Fake-device and fixture/helper tests establish software behavior within their cases, not the unperformed live hardware scenarios.",
+    "Historical relay and source measurements are not substituted for acceptance of these core changes."
+  ],
+  "scopedImplementationComplete": true,
+  "implementationRevision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+  "remainingLimitations": [
+    {
+      "scenario": "Live local-file header fallback and consistent detection of the short ALAC/WAV fixtures.",
+      "status": "not_verified",
+      "observedLimitation": "No local-file header label was observed; the explicit WAV attempt remained unknown.",
+      "softwareCoverage": [
+        "LocalFileFormatCacheTests",
+        "SourceProcessingTests",
+        "ConnectionControllerTests"
+      ]
+    },
+    {
+      "scenario": "Automatic transitions across several local files with different sample rates.",
+      "status": "not_live_tested",
+      "softwareCoverage": [
+        "ConnectionControllerTests"
+      ]
+    },
+    {
+      "scenario": "Physical unplugging and sleep.",
+      "status": "not_live_tested"
+    },
+    {
+      "scenario": "Unsupported source rate followed by a supported rate.",
+      "status": "not_live_tested",
+      "softwareCoverage": [
+        "ConnectionControllerTests",
+        "LeaseTests"
+      ]
+    },
+    {
+      "scenario": "Decoder observer startup/runtime failure.",
+      "status": "not_live_tested",
+      "softwareCoverage": [
+        "ConnectionControllerTests"
+      ]
+    },
+    {
+      "scenario": "Recording permission denied or BlackHole absent.",
+      "status": "not_live_tested",
+      "softwareCoverage": [
+        "ConnectionControllerTests.testAutomaticLocalTracksMatchDownwardAndRestoreWithoutProcessDiscovery"
+      ]
+    },
+    {
+      "scenario": "Rapid skips, ambiguous decoder association, stale evidence, first-write ownership, and device ID reuse.",
+      "status": "software_tests_only",
+      "softwareCoverage": [
+        "PolicyTests",
+        "DecoderEventParserTests",
+        "LeaseTests",
+        "ConnectionControllerTests"
+      ]
+    }
+  ]
+}

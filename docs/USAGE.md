@@ -16,8 +16,8 @@ Connect changes the Mac's default media output to the chosen device.
 It does not change the separate system-alert output.
 Another application's explicitly selected output can override the system default for that application.
 
-The **source** card labels its evidence: a Music decoder observation, an accessible local Music file, a Spotify profile, or your manual selection.
-Manual and profile rates are requested settings, not detected track metadata.
+The **source** card labels automatic evidence from a Music decoder observation or an accessible local Music file.
+Manual selections and Spotify's profile use a **target** card because they are requested settings, not detected track metadata.
 The **output** card reads the current hardware format.
 A 32-bit output container does not imply a 32-bit recording or create extra source detail.
 The optional capture line describes the Float32 process tap, not the source's original bit depth.
@@ -63,6 +63,8 @@ Already assigned observations are not reused for the next track, and conflicting
 These safeguards cannot prove that an untagged diagnostic belongs to the playing track rather than a prebuffered track.
 Rapid skipping, delayed observations, and prebuffering can still leave the source unknown or make detection arrive after playback begins.
 Local file format inspection takes precedence when a readable local file is available.
+File lookup takes priority over optional effect checks, and temporary lookup failures are retried at a five-second cadence while the format remains unknown.
+This does not guarantee that Music exposes a usable file location or that a short track is detected before it ends.
 Lossy formats and some playback paths may not generate a usable observation.
 
 filo keeps the current output rate while the source is unknown.

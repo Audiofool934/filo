@@ -3,7 +3,7 @@
 The core product goal is to follow usable source-rate evidence, manage the selected output predictably, and preserve external device changes.
 Format matching leaves audio on the player's ordinary path; it neither creates a process tap nor depends on audio-process discovery, BlackHole, Hog Mode, or recording permission.
 This document describes the implementation contract and required acceptance checks for the current core changes.
-Execution results for these changes are pending and must be recorded separately before claiming a verified release.
+The [validation record](validation/core-format-matching.json) separates completed software checks, bounded live observations, and outstanding acceptance work.
 
 ## Evidence and behavior
 
@@ -35,7 +35,7 @@ Sleep, unplugging, or external route/rate changes end the connection and require
 
 ## Acceptance matrix
 
-All rows below are acceptance requirements, not a record that the new checks or live scenarios have already passed.
+The rows below define acceptance requirements; the validation section identifies which checks and live scenarios have actually run.
 Automated tests use fake device access or fixture/helper processes and do not establish actual DAC behavior.
 
 | Scenario | Acceptance | Targeted automated coverage |
@@ -67,7 +67,41 @@ bash scripts/build.sh --universal
 ```
 
 These build and test commands do not establish live playback acceptance.
-Before release, separately record a packaged-app sequence with supported rates changing downward and upward, unknown/manual/profile displays, unavailable detection, and unsupported-rate handling where the device permits it.
-Also record disconnect/quit restoration and an intervening user route/rate change, including confirmation that Format matching works without recording access or BlackHole.
-Capture the app revision, device, initial settings, resulting UI/output state, and restoration outcome; mark any unexercised scenario as untested.
-Do not replay old relay measurements as evidence that these current matching changes passed, and do not infer sample identity from a matching rate display.
+
+## Recorded validation
+
+On 2026-09-26, [direct-head CI for `c3204fa`](https://github.com/Audiofool934/filo/actions/runs/36228174173/job/108366097069) passed all 116 XCTest tests with zero failures on an ARM64 macOS 15.7.9 runner, including four new local-header cache tests.
+The strict build, hardware-free finite-reference laboratory compile/help check, universal packaging, plist lint, and signature verification passed.
+Both `filo` and `filo-lab` contained arm64 and x86_64 executables; Intel execution was not tested by this CI run.
+The [PR merge check](https://github.com/Audiofool934/filo/actions/runs/36228177173/job/108366105093) also passed all 116 tests.
+Earlier local Command Line Tools adapters exercised 19 policy/parser, 12 lease, and 7 controller test bodies separately from XCTest.
+A later standalone check exercised eight new and existing test bodies for the local-header retry change.
+These results are pinned to their recorded revisions and do not validate subsequent changes automatically.
+
+Packaged-app UI observations and independent HAL readbacks on a Sony NW-ZX706 exposed as WALKMAN confirmed manual 44.1 and 96 kHz on `acaf1fe`, followed by manual 192 kHz and the labeled Spotify 44.1 kHz profile on `dcf8e66`.
+Changing the output to 48 kHz in Audio MIDI Setup ended management and preserved the external rate; the updated build also displayed the restored 48 kHz immediately after disconnect.
+The Spotify check validated its fixed target policy without establishing a playing track's source format.
+
+On `dcf8e66`, an owned five-second 44.1 kHz ALAC file in Music remained unknown on its first playback, leaving the output at 48 kHz.
+On replay, the UI identified Music decoder evidence at 44.1 kHz and the independent output readback matched 44.1 kHz.
+This replay is evidence for that decoder observation, not verification of local-file header fallback or reliable first-play detection.
+After the reference ended, unknown source state retained 44.1 kHz; disconnect restored the session's original 48 kHz.
+The imported library entry and its Music-managed copy were removed while the original fixture was preserved.
+The first-play miss prompted the bounded local-header retry change included in `c3204fa` and its passing software checks.
+
+Quitting the connected app restored an owned 96 kHz setting to the session's original 48 kHz, with an independent readback after exit.
+Audio MIDI Setup was then used to restore the task's 192 kHz baseline; WALKMAN remained the default output with no Hog Mode owner.
+The app and its helpers exited before a final acceptance sequence on `c3204fa`.
+
+The final universal build started from the 192 kHz baseline, with fresh imports of the owned five-second ALAC and WAV fixtures.
+Music Song Info confirmed the ALAC identity and its 44.1 kHz rate.
+Its first playback showed Music decoder evidence at 44.1 kHz and an independent output readback of 44.1 kHz.
+Both imported files played once as a list, but an explicit subsequent WAV selection remained unknown and no local-file header label was observed.
+The successful ALAC observation therefore does not establish that the header change caused it, that the earlier miss is universally fixed, or that local-file fallback works in this live configuration.
+Both imported entries and Music-managed copies were removed, the filtered library showed no items, and the original ALAC and WAV fixtures were preserved.
+Music was stopped with no current track and Play disabled, filo and its helpers exited, and the final independent readback confirmed WALKMAN at the 192 kHz baseline as default output with no Hog Mode owner.
+The scoped implementation and these bounded acceptance checks are complete; the limitations below remain explicit.
+Automatic matching across multiple local-file sample rates, local-file fallback, physical unplugging, sleep, unsupported-rate handling, unavailable detection, and operation with recording access denied or BlackHole absent have not been established by these live checks.
+Fake-device and fixture tests cover applicable policy and ownership cases, without converting unperformed hardware scenarios into live passes.
+No subscription stream, PCM comparison, or receiver capture was tested in this acceptance sequence.
+Matching device rates therefore establishes neither source sample identity nor zero-gap transitions or end-to-end bit-perfect playback.
