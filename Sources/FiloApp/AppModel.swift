@@ -34,11 +34,15 @@ final class AppModel: ObservableObject {
     private var permissionTimeout: DispatchWorkItem?
     private var terminating = false
     var onUpdate: (() -> Void)?
+    @Published var page: PanelPage = .main
+    @Published var panelVisible = false
+    enum PanelPage { case main, details, settings, about }
     var appVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "FiloReleaseLabel") as? String
         ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "development"
     }
     var selectedOutput: OutputDevice? { snapshot.devices.first { $0.uid == outputUID } }
+    var displayedOutput: OutputDevice? { snapshot.connected ? snapshot.output : selectedOutput }
     var exclusiveSource: OutputDevice? { snapshot.devices.first(where: ConnectionController.isExclusiveSourceDevice) }
     var outputChoices: [OutputDevice] {
         snapshot.devices.filter { mode != .exclusive || !ConnectionController.isExclusiveSourceDevice($0) }
@@ -77,6 +81,23 @@ final class AppModel: ObservableObject {
         if mode == .exclusive { preflightExclusivePermission(intent) }
         else { connect(intent) }
     }
+    func select(source: MusicSource) {
+        guard self.source != source, !snapshot.busy else { return }
+        self.source = source; rate = 0
+        UserDefaults.standard.set(source.rawValue, forKey: "source")
+        reconnectIfNeeded()
+    }
+    func select(outputUID: String) {
+        guard self.outputUID != outputUID, !snapshot.busy else { return }
+        self.outputUID = outputUID
+        if rate != 0, !availableRates.contains(rate) { rate = 0 }
+        UserDefaults.standard.set(outputUID, forKey: "outputUID")
+        reconnectIfNeeded()
+    }
+    private func reconnectIfNeeded() {
+        guard snapshot.connected, let executable = Bundle.main.executableURL else { return }
+        connect(ConnectionIntent(source: source, outputUID: outputUID, mode: mode, rate: rate, executable: executable))
+    }
     private func publishSnapshot() {
         var value = controllerSnapshot
         if let permissionPresentation {
@@ -114,7 +135,7 @@ final class AppModel: ObservableObject {
         case .notDetermined:
             guard !permissionRequestInFlight else {
                 permissionMessage(title: "Microphone permission pending",
-                    detail: "Respond to the macOS microphone prompt, then click Connect again to use BlackHole's virtual input.")
+                    detail: "Respond to the macOS microphone prompt, then turn the connection on again to use BlackHole's virtual input.")
                 return
             }
             let token = UUID()
@@ -125,7 +146,7 @@ final class AppModel: ObservableObject {
                 guard let self, self.permissionToken == token, !self.terminating else { return }
                 self.cancelPermissionPreflight()
                 self.permissionMessage(title: "Connection not started",
-                    detail: "The permission request is still pending. Respond to the macOS prompt, then click Connect again.")
+                    detail: "The permission request is still pending. Respond to the macOS prompt, then turn the connection on again.")
             }
             permissionTimeout = timeout
             DispatchQueue.main.asyncAfter(deadline: .now() + 60, execute: timeout)
@@ -138,7 +159,7 @@ final class AppModel: ObservableObject {
                     guard self.source == intent.source, self.outputUID == intent.outputUID,
                           self.mode == intent.mode, self.rate == intent.rate, self.connectionRequirement == nil else {
                         self.permissionMessage(title: "Connection not started",
-                            detail: "The connection options or available devices changed. Choose your output and click Connect again.")
+                            detail: "The connection options or available devices changed. Choose your output and turn the connection on again.")
                         return
                     }
                     if granted, AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
@@ -152,7 +173,7 @@ final class AppModel: ObservableObject {
             showPermissionUnavailable()
         @unknown default:
             permissionMessage(title: "Microphone permission unavailable",
-                detail: "macOS could not confirm microphone permission for BlackHole. Check System Settings > Privacy & Security > Microphone, then click Connect again.")
+                detail: "macOS could not confirm microphone permission for BlackHole. Check System Settings > Privacy & Security > Microphone, then turn the connection on again.")
         }
     }
     private func showPermissionUnavailable() {
@@ -161,7 +182,7 @@ final class AppModel: ObservableObject {
                 detail: "macOS restricts microphone access. Ask your administrator to allow filo to use BlackHole's virtual input, or choose Format matching.")
         } else {
             permissionMessage(title: "Microphone permission needed",
-                detail: "Enable filo in System Settings > Privacy & Security > Microphone, then click Connect again to use BlackHole's virtual input.")
+                detail: "Enable filo in System Settings > Privacy & Security > Microphone, then turn the connection on again to use BlackHole's virtual input.")
         }
     }
     func sleep() {
@@ -193,6 +214,9 @@ final class AppModel: ObservableObject {
         State: \(snapshot.title)
         Output: \(output?.name ?? "Unavailable")
         Output rate: \(output?.rate.description ?? "Unknown") Hz
+        Output physical format: \(describe(output?.formats.first))
+        Observed source depth: \(snapshot.sourceFormat?.bits.map(String.init) ?? "Unknown") bits
+        Output depth limited: \(snapshot.depthLimited)
         Selected target rate: \(snapshot.sourceFormat?.rate.description ?? "Unknown") Hz
         Evidence: \(snapshot.sourceFormat?.evidence.rawValue ?? "None")
         Automatic detection error: \(snapshot.detectionError ?? "None")
@@ -226,40 +250,59 @@ final class AppModel: ObservableObject {
     }
 }
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     let model = AppModel()
     private var item: NSStatusItem!
-    private var window: NSWindow!
+    private let popover = NSPopover()
     private var observers: [NSObjectProtocol] = []
     func applicationDidFinishLaunching(_ notification: Notification) {
         item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.title = "ƒ"
-        item.button?.font = .systemFont(ofSize: 18, weight: .medium)
-        item.button?.toolTip = "filo - Your music. A direct connection."
-        item.button?.target = self; item.button?.action = #selector(showWindow)
-        window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 440, height: 650),
-                          styleMask: [.titled, .closable, .fullSizeContentView], backing: .buffered, defer: false)
-        window.title = "filo"
-        window.titlebarAppearsTransparent = true; window.titleVisibility = .hidden
-        window.isReleasedWhenClosed = false
-        window.contentView = NSHostingView(rootView: FiloView(model: model))
-        window.center()
+        let icon = NSImage(systemSymbolName: "link", accessibilityDescription: "filo")?
+            .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 12, weight: .regular))
+        icon?.isTemplate = true
+        item.button?.image = icon
+        item.button?.imagePosition = .imageLeading
+        item.button?.font = .menuBarFont(ofSize: 0)
+        item.button?.toolTip = "filo · Automatic format matching"
+        item.button?.setAccessibilityLabel("filo")
+        item.button?.target = self; item.button?.action = #selector(togglePopover)
+        popover.behavior = .transient
+        popover.animates = false
+        popover.delegate = self
+        popover.contentSize = NSSize(width: FiloView.width, height: FiloView.height)
+        let content = NSHostingController(rootView: FiloView(model: model))
+        content.sizingOptions = []
+        popover.contentViewController = content
         model.onUpdate = { [weak self] in
             guard let self else { return }
             let rate = self.model.snapshot.output?.rate ?? 0
-            self.item.button?.title = self.model.snapshot.connected && rate > 0 ? "ƒ \(rateLabel(rate))" : "ƒ"
+            let title = self.model.snapshot.connected && rate > 0 ? " \(rateLabel(rate))" : ""
+            if self.item.button?.title != title { self.item.button?.title = title }
             self.item.button?.toolTip = "filo · \(self.model.snapshot.title)"
         }
         for name in ["com.apple.Music.playerInfo", "com.apple.iTunes.playerInfo", "com.spotify.client.PlaybackStateChanged"] {
             observers.append(DistributedNotificationCenter.default().addObserver(forName: Notification.Name(name), object: nil, queue: .main) { [weak self] _ in self?.model.controller.sourceDidChange() })
         }
         observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in self?.model.sleep() })
-        showWindow()
+        if !UserDefaults.standard.bool(forKey: "hasOpenedPanel") { showPopover() }
     }
-    @objc func showWindow() { window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showWindow(); return true }
+    @objc private func togglePopover() {
+        if popover.isShown { popover.performClose(nil) } else { showPopover() }
+    }
+    private func showPopover() {
+        guard let button = item.button else { return }
+        model.page = .main
+        model.panelVisible = true
+        model.controller.refreshDevices()
+        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        popover.contentViewController?.view.window?.makeKey()
+        UserDefaults.standard.set(true, forKey: "hasOpenedPanel")
+    }
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showPopover(); return true }
+    func popoverDidClose(_ notification: Notification) { model.panelVisible = false }
     func applicationWillTerminate(_ notification: Notification) {
         model.shutdown()
+        popover.close()
         for observer in observers {
             DistributedNotificationCenter.default().removeObserver(observer)
             NSWorkspace.shared.notificationCenter.removeObserver(observer)

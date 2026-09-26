@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 
 # A caller-selected Xcode or Command Line Tools installation is respected.
 configuration="${CONFIGURATION:-release}"
-app_dir="dist/filo.app"
+app_dir="${APP_DIR:-dist/filo.app}"
 mkdir -p "$app_dir/Contents/MacOS" "$app_dir/Contents/Resources"
 if [[ "${1:-}" == "--universal" ]]; then
     for architecture in arm64 x86_64; do
@@ -25,6 +25,7 @@ else
 fi
 cp Resources/Info.plist "$app_dir/Contents/Info.plist"
 cp LICENSE "$app_dir/Contents/Resources/LICENSE"
+cp -R Resources/Scenes "$app_dir/Contents/Resources/"
 swift scripts/icon.swift dist/filo.iconset
 iconutil -c icns dist/filo.iconset -o "$app_dir/Contents/Resources/filo.icns"
 # Sign the nested laboratory executable before sealing the app bundle.

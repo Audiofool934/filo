@@ -143,6 +143,8 @@ The adapter linked the actual debug FiloCore and FiloPCM objects; it did not exe
 Local `swift test` could not compile because this Command Line Tools installation does not include XCTest.
 CI is configured to select Xcode 26.3, listed in the [GitHub macOS 15 runner image](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode), for the macOS 26 SDK and full XCTest.
 No CI result for this follow-up is claimed here.
+The local beta.5 universal bundle passed strict signature verification, plist lint, both architecture checks for both executables, and byte-for-byte comparison of its four bundled scenes with the source assets.
+Intel execution was not tested.
 
 The new native UI has not yet been launched or visually validated because the desktop is locked.
 The NW-ZX706 is absent from the current hardware list, so the new physical-format negotiation has not been verified on that receiver.
