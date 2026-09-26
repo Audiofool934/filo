@@ -5,19 +5,19 @@
   "scope": "Core sample-rate matching, evidence labels, device ownership, and restoration.",
   "pullRequest": "https://github.com/Audiofool934/filo/pull/13",
   "softwareValidation": {
-    "verifiedHead": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+    "verifiedHead": "2100f7d1729720dddbac14ef014af848b890ab62",
     "ci": {
       "directHead": {
-        "url": "https://github.com/Audiofool934/filo/actions/runs/36228174173/job/108366097069",
-        "checkedOutRevision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "url": "https://github.com/Audiofool934/filo/actions/runs/36228822482/job/108367906394",
+        "checkedOutRevision": "2100f7d1729720dddbac14ef014af848b890ab62",
         "conclusion": "success",
-        "completedUTC": "2026-09-26T07:55:50Z"
+        "completedUTC": "2026-09-26T08:09:30Z"
       },
       "pullRequestMerge": {
-        "url": "https://github.com/Audiofool934/filo/actions/runs/36228177173/job/108366105093",
-        "checkedOutRevision": "e847238f2edd97456837fa7b526544f150cc7fe6",
+        "url": "https://github.com/Audiofool934/filo/actions/runs/36228825138/job/108367913968",
+        "checkedOutRevision": "d4f78b5d9408c956f570f84a55dfa081a2e4c8eb",
         "conclusion": "success",
-        "completedUTC": "2026-09-26T07:56:33Z"
+        "completedUTC": "2026-09-26T08:10:23Z"
       },
       "runner": {
         "operatingSystem": "macOS 15.7.9",
@@ -26,7 +26,7 @@
         "imageVersion": "20260907.0337.1"
       },
       "xctest": {
-        "executed": 116,
+        "executed": 118,
         "failures": 0,
         "unexpectedFailures": 0
       },
@@ -34,7 +34,7 @@
         "PolicyTests": 16,
         "DecoderEventParserTests": 3,
         "LeaseTests": 12,
-        "ConnectionControllerTests": 7,
+        "ConnectionControllerTests": 9,
         "LocalFileFormatCacheTests": 4
       },
       "passedChecks": [
@@ -66,7 +66,7 @@
       "limitation": "The local Command Line Tools environment could not load XCTest; the linked CI supplied the real XCTest run.",
       "revisionLimitation": "The available local summary records body counts but does not preserve an exact executed revision or binary hash; the CI results above are revision-pinned."
     },
-    "revisionBoundary": "CI is pinned to c3204fa and its recorded PR merge revision; earlier live observations retain their own build revisions, and later commits are not automatically validated.",
+    "revisionBoundary": "CI is pinned to 2100f7d and its recorded PR merge revision; all live observations remain pinned to their earlier builds, ending at c3204fa, and later commits are not automatically validated.",
     "previousCI": [
       {
         "verifiedHead": "dcf8e660902f42692ec91aa294c8bc3ef82dcdac",
@@ -87,6 +87,26 @@
           "failures": 0,
           "unexpectedFailures": 0
         }
+      },
+      {
+        "verifiedHead": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+        "directHead": {
+          "url": "https://github.com/Audiofool934/filo/actions/runs/36228174173/job/108366097069",
+          "checkedOutRevision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+          "conclusion": "success",
+          "completedUTC": "2026-09-26T07:55:50Z"
+        },
+        "pullRequestMerge": {
+          "url": "https://github.com/Audiofool934/filo/actions/runs/36228177173/job/108366105093",
+          "checkedOutRevision": "e847238f2edd97456837fa7b526544f150cc7fe6",
+          "conclusion": "success",
+          "completedUTC": "2026-09-26T07:56:33Z"
+        },
+        "xctest": {
+          "executed": 116,
+          "failures": 0,
+          "unexpectedFailures": 0
+        }
       }
     ],
     "localHeaderRetryStandaloneCheck": {
@@ -102,6 +122,27 @@
       "newCacheTestsPassed": 4,
       "liveHeaderFallbackVerified": false,
       "liveFirstPlayCausalFixEstablished": false
+    },
+    "unsupportedRateReviewFollowup": {
+      "revision": "2100f7d1729720dddbac14ef014af848b890ab62",
+      "status": "implemented_and_software_tested",
+      "behavior": "Keep the unsupported-rate warning visible when Music pauses or Spotify applies its fixed target before playback, with recovery text appropriate to automatic or fixed selection.",
+      "reproduction": {
+        "provenance": "Reported targeted pre-fix standalone reproduction; not rerun when authoring this record.",
+        "failedTitleAndAttentionAssertions": 4
+      },
+      "standaloneVerification": {
+        "provenance": "Reported post-fix standalone execution; not rerun when authoring this record.",
+        "controllerTestBodiesPassed": 9,
+        "realXCTestRun": false
+      },
+      "addedXCTestCases": [
+        "ConnectionControllerTests.testUnsupportedMusicRateStaysVisibleWhenPlaybackPauses",
+        "ConnectionControllerTests.testUnsupportedSpotifyProfileIsVisibleBeforePlaybackStarts"
+      ],
+      "fullXCTestVerification": "The revision-pinned CI above passed all 118 tests, including all nine controller tests.",
+      "packagedLiveUIVerified": false,
+      "liveEvidenceBoundary": "The existing live device and UI observations end at c3204fa; they do not establish these final warning states."
     }
   },
   "liveValidation": {
@@ -545,7 +586,7 @@
     "Historical relay and source measurements are not substituted for acceptance of these core changes."
   ],
   "scopedImplementationComplete": true,
-  "implementationRevision": "c3204fa1c1739a6fb5c1912d0f044f87f16f954a",
+  "implementationRevision": "2100f7d1729720dddbac14ef014af848b890ab62",
   "remainingLimitations": [
     {
       "scenario": "Live local-file header fallback and consistent detection of the short ALAC/WAV fixtures.",
@@ -598,6 +639,15 @@
         "DecoderEventParserTests",
         "LeaseTests",
         "ConnectionControllerTests"
+      ]
+    },
+    {
+      "scenario": "Final unsupported-rate warning visibility while Music is paused or Spotify applies its fixed target before playback, including automatic/fixed recovery text.",
+      "status": "software_tests_only",
+      "revision": "2100f7d1729720dddbac14ef014af848b890ab62",
+      "softwareCoverage": [
+        "ConnectionControllerTests.testUnsupportedMusicRateStaysVisibleWhenPlaybackPauses",
+        "ConnectionControllerTests.testUnsupportedSpotifyProfileIsVisibleBeforePlaybackStarts"
       ]
     }
   ]

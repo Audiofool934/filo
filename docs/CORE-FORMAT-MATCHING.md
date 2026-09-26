@@ -70,12 +70,15 @@ These build and test commands do not establish live playback acceptance.
 
 ## Recorded validation
 
-On 2026-09-26, [direct-head CI for `c3204fa`](https://github.com/Audiofool934/filo/actions/runs/36228174173/job/108366097069) passed all 116 XCTest tests with zero failures on an ARM64 macOS 15.7.9 runner, including four new local-header cache tests.
+On 2026-09-26, [direct-head CI for `2100f7d`](https://github.com/Audiofool934/filo/actions/runs/36228822482/job/108367906394) passed all 118 XCTest tests with zero failures on an ARM64 macOS 15.7.9 runner, including nine controller tests and four local-header cache tests.
 The strict build, hardware-free finite-reference laboratory compile/help check, universal packaging, plist lint, and signature verification passed.
 Both `filo` and `filo-lab` contained arm64 and x86_64 executables; Intel execution was not tested by this CI run.
-The [PR merge check](https://github.com/Audiofool934/filo/actions/runs/36228177173/job/108366105093) also passed all 116 tests.
+The [PR merge check](https://github.com/Audiofool934/filo/actions/runs/36228825138/job/108367913968) also passed all 118 tests.
 Earlier local Command Line Tools adapters exercised 19 policy/parser, 12 lease, and 7 controller test bodies separately from XCTest.
 A later standalone check exercised eight new and existing test bodies for the local-header retry change.
+The final review follow-up reproduced four failed title/attention assertions for unsupported rates before the fix, then passed all nine controller test bodies in a standalone check.
+In `2100f7d`, the warning remains visible when Music pauses or Spotify's fixed target is applied before playback, with recovery text appropriate to automatic or fixed selection.
+These final warning states have software regression coverage but were not physically tested in the packaged UI; the live observations below retain their earlier build revisions.
 These results are pinned to their recorded revisions and do not validate subsequent changes automatically.
 
 Packaged-app UI observations and independent HAL readbacks on a Sony NW-ZX706 exposed as WALKMAN confirmed manual 44.1 and 96 kHz on `acaf1fe`, followed by manual 192 kHz and the labeled Spotify 44.1 kHz profile on `dcf8e66`.
@@ -93,7 +96,7 @@ Quitting the connected app restored an owned 96 kHz setting to the session's ori
 Audio MIDI Setup was then used to restore the task's 192 kHz baseline; WALKMAN remained the default output with no Hog Mode owner.
 The app and its helpers exited before a final acceptance sequence on `c3204fa`.
 
-The final universal build started from the 192 kHz baseline, with fresh imports of the owned five-second ALAC and WAV fixtures.
+The universal `c3204fa` build used for the last live sequence started from the 192 kHz baseline, with fresh imports of the owned five-second ALAC and WAV fixtures.
 Music Song Info confirmed the ALAC identity and its 44.1 kHz rate.
 Its first playback showed Music decoder evidence at 44.1 kHz and an independent output readback of 44.1 kHz.
 Both imported files played once as a list, but an explicit subsequent WAV selection remained unknown and no local-file header label was observed.
