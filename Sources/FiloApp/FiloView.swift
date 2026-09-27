@@ -123,6 +123,7 @@ struct FiloView: View {
         } label: {
             Image(systemName: "ellipsis").font(.system(size: 13, weight: .medium))
                 .frame(width: 24, height: 24).modifier(ControlGlass())
+                .contentShape(Circle())
         }
         .menuStyle(.button).buttonStyle(.plain).menuIndicator(.hidden).fixedSize()
         .accessibilityLabel("More options").help("More options")

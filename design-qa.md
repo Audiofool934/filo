@@ -151,3 +151,25 @@ Before updating, the native card showed an active Apple Music to WALKMAN connect
 The connection journal confirms the running delivered app owns the restored WALKMAN session.
 The native automation intermittently lost the open card after restart, so the final matched source label and desktop menu-bar spacing were not captured in this follow-up.
 The previous build 8 bundle and package are preserved in the ignored `work/menu-spacing` directory.
+
+## More menu hit area, build 10
+
+Date: 2026-09-27.
+Branch: `codex/more-menu-hit-area`.
+Reproduced the missed clicks in the running 1.1.1 build 9 card with ordinary pointer clicks, rather than accessibility activation alone.
+At 2x scale, the ellipsis center at (624, 56) opened the menu, while (624, 44) and (624, 68), both inside its visible glass circle, did not.
+The plain menu label lacked an explicit hit shape around its 24-point frame.
+Adding `contentShape(Circle())` to that label makes its interaction area match the visible button without changing its size, appearance, audio behavior, or window dismissal.
+
+The locally delivered 1.1.2 build 10 passed pointer checks at the top, bottom, left, right, and center: (624, 38), (624, 74), (606, 56), (642, 56), and (624, 56).
+Escape closed the native menu between checks, and each subsequent single click reopened it.
+Connection details and Settings opened from the menu and returned to the main card normally.
+The bottom-edge check also passed with the connection enabled.
+Escape from the main card left no visible filo window.
+The original Spotify to WALKMAN connection was restored, displaying 44.1 kHz and Waiting for music with its switch on.
+Local screenshots and pointer-check results are retained in the ignored `work/menu-hit-fix` directory.
+
+The warnings-as-errors build and universal release build passed, as did deep strict signature and both-architecture checks.
+Local XCTest could not compile because this computer has Command Line Tools without the XCTest module or a full Xcode installation.
+This is a native pointer-interaction regression check on macOS 26 in light appearance, not a frame-time benchmark or a full accessibility audit.
+The previous app bundle is preserved at `work/menu-hit-fix/filo-before-hit-area.app`.
