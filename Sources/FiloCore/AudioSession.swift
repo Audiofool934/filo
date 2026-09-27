@@ -2,7 +2,7 @@ import Foundation
 import CoreAudio
 import FiloPCM
 
-public struct TransportMetrics: Codable {
+public struct TransportMetrics: Codable, Equatable {
     public let callbacks: UInt64
     public let frames: UInt64
     public let nonzeroSamples: UInt64

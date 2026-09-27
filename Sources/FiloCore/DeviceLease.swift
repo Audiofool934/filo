@@ -32,6 +32,8 @@ public final class DeviceLease {
         var originalDefaultUID: String?
         var originalRate: Double?
         var lastRate: Double?
+        var originalFormat: PCMFormat?
+        var lastFormat: PCMFormat?
         var changedDefault: Bool
     }
     public static var defaultJournalURL: URL {
@@ -42,6 +44,10 @@ public final class DeviceLease {
     private var originalDefaultUID: String?
     private var originalRate: Double?
     private var lastRate: Double?
+    private var originalFormat: PCMFormat?
+    private var lastFormat: PCMFormat?
+    private var lastSourceBits: Int?
+    private var lastDepthMatch: PCMFormat?
     private var changedDefault = false
     public init(access: DeviceAccess = SystemDeviceAccess(), journalURL: URL? = nil) {
         self.access = access; self.journalURL = journalURL
@@ -50,7 +56,8 @@ public final class DeviceLease {
     private func persist(ownerPID: Int32 = getpid()) throws {
         guard let journalURL, let outputUID else { return }
         let record = Record(ownerPID: ownerPID, outputUID: outputUID, originalDefaultUID: originalDefaultUID,
-                            originalRate: originalRate, lastRate: lastRate, changedDefault: changedDefault)
+                            originalRate: originalRate, lastRate: lastRate,
+                            originalFormat: originalFormat, lastFormat: lastFormat, changedDefault: changedDefault)
         try FileManager.default.createDirectory(at: journalURL.deletingLastPathComponent(), withIntermediateDirectories: true,
                                                 attributes: [.posixPermissions: 0o700])
         try JSONEncoder().encode(record).write(to: journalURL, options: .atomic)
@@ -69,6 +76,7 @@ public final class DeviceLease {
             }
             outputUID = record.outputUID; originalDefaultUID = record.originalDefaultUID
             originalRate = record.originalRate; lastRate = record.lastRate; changedDefault = record.changedDefault
+            originalFormat = record.originalFormat; lastFormat = record.lastFormat
             return restore()
         } catch { return ["Could not read the previous connection's recovery record: \(error.localizedDescription)"] }
     }
@@ -84,6 +92,7 @@ public final class DeviceLease {
         let originalDefaultID = try access.defaultOutput()
         originalDefaultUID = devices.first { $0.id == originalDefaultID }?.uid
         originalRate = try access.rate(device.id)
+        originalFormat = try (access as? PhysicalFormatAccess)?.physicalFormat(device.id)
         outputUID = device.uid
         do {
             if originalDefaultID != device.id {
@@ -102,22 +111,70 @@ public final class DeviceLease {
             throw AudioFailure("The system output changed. Reconnect filo to manage this output again.")
         }
         let before = try access.rate(device.id)
+        let formats = access as? PhysicalFormatAccess
+        let beforeFormat = try formats?.physicalFormat(device.id)
+        if beforeFormat.map({ $0.flags & kAudioFormatFlagIsNonMixable != 0 }) == true {
+            throw AudioFailure("The output is using an exclusive format. Release it before matching shared playback.")
+        }
+        if let expected = lastFormat ?? originalFormat, let actual = beforeFormat,
+           !actual.sameRepresentation(as: expected) {
+            throw AudioFailure("The output format was changed outside filo. Reconnect to continue.")
+        }
         if let expectedRate = lastRate ?? originalRate, abs(before - expectedRate) > 0.01 {
             throw AudioFailure("The output rate was changed outside filo. Reconnect to continue.")
         }
         guard abs(before - rate) > 0.01 else { return }
         let previousOwnedRate = lastRate
+        let previousOwnedFormat = lastFormat
         lastRate = rate
-        do { try persist() } catch { lastRate = previousOwnedRate; throw error }
-        do { try access.setRate(device.id, rate) }
+        lastFormat = beforeFormat?.at(rate: rate)
+        do { try persist() } catch { lastRate = previousOwnedRate; lastFormat = previousOwnedFormat; throw error }
+        do {
+            try access.setRate(device.id, rate)
+            if let formats { lastFormat = try formats.physicalFormat(device.id); try persist() }
+        }
         catch {
             // A failed write may have changed the hardware before readback failed.
             // Keep the new recovery target only if it may actually have taken effect.
             if let actual = try? access.rate(device.id), abs(actual - before) < 0.01 {
                 lastRate = previousOwnedRate
+                lastFormat = previousOwnedFormat
                 try? persist()
             }
             throw error
+        }
+    }
+    public func apply(rate: Double, sourceBits: Int?) throws {
+        try apply(rate: rate)
+        guard let sourceBits, let formats = access as? PhysicalFormatAccess,
+              let device = try access.devices().first(where: { $0.uid == outputUID }) else { return }
+        let current = try formats.physicalFormat(device.id)
+        if lastSourceBits == sourceBits, lastDepthMatch == current { return }
+        let available = try formats.physicalFormats(device.id, rate: rate)
+        guard let target = PhysicalFormatPolicy.select(sourceBits: sourceBits, rate: rate, current: current, available: available) else {
+            // Preserve playback and report limited precision from actual readback in the controller.
+            lastSourceBits = nil; return
+        }
+        guard target != current else { lastSourceBits = sourceBits; lastDepthMatch = current; return }
+        let previous = lastFormat
+        lastFormat = target
+        do { try persist() } catch { lastFormat = previous; throw error }
+        do {
+            try formats.setPhysicalFormat(device.id, target)
+            lastSourceBits = sourceBits
+            lastDepthMatch = target
+        } catch {
+            if let actual = try? formats.physicalFormat(device.id), actual == current {
+                lastFormat = previous; try? persist()
+            }
+            throw error
+        }
+    }
+    /// Used with fresh hardware snapshots, so an external bit-depth change is respected too.
+    func validateRepresentation(_ device: OutputDevice) throws {
+        if let expected = lastFormat ?? originalFormat, let actual = device.formats.first,
+           !actual.sameRepresentation(as: expected) {
+            throw AudioFailure("The output format changed outside filo. Your new format has been preserved.")
         }
     }
     @discardableResult public func restore() -> [String] {
@@ -129,6 +186,7 @@ public final class DeviceLease {
                 else { try? persist(ownerPID: 0) }
             }
             outputUID = nil; originalDefaultUID = nil; originalRate = nil; lastRate = nil; changedDefault = false
+            originalFormat = nil; lastFormat = nil; lastSourceBits = nil; lastDepthMatch = nil
         }
         do {
             let devices = try access.devices()
@@ -137,8 +195,35 @@ public final class DeviceLease {
                 errors.append("The managed output is disconnected. Its recovery record is retained until it returns.")
                 return errors
             }
-            if let lastRate, let originalRate, abs(try access.rate(device.id) - lastRate) < 0.01 {
-                do { try access.setRate(device.id, originalRate) } catch { errors.append(error.localizedDescription) }
+            let actualRate = try access.rate(device.id)
+            let formats = access as? PhysicalFormatAccess
+            let actualFormat = try formats?.physicalFormat(device.id)
+            let expectedFormat = lastFormat ?? originalFormat
+            let ownsFormat = expectedFormat == nil || actualFormat.map { $0.sameRepresentation(as: expectedFormat!) } == true
+            let ownsRate = (lastRate ?? originalRate).map { abs(actualRate - $0) < 0.01 } == true
+            if ownsFormat, ownsRate {
+                do {
+                    if let lastRate, let originalRate, abs(lastRate - originalRate) > 0.01 {
+                        let previousFormat = self.lastFormat
+                        self.lastRate = originalRate
+                        self.lastFormat = actualFormat?.at(rate: originalRate)
+                        do { try persist() } catch {
+                            self.lastRate = lastRate; self.lastFormat = previousFormat; throw error
+                        }
+                        do { try access.setRate(device.id, originalRate) }
+                        catch {
+                            if let actual = try? access.rate(device.id), abs(actual - lastRate) < 0.01 {
+                                self.lastRate = lastRate; self.lastFormat = previousFormat; try? persist()
+                            }
+                            throw error
+                        }
+                        if let formats { self.lastFormat = try formats.physicalFormat(device.id); try persist() }
+                    }
+                    if let originalFormat, let formats, lastFormat != nil,
+                       try formats.physicalFormat(device.id) != originalFormat {
+                        try formats.setPhysicalFormat(device.id, originalFormat)
+                    }
+                } catch { errors.append(error.localizedDescription) }
             }
             if changedDefault, try access.defaultOutput() == device.id {
                 if let previous = devices.first(where: { $0.uid == originalDefaultUID }) {

@@ -2,7 +2,7 @@ import CoreAudio
 import Foundation
 import FiloPCM
 
-public struct ExclusiveRelayMetrics: Codable {
+public struct ExclusiveRelayMetrics: Codable, Equatable {
     public let inputCallbacks: UInt64, outputCallbacks: UInt64
     public let capturedFrames: UInt64, deliveredFrames: UInt64, queuedFrames: UInt64
     public let startupSilenceFrames: UInt64, initialQueuedFrames: UInt64, underflows: UInt64, overflows: UInt64

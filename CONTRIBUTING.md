@@ -1,6 +1,7 @@
 # Contributing to filo
 
-Use a current Xcode installation with the license accepted and a macOS SDK supporting process taps.
+Use Xcode 26 or later with the license accepted and the macOS 26 SDK.
+The native Liquid Glass APIs require that SDK at build time; runtime availability checks retain macOS 14.4 support.
 The minimum deployment target is macOS 14.4.
 
 ```sh

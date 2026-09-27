@@ -2,25 +2,36 @@
 
 filo requires macOS 14.4 or later and a device with one stereo output stream.
 The universal app contains Apple Silicon and Intel executables.
-For ordinary listening, use **Format matching** to follow supported source sample rates while the player handles playback.
+For ordinary listening, use **Format matching** to follow supported source sample rates and known integer precision while the player handles playback.
 
 ## First connection
 
 1. Connect your DAC and enable its USB DAC mode if needed.
-2. Start filo, select Apple Music or Spotify, then select the DAC.
-3. Select Format matching as the audio path.
-4. Leave the rate on Automatic for Apple Music, or choose Spotify's labeled 44.1 kHz profile.
-5. Click Connect, start playback in the player, and read the source and output cards separately.
+2. Open filo from its compact link icon in the menu bar.
+3. Select Apple Music or Spotify and the DAC in the bottom row.
+4. Turn on Automatic for Apple Music, or Spotify profile for its fixed 44.1 kHz target.
+5. Start playback in the player; use **••• → Connection details** to inspect source and output separately.
 
-Connect changes the Mac's default media output to the chosen device.
+Turning the connection on changes the Mac's default media output to the chosen device.
 It does not change the separate system-alert output.
 Another application's explicitly selected output can override the system default for that application.
 
-The **source** card labels automatic evidence from a Music decoder observation or an accessible local Music file.
-Manual selections and Spotify's profile use a **target** card because they are requested settings, not detected track metadata.
-The **output** card reads the current hardware format.
-A 32-bit output container does not imply a 32-bit recording or create extra source detail.
-The optional capture line describes the Float32 process tap, not the source's original bit depth.
+The main panel shows the observed source rate when available, otherwise the selected output's current rate.
+Its status distinguishes Matched, Manual rate, Spotify profile, and unknown or unsupported formats.
+The menu bar always uses the actual connected output rate.
+The CD scene covers rates through 44.1 kHz, a home studio represents 48 kHz, a tube system covers 88.2/96 kHz, and a reference system covers higher rates.
+These scenes are decorative, not audio-quality grades.
+
+Connection details shows source evidence and actual output representation separately.
+A 32-bit float output can represent 24-bit integer PCM precision; its container size does not mean the recording contains 32 bits of detail.
+For known integer sources, filo prefers the exact advertised integer depth, then an advertised format with enough precision.
+If no adequate depth is available, the rate still matches and the panel reports **Rate matched · depth limited**.
+Unknown source depth, manual rates, Spotify's profile, and floating-point local files leave the current output depth unchanged.
+The optional capture format describes the process tap, not the original recording.
+
+Use **••• → Settings** while disconnected to choose a manual sample rate or an experimental audio path.
+Details, settings, and the main panel share a fixed 340 × 300 point frame.
+Click outside the popover or press Escape to close it; closing the panel leaves an active connection running.
 
 ## Listening settings
 
@@ -35,12 +46,12 @@ In Exclusive preview, only the selected application is forwarded from BlackHole 
 
 ## Audio paths
 
-**Format matching** manages the output rate and leaves playback on the player's ordinary path.
+**Format matching** manages the output rate and known source precision and leaves playback on the player's ordinary path.
 It is the default, does not capture or relay audio, and requires neither BlackHole nor audio-recording permission.
 It follows supported rates both upward and downward; a 192 kHz track does not make 192 kHz the permanent setting for later 44.1 or 48 kHz tracks.
 It does not change the player's effects or certify source bit depth, unchanged samples, or what the DAC receives.
 
-**Direct relay**, in the Audio path picker, taps the selected player and suppresses its ordinary output while the tap is active.
+**Direct relay**, under **••• → Settings → Audio path**, taps the selected player and suppresses its ordinary output while the tap is active.
 It forwards stereo samples without gain, EQ, or sample-rate conversion in filo.
 The output device is the aggregate clock, and the configuration requests no drift compensation.
 Unsupported formats or stopped callbacks cause the connection to stop.
@@ -82,7 +93,8 @@ For podcasts, ads, videos, or other content, select a known rate manually if nee
 
 | Status | Meaning |
 | --- | --- |
-| Format matched | Hardware rate matches the available local-file or decoder evidence; this is not a fidelity certification. |
+| Matched | Hardware rate matches the available local-file or decoder evidence; this is not a fidelity certification. |
+| Rate matched · depth limited | The rate matches, but the available output format cannot preserve all known source bits. |
 | Source format unknown | No usable current evidence; the hardware rate is unchanged. |
 | Automatic detection unavailable | The Music decoder observer failed; readable local files remain an alternative. |
 | Source rate not supported | The observed rate is unavailable on this output; playback continues at its current rate. |
@@ -111,7 +123,7 @@ Building from source is another option.
 
 Disconnect or Quit ends rate management and releases any active relay, then restores only settings filo changed that still match its recorded values.
 An already matching rate is not a new rate change that filo owns.
-If you or another app changes the output device or rate, filo stops and preserves the intervening change.
+If you or another app changes the output device, rate, or physical format, filo stops and preserves the intervening change.
 This protection also applies before filo's first rate change, and when a requested rate already matches the new external setting.
 Sleep releases the connection; reconnect explicitly after waking.
 An unplugged device also requires an explicit reconnect.

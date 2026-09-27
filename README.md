@@ -5,7 +5,8 @@
 A small, open-source macOS menu bar companion for Apple Music, Spotify, and your DAC.
 Keep your player and let filo manage the output format.
 
-**Format matching is the default:** follow the observed source sample rate and confirm the DAC setting while your player handles playback.
+**Format matching is the default:** follow the observed source sample rate and integer bit depth while your player handles playback.
+When an exact integer depth is unavailable, filo uses an advertised format with sufficient precision and shows the actual device representation in Connection details.
 Unknown or unsupported rates keep the existing output rate, and user changes take priority over automatic matching.
 Manual selections and Spotify's fixed profile are shown as targets, separately from detected source formats.
 Read the [core behavior and validation contract](docs/CORE-FORMAT-MATCHING.md) for supported cases and detection limits.
@@ -14,7 +15,8 @@ Read the [core behavior and validation contract](docs/CORE-FORMAT-MATCHING.md) f
 
 - **Apple Music:** follows fresh lossless decoder observations around track changes and reads the format of accessible local files.
 - **Spotify:** offers an explicitly labeled 44.1 kHz music profile, plus manual output-rate selection.
-- **Your DAC:** reads its actual format, selects supported rates, and restores settings on disconnect or quit when they still belong to filo.
+- **Your DAC:** reads its actual format, selects supported rates and precision, and restores settings on disconnect or quit when they still belong to filo.
+- **Menu bar:** a compact status item and fixed-size panel with a single connection switch, native Liquid Glass on macOS 26, and a listening scene for each rate family.
 - **Direct relay:** optionally forwards the selected application's stereo PCM through a CoreAudio process tap without gain, EQ, or resampling in filo.
 - **Exclusive preview:** routes through an already installed BlackHole 2ch, owns a compatible DAC with Hog Mode, and uses matching non-mixable integer callback and physical formats.
 - **Recovery:** stops on device or external routing changes, releases the audio path on sleep, and recovers still-owned settings after an interrupted session.
@@ -38,15 +40,19 @@ No driver, administrator helper, account, or network service is installed.
 
 1. Open filo from the menu bar.
 2. Select Apple Music or Spotify and an output such as your USB DAC.
-3. Choose **Automatic** for Music or the **Spotify · 44.1 kHz** profile, then **Connect**.
+3. Turn on **Automatic** for Music, or the labeled **Spotify profile** for its fixed 44.1 kHz target.
 4. Start a track in your music app.
-5. Choose the audio path in the main configuration; use **Connection details** for evidence limits and diagnostics.
+5. Use **••• → Connection details** for the observed source, actual output format, and diagnostics.
+
+The panel stays the same size across scenes, details, and settings.
+Use **••• → Settings** while disconnected for manual rates and experimental audio paths.
+Changing the player or output while connected reconnects to that selection.
 
 Connecting makes the selected device your Mac's default output in the shared paths.
 Exclusive preview instead routes media to BlackHole 2ch and takes direct ownership of the selected DAC.
 Other applications routed to BlackHole are not forwarded by the selected-player tap.
 System alerts keep their separate existing output selection.
-Disconnect restores the previous device and rate only if another app or you have not changed them in the meantime.
+Turning the switch off restores the previous device, rate, and physical format only if another app or you have not changed them in the meantime.
 After sleep or a device disconnect, reconnect explicitly.
 
 **Format matching** keeps the player's ordinary playback path.
@@ -107,7 +113,8 @@ For the universal release ZIP and SHA-256 manifest, run `bash scripts/package-re
 
 The project uses Swift Package Manager, SwiftUI/AppKit, CoreAudio, and a small C real-time transport.
 There are no third-party package dependencies.
-Use Xcode 15.3 or later, or a sufficiently recent Command Line Tools installation for building.
+Build with Xcode 26 or later, or Command Line Tools with the macOS 26 SDK.
+The app still runs on macOS 14.4 and later, with native material fallbacks before macOS 26.
 Full Xcode with its license accepted is needed for XCTest on installations where the Command Line Tools do not include XCTest.
 
 ```sh

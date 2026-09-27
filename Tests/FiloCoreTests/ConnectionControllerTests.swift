@@ -89,6 +89,80 @@ private final class ControllerFixture {
 }
 
 final class ConnectionControllerTests: XCTestCase {
+    func testConnectedOutputChangesRestoreOriginalRouteAndEachDeviceRate() throws {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.controller.queue.async { fixture.devices.current = 2 }
+        func connect(_ uid: String, rate: Double) {
+            fixture.controller.connect(source: .appleMusic, outputUID: uid, mode: .format,
+                                       manualRate: rate, executable: URL(fileURLWithPath: "/unused-fake-player"))
+            drain(fixture)
+            XCTAssertTrue(fixture.snapshot.connected)
+            XCTAssertNil(fixture.snapshot.error)
+        }
+        connect("dac", rate: 44100)
+        XCTAssertEqual(fixture.devices.current, 2)
+        XCTAssertEqual(try fixture.devices.rate(2), 44100)
+        connect("speakers", rate: 96000)
+        XCTAssertEqual(fixture.devices.current, 1)
+        XCTAssertEqual(try fixture.devices.rate(2), 96000)
+        XCTAssertEqual(try fixture.devices.rate(1), 96000)
+        connect("dac", rate: 48000)
+        XCTAssertEqual(fixture.devices.current, 2)
+        XCTAssertEqual(try fixture.devices.rate(1), 48000)
+        XCTAssertEqual(try fixture.devices.rate(2), 48000)
+        fixture.controller.disconnect(); drain(fixture)
+        XCTAssertFalse(fixture.snapshot.connected)
+        XCTAssertNil(fixture.snapshot.error)
+        XCTAssertEqual(fixture.devices.current, 2)
+        XCTAssertEqual(try fixture.devices.rate(1), 48000)
+        XCTAssertEqual(try fixture.devices.rate(2), 96000)
+    }
+    func testKnownLocalDepthReportsLimitedOutputAndClearsOnNextTrack() {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.controller.queue.async {
+            var description = fixture.devices.outputs[1].formats[0].asbd
+            description.mBitsPerChannel = 16
+            description.mBytesPerFrame = 4; description.mBytesPerPacket = 4
+            fixture.devices.outputs[1].formats = [PCMFormat(description)]
+        }
+        fixture.connect(); drain(fixture)
+        fixture.send(PlayerState(playing: true, trackID: "24-bit", localRate: 48000, localBits: 24))
+        drain(fixture)
+        XCTAssertTrue(fixture.snapshot.connected)
+        XCTAssertEqual(fixture.snapshot.sourceFormat?.bits, 24)
+        XCTAssertTrue(fixture.snapshot.depthLimited)
+        XCTAssertEqual(fixture.snapshot.title, "Output depth limited")
+        fixture.send(PlayerState(playing: true, trackID: "16-bit", localRate: 44100, localBits: 16))
+        drain(fixture)
+        XCTAssertFalse(fixture.snapshot.depthLimited)
+        XCTAssertEqual(fixture.snapshot.title, "Format matched")
+    }
+    func testRepeatedMatchedSourceDoesNotHideAnExternalRateChange() throws {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.connect(); drain(fixture)
+        let state = PlayerState(playing: true, trackID: "same", localRate: 48000)
+        fixture.send(state); drain(fixture)
+        fixture.controller.queue.async { fixture.devices.outputs[1].rate = 44100 }
+        fixture.send(state); drain(fixture)
+        XCTAssertFalse(fixture.snapshot.connected)
+        XCTAssertTrue(fixture.snapshot.error?.contains("outside filo") == true)
+        XCTAssertEqual(try fixture.devices.rate(2), 44100)
+        XCTAssertEqual(fixture.devices.writes, [48000])
+    }
+    func testUnchangedPlaybackDoesNotRepublishTimestampOnlyUpdates() {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.connect(); drain(fixture)
+        fixture.send(PlayerState(playing: true, trackID: "same", localRate: 48000, primaryObservedAt: Date()))
+        drain(fixture)
+        let count = fixture.snapshots.count
+        fixture.send(PlayerState(playing: true, trackID: "same", localRate: 48000, primaryObservedAt: Date()))
+        drain(fixture)
+        XCTAssertEqual(fixture.snapshots.count, count)
+    }
     /// The marker follows controller work and all snapshots it enqueued on the main queue.
     private func drain(_ fixture: ControllerFixture) {
         let drained = expectation(description: "Controller and snapshots drained")
