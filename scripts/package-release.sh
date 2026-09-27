@@ -69,7 +69,11 @@ if [[ -n "$notary_profile" ]]; then
 fi
 ditto -c -k --sequesterRsrc --keepParent "$app" "$release_work/$archive"
 (cd "$release_work" && shasum -a 256 "$image" "$archive" > SHA256SUMS)
-python3 scripts/verify-release.py "$release_work"
+if [[ -n "$notary_profile" ]]; then
+    python3 scripts/verify-release.py "$release_work" --require-notarization
+else
+    python3 scripts/verify-release.py "$release_work"
+fi
 # Publish local artifacts only after every requested build and verification succeeds.
 for artifact in "$image" "$archive" SHA256SUMS; do mv "$release_work/$artifact" "dist/$artifact"; done
 echo "Packaged dist/$image and dist/$archive"

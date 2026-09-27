@@ -43,7 +43,7 @@ The account setup and initial certificate creation are separate from this build 
 ```sh
 SIGNING_IDENTITY="Developer ID Application: YOUR NAME (TEAMID)" \
   bash scripts/package-release.sh --notarize filo-notary
-python3 scripts/verify-release.py
+python3 scripts/verify-release.py --require-notarization
 ```
 
 The script builds both CPU architectures in isolation, signs the nested laboratory executable before the app, and enables Hardened Runtime with secure timestamps.
@@ -85,7 +85,60 @@ The hash-pinned Python tools only create the disk image and Finder layout; they 
 ## Final checks
 
 The verification script checks SHA-256 sums, mounts only its own image, verifies the Applications shortcut, checks signatures and both architectures, and compares all app file contents between DMG and ZIP.
+With `--require-notarization`, it also requires filo's Developer ID team, secure timestamps, Hardened Runtime, stapled tickets, and Gatekeeper acceptance for the actual packaged app and DMG.
+An ad-hoc package cannot pass that release check.
 It detaches its test mount on exit.
 Also open the DMG in Finder to inspect the installation layout, and test a freshly downloaded signed release on a separate Mac or clean account before calling the full first-launch experience verified.
 The ordinary downloaded-from-the-internet confirmation may still appear for a correctly notarized app.
 Apple describes those distinct messages in [Safely open apps on your Mac](https://support.apple.com/en-us/102445).
+
+## Publish to GitHub
+
+The release version in `Resources/Info.plist`, the `vMAJOR.MINOR.PATCH` tag, and the release notes must agree.
+Increase the bundle build number whenever the application changes.
+Merge through a pull request after the required `test` check passes, then wait for CI on the merged `main` commit.
+Build from that clean checkout with the signing command above; keep private keys and notarization credentials in the local Keychain.
+CI builds disposable ad-hoc packages for validation, never distribution packages.
+
+For example, to publish version 1.1.2:
+
+```sh
+git switch main
+git pull --ff-only
+test -z "$(git status --porcelain)"
+python3 scripts/verify-release.py --require-notarization --tag v1.1.2
+git tag -a v1.1.2 -m 'filo 1.1.2'
+git push origin v1.1.2
+gh release create v1.1.2 --verify-tag --draft --title 'filo 1.1.2' \
+  --notes-file docs/releases/1.1.2.md \
+  dist/filo-macos-universal.dmg dist/filo-macos-universal.zip dist/SHA256SUMS
+```
+
+Download the three assets from the draft into a temporary directory and run the same verifier against that directory.
+Confirm that only the intended DMG, ZIP, and checksum file are attached, and that the notes and tag identify the tested source.
+Then publish the draft:
+
+```sh
+gh release edit v1.1.2 --draft=false --latest
+```
+
+Repository release immutability locks the assets and tag after publication and supplies GitHub's release attestation.
+Follow GitHub's [draft, attach, publish workflow](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases).
+Corrections to binaries need a new version; never replace a published asset or move its tag.
+Older releases remain available as historical records, while the README always links to the latest stable DMG.
+
+The `Verify release` workflow downloads the public assets without credentials and checks checksums, version, signatures, notarization, and both package payloads on a fresh macOS runner.
+Watch that run after publishing, then check the README's `/releases/latest/download/` links.
+A failing public verification needs investigation immediately; if users are affected, mark the release as a prerelease and restore the previous stable release as latest while preparing a new patch.
+The workflow can also be dispatched manually with a published tag.
+
+## Repository safeguards
+
+`main` requires a pull request, successful up-to-date `test` checks, resolved conversations, and linear history.
+Force pushes and deletion are disabled, including for administrators.
+Squash merging and automatic branch deletion keep merged changes easy to follow.
+No mandatory second reviewer is configured for this single-maintainer project.
+
+Actions use read-only tokens, full commit pins, bounded job runtimes, and cancellation of superseded CI runs.
+Dependabot proposes monthly updates to Actions and hash-pinned packaging dependencies.
+Dependency alerts, secret scanning, push protection, and private vulnerability reporting are enabled on GitHub.
