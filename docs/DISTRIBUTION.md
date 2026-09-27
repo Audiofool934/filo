@@ -1,8 +1,9 @@
 # Developer ID signing and notarization
 
 Checked against Apple's documentation on 2026-09-27.
-The current public 1.1.1 download is ad-hoc signed and not notarized.
-Adding a DMG does not change that status.
+The 1.1.1 release used ad-hoc signing and was not notarized.
+The 1.1.2 build 10 distribution packages have now passed Developer ID signing, Apple's notarization service, ticket stapling, and Gatekeeper assessment.
+The final ZIP was extracted again to confirm its app's ticket survived packaging.
 Only describe a release as notarized after Apple accepts it and the verification steps below pass.
 
 ## One-time account setup

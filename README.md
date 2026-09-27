@@ -10,7 +10,7 @@ Spend less time in Audio MIDI Setup.
 
 macOS 14.4+ · Apple Silicon & Intel · MIT license
 
-> The current download is not Apple-notarized, so macOS may block its first launch.
+> The 1.1.2 DMG and ZIP are Developer ID signed and Apple-notarized.
 > Read the [first-launch instructions](docs/INSTALL.md#first-launch) before installing.
 
 <p align="center">

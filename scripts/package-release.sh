@@ -38,7 +38,9 @@ PY
 
 if [[ -n "$notary_profile" ]]; then
     # Staple the app before packaging so both ZIP and DMG contain its offline ticket.
-    codesign -d --verbose=4 "$app" 2>&1 | grep -q '^Authority=Developer ID Application:'
+    # Read the complete output before matching so grep cannot SIGPIPE codesign under pipefail.
+    signature_details="$(codesign -d --verbose=4 "$app" 2>&1)"
+    grep -q '^Authority=Developer ID Application:' <<< "$signature_details"
     mkdir -p dist/notarization
     ditto -c -k --sequesterRsrc --keepParent "$app" "$release_work/submit.zip"
     notarize "$release_work/submit.zip" dist/notarization/app.json

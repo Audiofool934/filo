@@ -9,7 +9,7 @@
 
 macOS 14.4 及以上 · Apple Silicon 与 Intel 通用 · MIT 开源
 
-> 当前下载版本尚未通过 Apple 公证，macOS 可能会拦截首次打开。
+> 1.1.2 的 DMG 和 ZIP 已完成 Developer ID 签名并通过 Apple 公证。
 > 安装前请看[首次打开说明](docs/INSTALL.zh-CN.md#首次打开)。
 
 <p align="center">

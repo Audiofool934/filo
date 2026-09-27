@@ -20,12 +20,12 @@ GitHub 页面上的 **Source code** 是留给自行编译的开发者的。
 
 ## 首次打开
 
-当前版本使用临时签名，尚未通过 Apple 公证。
-macOS 可能显示无法验证开发者或无法检查应用的提示。
+1.1.2 的 DMG 和 ZIP 已完成 Developer ID 签名并通过 Apple 公证。
+两种安装包都附带应用的公证凭据，DMG 也附带自己的公证凭据。
+首次启动时，macOS 仍可能询问是否打开从互联网下载的应用，这是正常的首次确认，详见 [Apple 官方说明](https://support.apple.com/en-us/102445)。
 
-如果你信任下载来源并决定使用，先尝试打开一次应用，再进入 **系统设置 → 隐私与安全性**，找到 **仍要打开（Open Anyway）**。
-这是 Apple 提供的单个应用例外流程，详见 [Apple 官方说明](https://support.apple.com/en-us/102445)。
-如果提示的是应用「已损坏」或「会损坏你的电脑」，先停止安装并[反馈原始提示](https://github.com/Audiofool934/filo/issues/new/choose)。
+如果 macOS 提示无法验证开发者，请先确认下载的是本仓库 Releases 中的 1.1.2 或更新版本；旧版本尚未公证。
+如果当前版本仍被拦截，或提示应用「已损坏」「会损坏你的电脑」，先停止安装并[反馈原始提示](https://github.com/Audiofool934/filo/issues/new/choose)。
 
 ## 接上音乐
 

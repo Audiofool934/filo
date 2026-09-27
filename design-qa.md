@@ -196,3 +196,25 @@ The preview mounts and temporary Finder windows were closed after inspection.
 Only an Apple Development identity was available locally, so Developer ID signing, submission to Apple, ticket stapling, Gatekeeper acceptance, and a fresh-Mac installation remain unverified.
 The new notarization workflow is opt-in, uses a named Keychain profile, and requires Apple's Accepted result before producing final release artifacts.
 Dark appearance and earlier macOS Finder versions were not visually checked.
+
+## Developer ID and notarization verification
+
+Date: 2026-09-27.
+The Developer ID Application certificate was issued and imported into the login Keychain, and its public key matches the locally generated certificate request.
+The signing private key was not exported.
+The app, nested laboratory executable, and DMG have valid Developer ID signatures and secure timestamps; the executable signatures enable Hardened Runtime.
+
+The first run of the notarization path stopped before submission with exit status 141.
+With `pipefail` enabled, `grep -q` could close the signature-details pipe before `codesign` finished writing.
+The script now captures the complete signature details before checking the authority.
+The subsequent real submission completed successfully.
+
+Apple returned Accepted for both the application and DMG submissions.
+Both tickets were stapled and validated, and Gatekeeper reported `source=Notarized Developer ID` for the application and disk image.
+Final packaging verified checksums, strict signatures, both CPU architectures, matching app contents in the DMG and ZIP, the installation shortcut, and Finder layout assets.
+The final ZIP was extracted separately, and its app passed ticket validation and Gatekeeper assessment again.
+Submission receipts and verification logs remain local in the ignored `dist/notarization` and `work/developer-id-setup` directories.
+
+The running app and music connection were not replaced or restarted.
+All packaging mounts and temporary verification directories were cleaned up.
+These checks establish signing, notarization, and Gatekeeper acceptance on the current Mac; a fresh installation and launch on a separate Mac or clean account remain unverified.

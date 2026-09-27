@@ -20,12 +20,12 @@ GitHub's **Source code** downloads are for building it yourself.
 
 ## First launch
 
-The current build is ad-hoc signed and has not been notarized by Apple.
-macOS may block it with an unidentified-developer or unverified-app message.
+The 1.1.2 DMG and ZIP are signed with Developer ID and notarized by Apple.
+Both include the app's notarization ticket, and the DMG has its own ticket.
+macOS may still ask you to confirm opening an app downloaded from the internet; this is the normal first-launch confirmation described in [Apple's instructions](https://support.apple.com/en-us/102445).
 
-If you trust the download and choose to open it, first try launching it once, then open **System Settings → Privacy & Security** and look for **Open Anyway**.
-This is Apple's per-app exception flow; see [Apple's instructions](https://support.apple.com/en-us/102445).
-If the message instead says the app is damaged or will harm your computer, stop and [report the exact message](https://github.com/Audiofool934/filo/issues/new/choose).
+If macOS cannot verify the developer, first check that you downloaded version 1.1.2 or later from this repository's releases; older versions were not notarized.
+If a current release is blocked, or the message says the app is damaged or will harm your computer, stop and [report the exact message](https://github.com/Audiofool934/filo/issues/new/choose).
 
 ## Connect your music
 
