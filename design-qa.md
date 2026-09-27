@@ -90,3 +90,54 @@ It remains running for the user; all test previews and their helpers were stoppe
 The previous beta.4 app is preserved under `work/liquid-glass/filo-beta4-before-menu-bar.app`.
 
 final result: pass for the inspected native light-mode surfaces and recorded WALKMAN scenarios
+
+## 1.1.1 menu card follow-up
+
+Date: 2026-09-27.
+Branch: `codex/stable-menu-card`.
+Scope: stabilize the menu item, give it a recognizable filo f, and remove the popover arrow.
+The earlier captures above describe the previous UI.
+
+The menu item now uses `NSStatusItem.squareLength` with an 18-point monochrome template image drawn from the app icon's curved f motif.
+Connection and sample-rate changes no longer update the item's title or width.
+An arrowless, nonactivating `NSPanel` replaces `NSPopover`, retaining the existing 340 × 300 point composition and clipping the glass and artwork to one continuous rounded outline.
+The card is centered on the status button, constrained to its screen, and aligned to physical pixels when opened.
+Only opening the card sets its position; connection updates do not reposition it.
+
+### Native checks
+
+- Reproduced the original off/on menu-item change in the released app before replacing it.
+- Inspected the final card and details page visually in macOS 26 light appearance.
+- Connected and disconnected with Apple Music selected and no music playing; the card changed between Ready to match and Waiting for music.
+- Opened Connection details from the native more menu and returned with Back.
+- Verified that Escape hides the card and reopening returns to the main page.
+- Confirmed that off, on, and details captures are all 680 × 600 pixels at 2× scale.
+- Inspected the actual vector icon rendered at 2× separately.
+- Quit the final preview through its native Quit filo menu and verified process exit.
+
+Local evidence is in the ignored `work/menu-card` directory: `before-off.png`, `before-on.png`, `final-off-native.png`, `final-on-native.png`, `final-details-native.png`, `f-monogram-2x.png`, and `delivered-ready-native.png`.
+The hosting controller initially reset the panel to zero size; explicit content sizing after controller installation resolved this and was verified in the native captures.
+The application-activation dismissal observer checks that the panel has lost key focus so native menu activation does not immediately dismiss the details page.
+
+### Build and delivery
+
+The final code passes a Swift build with warnings treated as errors and a universal release build.
+Both delivered executables contain arm64 and x86_64 slices, the Info.plist passes lint, and the app passes deep strict code-signature verification.
+The tested bundle is installed at `dist/filo.app` as 1.1.1, build 8, with a local universal ZIP and SHA-256 manifest.
+The previous 1.1.0 bundle and ZIP are preserved under `work/menu-card`.
+The delivered app was launched and inspected with Automatic, Apple Music, MacBook Pro Speakers selected, and the connection off.
+No new public release was created for this follow-up.
+
+The initial preview preserved the recorded default speakers route and its 48 kHz format.
+The later independent readback found WALKMAN as the default at 192 kHz, with no Hog Mode owner and no connection journal.
+There is no continuous route trace identifying when that changed, so this follow-up does not claim the original default route stayed constant for the entire session.
+The observed final default was left untouched.
+No audio-engine source changed.
+
+### Coverage limits
+
+Window captures verify content size, not absolute desktop coordinates.
+The fixed menu-item width and the absence of state-driven positioning were checked in code; the actual F in the desktop menu bar and repeated same-icon toggling were not captured successfully by the native desktop-capture tool.
+Outside-click, application-switch, screen-change, sleep, and Space-change dismissal are implemented but were not established end to end by this session's UI automation.
+Dark appearance, older macOS versions, fullscreen behavior, and Intel execution were not rechecked.
+The audio XCTest suite was not rerun for this UI-only patch; the release build and native interactions are the validation for this follow-up.

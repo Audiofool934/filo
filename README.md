@@ -16,7 +16,7 @@ Read the [core behavior and validation contract](docs/CORE-FORMAT-MATCHING.md) f
 - **Apple Music:** follows fresh lossless decoder observations around track changes and reads the format of accessible local files.
 - **Spotify:** offers an explicitly labeled 44.1 kHz music profile, plus manual output-rate selection.
 - **Your DAC:** reads its actual format, selects supported rates and precision, and restores settings on disconnect or quit when they still belong to filo.
-- **Menu bar:** a compact status item and fixed-size panel with a single connection switch, native Liquid Glass on macOS 26, and a listening scene for each rate family.
+- **Menu bar:** a fixed-width filo f icon and an arrowless, fixed-size card with a single connection switch, native Liquid Glass on macOS 26, and a listening scene for each rate family.
 - **Direct relay:** optionally forwards the selected application's stereo PCM through a CoreAudio process tap without gain, EQ, or resampling in filo.
 - **Exclusive preview:** routes through an already installed BlackHole 2ch, owns a compatible DAC with Hog Mode, and uses matching non-mixable integer callback and physical formats.
 - **Recovery:** stops on device or external routing changes, releases the audio path on sleep, and recovers still-owned settings after an interrupted session.

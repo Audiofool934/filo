@@ -6,7 +6,7 @@ import FiloCore
 
 private let accent = Color(red: 0.12, green: 0.48, blue: 0.46)
 
-/// Changes of source, artwork or page never resize the popover.
+/// Changes of source, artwork or page never resize the menu bar card.
 struct FiloView: View {
     static let width: CGFloat = 340
     static let height: CGFloat = 300
@@ -42,7 +42,8 @@ struct FiloView: View {
                 }
             }.padding(16)
         }
-        .frame(width: Self.width, height: Self.height).clipped()
+        .frame(width: Self.width, height: Self.height)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .onChange(of: model.mode) { _, _ in
             if !model.outputChoices.contains(where: { $0.uid == model.outputUID }) {
                 model.outputUID = model.outputChoices.first(where: \.isDefault)?.uid ?? model.outputChoices.first?.uid ?? ""
