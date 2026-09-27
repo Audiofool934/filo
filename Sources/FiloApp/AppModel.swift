@@ -291,6 +291,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     }
     private func showPopover() {
         guard let button = item.button else { return }
+        guard !popover.isShown else {
+            popover.contentViewController?.view.window?.makeKey()
+            return
+        }
         model.page = .main
         model.panelVisible = true
         model.controller.refreshDevices()

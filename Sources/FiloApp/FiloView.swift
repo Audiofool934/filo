@@ -90,7 +90,7 @@ struct FiloView: View {
         return model.source == .appleMusic ? "Automatic" : "Spotify profile"
     }
     private var statusLabel: String {
-        if state.busy { return "Matching output…" }
+        if state.busy { return state.title }
         if state.error != nil { return "Connection stopped" }
         if !state.connected { return model.selectedOutput == nil ? "Choose an output" : "Ready to match" }
         if state.unsupportedRate != nil { return "Rate not supported" }
@@ -123,7 +123,7 @@ struct FiloView: View {
             Image(systemName: "ellipsis").font(.system(size: 13, weight: .medium))
                 .frame(width: 24, height: 24).modifier(ControlGlass())
         }
-        .menuStyle(.borderlessButton).menuIndicator(.hidden).fixedSize()
+        .menuStyle(.button).buttonStyle(.plain).menuIndicator(.hidden).fixedSize()
         .accessibilityLabel("More options").help("More options")
     }
     private var connectionControls: some View {
@@ -141,9 +141,13 @@ struct FiloView: View {
                         Image(nsImage: icon).resizable().frame(width: 17, height: 17)
                     }
                     Text(model.source == .appleMusic ? "Music" : "Spotify").lineLimit(1)
+                    Spacer(minLength: 3)
                     Image(systemName: "chevron.down").font(.system(size: 8, weight: .medium))
                 }.frame(maxWidth: .infinity, alignment: .leading)
-            }.accessibilityLabel("Music app: \(model.source.name)")
+                    .padding(.horizontal, 8).frame(height: 30).modifier(ControlGlass())
+                    .contentShape(Capsule())
+                    .accessibilityElement(children: .ignore).accessibilityLabel("Music app: \(model.source.name)")
+            }.frame(maxWidth: .infinity).accessibilityLabel("Music app: \(model.source.name)")
             Image(systemName: "arrow.right").font(.system(size: 12)).foregroundStyle(.secondary).accessibilityHidden(true)
             Menu {
                 if model.outputChoices.isEmpty { Text("No outputs available") }
@@ -158,13 +162,17 @@ struct FiloView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "headphones").font(.system(size: 14))
                     Text(model.selectedOutput?.name ?? "Output").lineLimit(1).truncationMode(.tail)
+                    Spacer(minLength: 3)
                     Image(systemName: "chevron.down").font(.system(size: 8, weight: .medium))
                 }.frame(maxWidth: .infinity, alignment: .leading)
-            }.accessibilityLabel("Output: \(model.selectedOutput?.name ?? "Choose an output")")
+                    .padding(.horizontal, 8).frame(height: 30).modifier(ControlGlass())
+                    .contentShape(Capsule())
+                    .accessibilityElement(children: .ignore).accessibilityLabel("Output: \(model.selectedOutput?.name ?? "Choose an output")")
+            }.frame(maxWidth: .infinity).accessibilityLabel("Output: \(model.selectedOutput?.name ?? "Choose an output")")
                 .help(model.selectedOutput?.name ?? "Choose your output device")
         }
-        .font(.system(size: 12, weight: .medium)).menuStyle(.borderlessButton).menuIndicator(.hidden)
-        .padding(.horizontal, 12).frame(height: 42).modifier(ControlGlass()).disabled(state.busy)
+        .font(.system(size: 12, weight: .medium)).menuStyle(.button).buttonStyle(.plain).menuIndicator(.hidden)
+        .padding(.horizontal, 6).frame(maxWidth: .infinity).frame(height: 42).modifier(ControlGlass()).disabled(state.busy)
     }
     private func pageHeader(_ title: String) -> some View {
         HStack(spacing: 8) {

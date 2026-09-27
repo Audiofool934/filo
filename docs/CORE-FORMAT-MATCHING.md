@@ -146,8 +146,36 @@ No CI result for this follow-up is claimed here.
 The local beta.5 universal bundle passed strict signature verification, plist lint, both architecture checks for both executables, and byte-for-byte comparison of its four bundled scenes with the source assets.
 Intel execution was not tested.
 
-The new native UI has not yet been launched or visually validated because the desktop is locked.
-The NW-ZX706 is absent from the current hardware list, so the new physical-format negotiation has not been verified on that receiver.
-Read-only inspection confirmed that the built-in speakers advertise Float32 stereo at 44.1, 48, 88.2, and 96 kHz.
-No live rate, depth, route, player setting, or library changes were made during this follow-up's software checks.
-The native comparison and remaining acceptance work are tracked in `design-qa.md`.
+On 2026-09-27, the desktop and WALKMAN were available for native acceptance of the beta.5 menu bar implementation.
+Native testing exposed flattened menu labels, incomplete selector hit areas, duplicate accessibility controls, and a reopen event that reset secondary pages.
+The resulting fixes preserve glass menu labels, full-width click areas, one accessibility element per selector, and the current page while the popover remains open.
+The final strict Swift build and universal arm64/x86_64 packaging passed after those fixes.
+The final standalone adapter executed all 134 test bodies with zero assertion failures, including a new repeated-output-switch regression covering each device's rate and the original route.
+The local XCTest framework and follow-up CI limitations described above still apply.
+
+The recorded baseline was WALKMAN as default output at 192 kHz with stereo 32-bit signed integer physical format, eight bytes per frame, flags 12, and no Hog Mode owner.
+Manual 48 and 96 kHz selections reached those rates while retaining the unknown source's existing 32-bit representation.
+The explicitly labeled Spotify profile reached 44.1 kHz without claiming track-format detection or playing subscription audio.
+Independent CoreAudio readbacks after ordinary disconnects confirmed exact restoration of the original rate and representation.
+
+An owned five-second 48 kHz / 24-bit ALAC reference in Music matched on its first playback.
+The native panel showed Matched with 24-bit source evidence, and independent CoreAudio readback showed 48 kHz, stereo 24-bit signed integer, six bytes per frame, and flags 12.
+Disconnect restored the original 192 kHz / 32-bit integer representation.
+The particular source-evidence label was not captured during this brief playback, so this result does not establish whether decoder evidence or the local header caused the match.
+The library entry and Music-managed copy were removed, and the filtered library showed no remaining test item.
+The original generated WAV and ALAC fixtures were preserved locally.
+
+Changing the rate to 48 kHz outside filo while it managed a manual 96 kHz target stopped the connection and preserved 48 kHz.
+Connection details explicitly explained that the external rate was preserved.
+The test operator then restored the recorded 192 kHz baseline.
+Selecting MacBook Pro Speakers and then WALKMAN while connected changed the actual default output and retained the selected rate display without resizing the panel.
+
+All four scene families, the matched studio state, details, settings, About, long output names, and the connected/disconnected menu-bar item were inspected in native captures.
+The fixed 340 × 300 point content bounds were consistent across the captured pages and scenes.
+The approved mockup and native matched state were compared at a normalized panel width in `design-qa.md`.
+
+Short closed-panel idle samples showed the main process at 0.0% CPU in disconnected, Spotify-connected, and Music-connected states.
+Spotify's helper reported 0.1% CPU; Music's two metadata helpers together reported 0.2-0.3%, with a further 0.9-1.2% for its decoder log observer.
+These brief no-playback samples on a busy desktop are not sustained-performance or battery measurements.
+Raw local receipts, screenshots, and generated fixtures are retained under the ignored `work/liquid-glass` directory.
+The new checks verify host-side physical-format negotiation and restoration, not subscription source identity, gapless transitions, or samples received inside the Sony receiver.

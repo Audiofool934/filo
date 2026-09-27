@@ -89,6 +89,35 @@ private final class ControllerFixture {
 }
 
 final class ConnectionControllerTests: XCTestCase {
+    func testConnectedOutputChangesRestoreOriginalRouteAndEachDeviceRate() throws {
+        let fixture = ControllerFixture()
+        defer { fixture.controller.shutdown() }
+        fixture.controller.queue.async { fixture.devices.current = 2 }
+        func connect(_ uid: String, rate: Double) {
+            fixture.controller.connect(source: .appleMusic, outputUID: uid, mode: .format,
+                                       manualRate: rate, executable: URL(fileURLWithPath: "/unused-fake-player"))
+            drain(fixture)
+            XCTAssertTrue(fixture.snapshot.connected)
+            XCTAssertNil(fixture.snapshot.error)
+        }
+        connect("dac", rate: 44100)
+        XCTAssertEqual(fixture.devices.current, 2)
+        XCTAssertEqual(try fixture.devices.rate(2), 44100)
+        connect("speakers", rate: 96000)
+        XCTAssertEqual(fixture.devices.current, 1)
+        XCTAssertEqual(try fixture.devices.rate(2), 96000)
+        XCTAssertEqual(try fixture.devices.rate(1), 96000)
+        connect("dac", rate: 48000)
+        XCTAssertEqual(fixture.devices.current, 2)
+        XCTAssertEqual(try fixture.devices.rate(1), 48000)
+        XCTAssertEqual(try fixture.devices.rate(2), 48000)
+        fixture.controller.disconnect(); drain(fixture)
+        XCTAssertFalse(fixture.snapshot.connected)
+        XCTAssertNil(fixture.snapshot.error)
+        XCTAssertEqual(fixture.devices.current, 2)
+        XCTAssertEqual(try fixture.devices.rate(1), 48000)
+        XCTAssertEqual(try fixture.devices.rate(2), 96000)
+    }
     func testKnownLocalDepthReportsLimitedOutputAndClearsOnNextTrack() {
         let fixture = ControllerFixture()
         defer { fixture.controller.shutdown() }
