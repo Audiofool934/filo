@@ -151,3 +151,70 @@ Before updating, the native card showed an active Apple Music to WALKMAN connect
 The connection journal confirms the running delivered app owns the restored WALKMAN session.
 The native automation intermittently lost the open card after restart, so the final matched source label and desktop menu-bar spacing were not captured in this follow-up.
 The previous build 8 bundle and package are preserved in the ignored `work/menu-spacing` directory.
+
+## More menu hit area, build 10
+
+Date: 2026-09-27.
+Branch: `codex/more-menu-hit-area`.
+Reproduced the missed clicks in the running 1.1.1 build 9 card with ordinary pointer clicks, rather than accessibility activation alone.
+At 2x scale, the ellipsis center at (624, 56) opened the menu, while (624, 44) and (624, 68), both inside its visible glass circle, did not.
+The plain menu label lacked an explicit hit shape around its 24-point frame.
+Adding `contentShape(Circle())` to that label makes its interaction area match the visible button without changing its size, appearance, audio behavior, or window dismissal.
+
+The locally delivered 1.1.2 build 10 passed pointer checks at the top, bottom, left, right, and center: (624, 38), (624, 74), (606, 56), (642, 56), and (624, 56).
+Escape closed the native menu between checks, and each subsequent single click reopened it.
+Connection details and Settings opened from the menu and returned to the main card normally.
+The bottom-edge check also passed with the connection enabled.
+Escape from the main card left no visible filo window.
+The original Spotify to WALKMAN connection was restored, displaying 44.1 kHz and Waiting for music with its switch on.
+Local screenshots and pointer-check results are retained in the ignored `work/menu-hit-fix` directory.
+
+The warnings-as-errors build and universal release build passed, as did deep strict signature and both-architecture checks.
+Local XCTest could not compile because this computer has Command Line Tools without the XCTest module or a full Xcode installation.
+This is a native pointer-interaction regression check on macOS 26 in light appearance, not a frame-time benchmark or a full accessibility audit.
+The previous app bundle is preserved at `work/menu-hit-fix/filo-before-hit-area.app`.
+
+## DMG distribution preparation
+
+Date: 2026-09-27.
+The 1.1.2 build 10 package now includes a DMG with the app, an Applications shortcut, and a light installation background containing a teal drag arrow.
+The final image was opened through Finder and visually inspected on macOS 26 at Retina scale.
+The two icons, their labels, the heading, and the drag instruction are visible and aligned.
+Finder retains this user's tab and path bar preferences; those global settings were not changed.
+The final native capture is `work/dmg-distribution/installer-final.jpg`.
+
+The first package exposed a strict-signature failure because hiding the app's extension added FinderInfo to the already-signed bundle.
+The packaging settings no longer modify the app's FinderInfo.
+A separate Retina background issue was fixed by setting bitmap display size after rendering, avoiding a second scale transform.
+
+Final packaging passed DMG checksums, ZIP checksums, app signature verification inside both artifacts, both CPU architecture checks, and byte comparisons of all bundled app files.
+The verification also checks the Applications symlink and the Finder layout assets, then detaches its own mount.
+Ad-hoc and Apple Development identities were rejected by the notarization preflight before building or uploading.
+The running `dist/filo.app` and its existing connection were not replaced or restarted by packaging.
+The preview mounts and temporary Finder windows were closed after inspection.
+
+Only an Apple Development identity was available locally, so Developer ID signing, submission to Apple, ticket stapling, Gatekeeper acceptance, and a fresh-Mac installation remain unverified.
+The new notarization workflow is opt-in, uses a named Keychain profile, and requires Apple's Accepted result before producing final release artifacts.
+Dark appearance and earlier macOS Finder versions were not visually checked.
+
+## Developer ID and notarization verification
+
+Date: 2026-09-27.
+The Developer ID Application certificate was issued and imported into the login Keychain, and its public key matches the locally generated certificate request.
+The signing private key was not exported.
+The app, nested laboratory executable, and DMG have valid Developer ID signatures and secure timestamps; the executable signatures enable Hardened Runtime.
+
+The first run of the notarization path stopped before submission with exit status 141.
+With `pipefail` enabled, `grep -q` could close the signature-details pipe before `codesign` finished writing.
+The script now captures the complete signature details before checking the authority.
+The subsequent real submission completed successfully.
+
+Apple returned Accepted for both the application and DMG submissions.
+Both tickets were stapled and validated, and Gatekeeper reported `source=Notarized Developer ID` for the application and disk image.
+Final packaging verified checksums, strict signatures, both CPU architectures, matching app contents in the DMG and ZIP, the installation shortcut, and Finder layout assets.
+The final ZIP was extracted separately, and its app passed ticket validation and Gatekeeper assessment again.
+Submission receipts and verification logs remain local in the ignored `dist/notarization` and `work/developer-id-setup` directories.
+
+The running app and music connection were not replaced or restarted.
+All packaging mounts and temporary verification directories were cleaned up.
+These checks establish signing, notarization, and Gatekeeper acceptance on the current Mac; a fresh installation and launch on a separate Mac or clean account remain unverified.

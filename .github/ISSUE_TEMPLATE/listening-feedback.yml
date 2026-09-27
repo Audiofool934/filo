@@ -22,7 +22,7 @@ body:
     attributes:
       label: Your setup / 使用环境
       description: macOS version, Mac chip, filo version, player, and DAC model.
-      placeholder: macOS 26, Apple Silicon, filo 1.1.1, Apple Music, Sony NW-ZX706
+      placeholder: macOS 26, Apple Silicon, filo 1.1.2, Apple Music, Sony NW-ZX706
     validations:
       required: true
   - type: textarea

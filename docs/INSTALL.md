@@ -8,22 +8,24 @@ Requires macOS 14.4 or later.
 One download supports both Apple Silicon and Intel Macs.
 Native Liquid Glass requires macOS 26; earlier versions use native material fallbacks.
 
-1. [Download filo for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip).
-2. Unzip the file and move **filo.app** to **Applications**.
+1. [Download filo for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg).
+2. Open the DMG and drag **filo** onto the **Applications** folder.
+   When copying finishes, eject the filo disk image.
 3. Open filo from Applications, then click **ƒ** in the menu bar.
 
 There is no Dock icon or separate main window.
-The release ZIP contains the app; GitHub's **Source code** downloads are for building it yourself.
+A [ZIP alternative](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip) is also available; unzip it and move **filo.app** to **Applications**.
+GitHub's **Source code** downloads are for building it yourself.
 [Release notes and SHA256SUMS](https://github.com/Audiofool934/filo/releases/latest) are available alongside the app download.
 
 ## First launch
 
-The current build is ad-hoc signed and has not been notarized by Apple.
-macOS may block it with an unidentified-developer or unverified-app message.
+The 1.1.2 DMG and ZIP are signed with Developer ID and notarized by Apple.
+Both include the app's notarization ticket, and the DMG has its own ticket.
+macOS may still ask you to confirm opening an app downloaded from the internet; this is the normal first-launch confirmation described in [Apple's instructions](https://support.apple.com/en-us/102445).
 
-If you trust the download and choose to open it, first try launching it once, then open **System Settings → Privacy & Security** and look for **Open Anyway**.
-This is Apple's per-app exception flow; see [Apple's instructions](https://support.apple.com/en-us/102445).
-If the message instead says the app is damaged or will harm your computer, stop and [report the exact message](https://github.com/Audiofool934/filo/issues/new/choose).
+If macOS cannot verify the developer, first check that you downloaded version 1.1.2 or later from this repository's releases; older versions were not notarized.
+If a current release is blocked, or the message says the app is damaged or will harm your computer, stop and [report the exact message](https://github.com/Audiofool934/filo/issues/new/choose).
 
 ## Connect your music
 

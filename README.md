@@ -6,11 +6,11 @@ A free, open-source menu bar companion for your Mac and DAC.
 Keep listening in Apple Music while filo matches your output to the formats it can identify.
 Spend less time in Audio MIDI Setup.
 
-**[Download for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)** · [Installation](docs/INSTALL.md) · [简体中文](README.zh-CN.md)
+**[Download for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)** · [Installation](docs/INSTALL.md) · [简体中文](README.zh-CN.md)
 
 macOS 14.4+ · Apple Silicon & Intel · MIT license
 
-> The current download is not Apple-notarized, so macOS may block its first launch.
+> The 1.1.2 DMG and ZIP are Developer ID signed and Apple-notarized.
 > Read the [first-launch instructions](docs/INSTALL.md#first-launch) before installing.
 
 <p align="center">
@@ -39,7 +39,7 @@ If an exact integer bit depth is unavailable, it uses a supported format with su
 
 ## Start listening
 
-1. [Download the ZIP](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip), unzip it, and move **filo.app** to **Applications**.
+1. [Download the DMG](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg), open it, and drag **filo** to **Applications**.
 2. Connect your USB DAC and enable its USB DAC mode if it has one.
 3. Open filo, click **ƒ**, and select **Apple Music** and your output.
 4. Turn on **Automatic**, allow playback access if macOS asks, and start a lossless track in Music.
@@ -84,7 +84,8 @@ open dist/filo.app
 ```
 
 Swift, SwiftUI/AppKit, CoreAudio, and a small C audio bridge, with no third-party package dependencies.
-The universal package script is `bash scripts/package-release.sh`.
+The universal DMG and ZIP package script is `bash scripts/package-release.sh`; packaging also needs Python 3.10+.
+See [Distribution](docs/DISTRIBUTION.md) for Developer ID signing and notarization.
 
 [Contributing](CONTRIBUTING.md) · [Matching behavior](docs/CORE-FORMAT-MATCHING.md) · [Validation](docs/VALIDATION.md) · [Technical notes and audio laboratory](docs/TECHNICAL-NOTES.md)
 

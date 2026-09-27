@@ -8,22 +8,24 @@
 同一个安装包同时支持 Apple Silicon 和 Intel Mac，无需选择芯片版本。
 原生 Liquid Glass 需要 macOS 26，较早版本会使用系统材质替代。
 
-1. [下载 filo Mac 版](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)。
-2. 解压，把 **filo.app** 拖进「应用程序」。
+1. [下载 filo Mac 版](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)。
+2. 打开 DMG，把 **filo** 拖到 **Applications（应用程序）** 文件夹。
+   复制完成后，推出 filo 磁盘映像。
 3. 从「应用程序」启动 filo，然后点击菜单栏里的 **ƒ**。
 
 filo 没有 Dock 图标或独立主窗口。
-下载 ZIP 即可；GitHub 页面上的 **Source code** 是留给自行编译的开发者的。
+也可以选择 [ZIP 版本](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)，解压后把 **filo.app** 拖进「应用程序」。
+GitHub 页面上的 **Source code** 是留给自行编译的开发者的。
 [更新记录与 SHA256SUMS 校验文件](https://github.com/Audiofool934/filo/releases/latest)与安装包放在同一个发布页面。
 
 ## 首次打开
 
-当前版本使用临时签名，尚未通过 Apple 公证。
-macOS 可能显示无法验证开发者或无法检查应用的提示。
+1.1.2 的 DMG 和 ZIP 已完成 Developer ID 签名并通过 Apple 公证。
+两种安装包都附带应用的公证凭据，DMG 也附带自己的公证凭据。
+首次启动时，macOS 仍可能询问是否打开从互联网下载的应用，这是正常的首次确认，详见 [Apple 官方说明](https://support.apple.com/en-us/102445)。
 
-如果你信任下载来源并决定使用，先尝试打开一次应用，再进入 **系统设置 → 隐私与安全性**，找到 **仍要打开（Open Anyway）**。
-这是 Apple 提供的单个应用例外流程，详见 [Apple 官方说明](https://support.apple.com/en-us/102445)。
-如果提示的是应用「已损坏」或「会损坏你的电脑」，先停止安装并[反馈原始提示](https://github.com/Audiofool934/filo/issues/new/choose)。
+如果 macOS 提示无法验证开发者，请先确认下载的是本仓库 Releases 中的 1.1.2 或更新版本；旧版本尚未公证。
+如果当前版本仍被拦截，或提示应用「已损坏」「会损坏你的电脑」，先停止安装并[反馈原始提示](https://github.com/Audiofool934/filo/issues/new/choose)。
 
 ## 接上音乐
 

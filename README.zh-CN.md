@@ -5,11 +5,11 @@
 一个给 Mac 和 DAC 用的免费、开源菜单栏小工具。
 继续用 Apple Music 听歌，让 filo 根据识别到的曲目格式匹配设备输出，少开几次「音频 MIDI 设置」。
 
-**[下载 Mac 版](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)** · [安装说明](docs/INSTALL.zh-CN.md) · [English](README.md)
+**[下载 Mac 版](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)** · [安装说明](docs/INSTALL.zh-CN.md) · [English](README.md)
 
 macOS 14.4 及以上 · Apple Silicon 与 Intel 通用 · MIT 开源
 
-> 当前下载版本尚未通过 Apple 公证，macOS 可能会拦截首次打开。
+> 1.1.2 的 DMG 和 ZIP 已完成 Developer ID 签名并通过 Apple 公证。
 > 安装前请看[首次打开说明](docs/INSTALL.zh-CN.md#首次打开)。
 
 <p align="center">
@@ -38,7 +38,7 @@ macOS 14.4 及以上 · Apple Silicon 与 Intel 通用 · MIT 开源
 
 ## 开始听歌
 
-1. [下载 ZIP](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)，解压，把 **filo.app** 拖进「应用程序」。
+1. [下载 DMG](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)，打开后把 **filo** 拖进「应用程序」。
 2. 接上 USB DAC；如果设备有 USB DAC 模式，先打开它。
 3. 启动 filo，点菜单栏里的 **ƒ**，选择 **Apple Music** 和输出设备。
 4. 打开 **Automatic** 开关，按提示允许读取播放信息，然后在 Music 里开始播放一首无损歌曲。
