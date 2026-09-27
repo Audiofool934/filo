@@ -57,7 +57,7 @@ The menu bar crops are `menu-bar-connected-native.png` and `menu-bar-off-native.
 - Disconnect after the automatic and fixed-profile checks restores the exact original 192 kHz / 32-bit integer representation.
 - An external 48 kHz write while filo manages 96 kHz stops management and preserves 48 kHz; the test operator then restores the recorded 192 kHz baseline.
 
-The imported Music reference and its managed copy were removed after testing; the original generated fixture remains in the local evidence directory.
+The imported Music reference and its managed copy were removed after testing; the original generated fixture was subsequently moved to Trash during the [test-audio cleanup](docs/validation/test-audio-cleanup.md).
 These checks establish UI behavior and host device-format negotiation, not sample equality at the USB receiver.
 The first final-cleanup readback found speakers as default, while WALKMAN's rate and depth were restored.
 Its cause was not established.
@@ -90,3 +90,64 @@ It remains running for the user; all test previews and their helpers were stoppe
 The previous beta.4 app is preserved under `work/liquid-glass/filo-beta4-before-menu-bar.app`.
 
 final result: pass for the inspected native light-mode surfaces and recorded WALKMAN scenarios
+
+## 1.1.1 menu card follow-up
+
+Date: 2026-09-27.
+Branch: `codex/stable-menu-card`.
+Scope: stabilize the menu item, give it a recognizable filo f, and remove the popover arrow.
+The earlier captures above describe the previous UI.
+
+The menu item now uses `NSStatusItem.squareLength` with an 18-point monochrome template image drawn from the app icon's curved f motif.
+Connection and sample-rate changes no longer update the item's title or width.
+An arrowless, nonactivating `NSPanel` replaces `NSPopover`, retaining the existing 340 × 300 point composition and clipping the glass and artwork to one continuous rounded outline.
+The card is centered on the status button, constrained to its screen, and aligned to physical pixels when opened.
+Only opening the card sets its position; connection updates do not reposition it.
+
+### Native checks
+
+- Reproduced the original off/on menu-item change in the released app before replacing it.
+- Inspected the final card and details page visually in macOS 26 light appearance.
+- Connected and disconnected with Apple Music selected and no music playing; the card changed between Ready to match and Waiting for music.
+- Opened Connection details from the native more menu and returned with Back.
+- Verified that Escape hides the card and reopening returns to the main page.
+- Confirmed that off, on, and details captures are all 680 × 600 pixels at 2× scale.
+- Inspected the actual vector icon rendered at 2× separately.
+- Quit the final preview through its native Quit filo menu and verified process exit.
+
+Local evidence is in the ignored `work/menu-card` directory: `before-off.png`, `before-on.png`, `final-off-native.png`, `final-on-native.png`, `final-details-native.png`, `f-monogram-2x.png`, and `delivered-ready-native.png`.
+The hosting controller initially reset the panel to zero size; explicit content sizing after controller installation resolved this and was verified in the native captures.
+The application-activation dismissal observer checks that the panel has lost key focus so native menu activation does not immediately dismiss the details page.
+
+### Build and delivery
+
+The final code passes a Swift build with warnings treated as errors and a universal release build.
+Both delivered executables contain arm64 and x86_64 slices, the Info.plist passes lint, and the app passes deep strict code-signature verification.
+The tested bundle is installed at `dist/filo.app` as 1.1.1, build 8, with a local universal ZIP and SHA-256 manifest.
+The previous 1.1.0 bundle and ZIP are preserved under `work/menu-card`.
+The delivered app was launched and inspected with Automatic, Apple Music, MacBook Pro Speakers selected, and the connection off.
+No new public release was created for this follow-up.
+
+The initial preview preserved the recorded default speakers route and its 48 kHz format.
+The later independent readback found WALKMAN as the default at 192 kHz, with no Hog Mode owner and no connection journal.
+There is no continuous route trace identifying when that changed, so this follow-up does not claim the original default route stayed constant for the entire session.
+The observed final default was left untouched.
+No audio-engine source changed.
+
+### Coverage limits
+
+Window captures verify content size, not absolute desktop coordinates.
+The fixed menu-item width and the absence of state-driven positioning were checked in code; the actual F in the desktop menu bar and repeated same-icon toggling were not captured successfully by the native desktop-capture tool.
+Outside-click, application-switch, screen-change, sleep, and Space-change dismissal are implemented but were not established end to end by this session's UI automation.
+Dark appearance, older macOS versions, fullscreen behavior, and Intel execution were not rechecked.
+The audio XCTest suite was not rerun for this UI-only patch; the release build and native interactions are the validation for this follow-up.
+
+### Spacing refinement, build 9
+
+The status item now has an explicit 20-point width instead of the system's square width, reducing horizontal padding around the unchanged 18-point f image.
+Its width remains constant across connection states.
+The refinement passes the warnings-as-errors and universal builds, and the updated local bundle passes strict signature verification.
+Before updating, the native card showed an active Apple Music to WALKMAN connection; after the update those selections were retained and the connection was re-enabled.
+The connection journal confirms the running delivered app owns the restored WALKMAN session.
+The native automation intermittently lost the open card after restart, so the final matched source label and desktop menu-bar spacing were not captured in this follow-up.
+The previous build 8 bundle and package are preserved in the ignored `work/menu-spacing` directory.

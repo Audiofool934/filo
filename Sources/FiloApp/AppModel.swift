@@ -33,7 +33,6 @@ final class AppModel: ObservableObject {
     private var permissionRequestInFlight = false
     private var permissionTimeout: DispatchWorkItem?
     private var terminating = false
-    var onUpdate: (() -> Void)?
     @Published var page: PanelPage = .main
     @Published var panelVisible = false
     enum PanelPage { case main, details, settings, about }
@@ -107,7 +106,6 @@ final class AppModel: ObservableObject {
             value.error = permissionPresentation.error
         }
         snapshot = value
-        onUpdate?()
     }
     private func permissionMessage(title: String, detail: String, waiting: Bool = false) {
         permissionPresentation = PermissionPresentation(title: title, detail: detail, busy: waiting, error: waiting ? nil : detail)
@@ -250,66 +248,65 @@ final class AppModel: ObservableObject {
     }
 }
 
-final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate {
     let model = AppModel()
     private var item: NSStatusItem!
-    private let popover = NSPopover()
+    private lazy var panel = MenuBarPanel(content: FiloView(model: model))
     private var observers: [NSObjectProtocol] = []
     func applicationDidFinishLaunching(_ notification: Notification) {
-        item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        let icon = NSImage(systemSymbolName: "link", accessibilityDescription: "filo")?
-            .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 12, weight: .regular))
-        icon?.isTemplate = true
-        item.button?.image = icon
-        item.button?.imagePosition = .imageLeading
-        item.button?.font = .menuBarFont(ofSize: 0)
-        item.button?.toolTip = "filo · Automatic format matching"
+        // The narrow f needs less horizontal padding than a square status item.
+        item = NSStatusBar.system.statusItem(withLength: 20)
+        item.button?.image = MenuBarIcon.make()
+        item.button?.imagePosition = .imageOnly
+        item.button?.toolTip = "filo"
         item.button?.setAccessibilityLabel("filo")
-        item.button?.target = self; item.button?.action = #selector(togglePopover)
-        popover.behavior = .transient
-        popover.animates = false
-        popover.delegate = self
-        popover.contentSize = NSSize(width: FiloView.width, height: FiloView.height)
-        let content = NSHostingController(rootView: FiloView(model: model))
-        content.sizingOptions = []
-        popover.contentViewController = content
-        model.onUpdate = { [weak self] in
-            guard let self else { return }
-            let rate = self.model.snapshot.output?.rate ?? 0
-            let title = self.model.snapshot.connected && rate > 0 ? " \(rateLabel(rate))" : ""
-            if self.item.button?.title != title { self.item.button?.title = title }
-            self.item.button?.toolTip = "filo · \(self.model.snapshot.title)"
+        item.button?.target = self; item.button?.action = #selector(togglePanel)
+        panel.onDismiss = { [weak self] in
+            self?.model.panelVisible = false
+            self?.item.button?.highlight(false)
         }
         for name in ["com.apple.Music.playerInfo", "com.apple.iTunes.playerInfo", "com.spotify.client.PlaybackStateChanged"] {
             observers.append(DistributedNotificationCenter.default().addObserver(forName: Notification.Name(name), object: nil, queue: .main) { [weak self] _ in self?.model.controller.sourceDidChange() })
         }
-        observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in self?.model.sleep() })
-        if !UserDefaults.standard.bool(forKey: "hasOpenedPanel") { showPopover() }
+        observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.panel.dismiss(); self?.model.sleep()
+        })
+        observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.panel.dismiss() })
+        observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] notification in
+            guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+                  app.processIdentifier != ProcessInfo.processInfo.processIdentifier else { return }
+            // A nonactivating panel can keep key focus while a native menu returns
+            // application activation to the app behind it.
+            guard let self, !self.panel.isKeyWindow else { return }
+            self.panel.dismiss()
+        })
+        observers.append(NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main) { [weak self] _ in self?.panel.dismiss() })
+        if !UserDefaults.standard.bool(forKey: "hasOpenedPanel") { showPanel() }
     }
-    @objc private func togglePopover() {
-        if popover.isShown { popover.performClose(nil) } else { showPopover() }
+    @objc private func togglePanel() {
+        if panel.isVisible { panel.dismiss() } else { showPanel() }
     }
-    private func showPopover() {
+    private func showPanel() {
         guard let button = item.button else { return }
-        guard !popover.isShown else {
-            popover.contentViewController?.view.window?.makeKey()
+        guard !panel.isVisible else {
+            panel.makeKey()
             return
         }
         model.page = .main
         model.panelVisible = true
         model.controller.refreshDevices()
-        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-        popover.contentViewController?.view.window?.makeKey()
+        panel.show(below: button)
+        button.highlight(true)
         UserDefaults.standard.set(true, forKey: "hasOpenedPanel")
     }
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showPopover(); return true }
-    func popoverDidClose(_ notification: Notification) { model.panelVisible = false }
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showPanel(); return true }
     func applicationWillTerminate(_ notification: Notification) {
         model.shutdown()
-        popover.close()
+        panel.dismiss()
         for observer in observers {
             DistributedNotificationCenter.default().removeObserver(observer)
             NSWorkspace.shared.notificationCenter.removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer)
         }
         NSStatusBar.system.removeStatusItem(item)
     }
