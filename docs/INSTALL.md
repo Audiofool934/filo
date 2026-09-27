@@ -1,6 +1,6 @@
 # Install filo
 
-[简体中文](INSTALL.zh-CN.md) · [Back to filo](../README.md)
+[Back to filo](../README.md)
 
 ## Download
 

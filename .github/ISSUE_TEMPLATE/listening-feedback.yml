@@ -1,26 +1,25 @@
-name: Setup or playback feedback / 使用反馈
+name: Setup or playback feedback
 description: Tell us how filo works with your Mac and DAC.
 body:
   - type: markdown
     attributes:
       value: |
-        English or 中文都可以。
         Please describe your setup and experience; no music files or device serial numbers are needed.
   - type: dropdown
     id: kind
     attributes:
-      label: What would you like to share? / 反馈类型
+      label: What would you like to share?
       options:
-        - Works with my setup / 我的设备使用正常
-        - Installation or permissions / 安装或权限问题
-        - Playback or format matching / 播放或格式匹配问题
-        - Interface feedback / 界面体验
+        - Works with my setup
+        - Installation or permissions
+        - Playback or format matching
+        - Interface feedback
     validations:
       required: true
   - type: textarea
     id: setup
     attributes:
-      label: Your setup / 使用环境
+      label: Your setup
       description: macOS version, Mac chip, filo version, player, and DAC model.
       placeholder: macOS 26, Apple Silicon, filo 1.1.2, Apple Music, Sony NW-ZX706
     validations:
@@ -28,13 +27,13 @@ body:
   - type: textarea
     id: experience
     attributes:
-      label: What happened? / 具体情况
+      label: What happened?
       description: What worked, what did not, and how we can reproduce it if something went wrong.
     validations:
       required: true
   - type: textarea
     id: diagnostics
     attributes:
-      label: Diagnostics / 诊断信息（可选）
+      label: Diagnostics (optional)
       description: Use ••• → Connection details → Copy diagnostics. Review the text before posting it publicly.
       render: text

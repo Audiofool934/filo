@@ -6,7 +6,7 @@ A free, open-source menu bar companion for your Mac and DAC.
 Keep listening in Apple Music while filo matches your output to the formats it can identify.
 Spend less time in Audio MIDI Setup.
 
-**[Download for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)** · [Installation](docs/INSTALL.md) · [简体中文](README.zh-CN.md)
+**[Download for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)** · [Installation](docs/INSTALL.md)
 
 macOS 14.4+ · Apple Silicon & Intel · MIT license
 

@@ -1,5 +1,8 @@
 # Contributing to filo
 
+Write documentation, comments, interface text, and GitHub templates in English.
+Maintain a single English documentation set for now.
+
 Use Xcode 26 or later with the license accepted and the macOS 26 SDK.
 The native Liquid Glass APIs require that SDK at build time; runtime availability checks retain macOS 14.4 support.
 The minimum deployment target is macOS 14.4.

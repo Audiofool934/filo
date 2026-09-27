@@ -1,131 +1,131 @@
-开源 macOS 音频助手：可行性与首个验证版本
+# An open-source macOS audio companion: feasibility and the first validation build
 
-研究日期：2026-09-23。
-目标设备：Mac → USB → Sony NW-ZX706；源应用为 Apple Music 和 Spotify。
-本文记录实现之前的研究和设计状态。
-后续 1.0 的实现与实测结果见 [ARCHITECTURE.md](ARCHITECTURE.md) 和 [VALIDATION.md](VALIDATION.md)，下文的待验证事项保留为历史背景。
+Research date: 2026-09-23.
+Target setup: Mac → USB → Sony NW-ZX706, with Apple Music and Spotify as source applications.
+This document records the research and design before implementation.
+See [ARCHITECTURE.md](ARCHITECTURE.md) and [VALIDATION.md](VALIDATION.md) for the subsequent 1.0 implementation and measurements; the open questions below remain as historical context.
 
-产品目标是保留用户已有播放器，只增加一个菜单栏工具，让用户选择源应用、目标 DAC，并自动管理输出格式。
-严格 bit-perfect 的定义是：源内容解码后的有效 PCM 样本，以相同采样率、声道顺序、数量和顺序到达 DAC 输入；允许无损的存储表示转换和固定传输延迟。
-这个定义不对 DAC 内部音量控制、滤波和数模转换作出保证。
-无损流媒体、原生采样率、独占访问和样本一致分别是不同的可验证属性。
+The product goal is to preserve the user's existing player and add a menu bar tool for selecting a source application and DAC, with automatic output-format management.
+Strict bit-perfect playback means that the decoded source's valid PCM samples reach the DAC input with the same sample rate, channel order, sample count, and sequence; lossless storage-representation changes and fixed transport latency are allowed.
+This definition makes no guarantee about volume control, filtering, or digital-to-analog conversion inside the DAC.
+Lossless streaming, native sample rate, exclusive access, and sample equality are distinct properties that require separate verification.
 
-1. 已知可用的系统能力
+## 1. Available system capabilities
 
-Apple 的 Core Audio Process Tap 示例允许捕获指定进程的输出，也允许在读取 tap 时抑制原进程的正常输出。
-示例使用私有聚合设备把 tap 作为输入；首次实际捕获需要用户授予系统音频录制权限。
-这些能力支持构建应用外部的音频助手，无需先实现内核驱动。
-它们并未承诺 tap 内容等同于源文件解码后的原生 PCM。
-[Apple 官方示例](https://developer.apple.com/documentation/CoreAudio/capturing-system-audio-with-core-audio-taps)
+Apple's Core Audio Process Tap example can capture a selected process's output and suppress that process's normal output while reading the tap.
+The example uses a private aggregate device with the tap as an input; actual capture requires the user's permission to record system audio.
+These capabilities support an audio companion outside the player without first implementing a kernel driver.
+They do not promise that tap content equals the source file's native decoded PCM.
+[Apple's example](https://developer.apple.com/documentation/CoreAudio/capturing-system-audio-with-core-audio-taps)
 
-CoreAudio 的设备 Hog Mode 可以取得独占访问。
-独占归属于取得它的进程，不能仅由辅助进程抢占 DAC 就让 Music 自动拥有一条直通路径；这可能阻断 Music 的正常输出。
-中继方案必须同时验证捕获路由和设备所有权。
-[Apple 独占接口](https://developer.apple.com/documentation/coreaudio/audiohardwaredevice/togglehogmode())
+CoreAudio device Hog Mode provides exclusive access.
+Ownership belongs to the process that acquires it; a helper taking over the DAC does not automatically give Music a direct output path and may block Music's normal output.
+A relay must verify both capture routing and device ownership.
+[Apple's exclusive-access interface](https://developer.apple.com/documentation/coreaudio/audiohardwaredevice/togglehogmode())
 
-一个容易误用的名称是 CATapDescription.isExclusive。
-它表示捕获时排除 processes 列表中的进程，不表示独占 DAC。
-设备独占必须单独建立和确认。
-[Apple 属性定义](https://developer.apple.com/documentation/coreaudio/catapdescription/isexclusive)
+The name `CATapDescription.isExclusive` is easy to misinterpret.
+It excludes the processes in the `processes` list from capture; it does not mean exclusive access to the DAC.
+Device exclusivity must be established and confirmed separately.
+[Apple's property definition](https://developer.apple.com/documentation/coreaudio/catapdescription/isexclusive)
 
-MusicKit 提供曲库、队列和播放控制能力；本次检查的公开文档没有提供可据此设计的订阅音频原始 PCM 回调。
-因此架构不依赖通过 MusicKit 获取原始解码样本。
+MusicKit supports library access, queues, and playback control; the public documentation examined during this research did not provide a raw PCM callback for subscription audio on which to base the design.
+The architecture therefore does not depend on obtaining raw decoded samples through MusicKit.
 [MusicKit](https://developer.apple.com/musickit/)
 
-2. 从第一性原理得到的约束
+## 2. Constraints from first principles
 
-如果上游已经把 44.1 kHz 内容重采样成 48 kHz，下游再转回 44.1 kHz，不能保证恢复原样。
-读取到的 tap 格式是捕获输出的格式，不能作为原始内容格式的独立证据。
-源格式、tap 格式、DAC 格式必须分别记录，未知的字段保持未知。
+If upstream processing resamples 44.1 kHz content to 48 kHz, converting it back to 44.1 kHz downstream cannot guarantee recovery of the original samples.
+The tap's reported format describes its captured output and is not independent evidence of the original content format.
+Record source, tap, and DAC formats separately, leaving unknown fields unknown.
 
-同一个输出流在同一时刻只有一个采样率。
-两段不同采样率的音频不能同时混入这个流而又各自保持原样。
-第一版一次管理一个音乐源；处理多应用并发时不静默混音并宣称 bit-perfect。
+One output stream has only one sample rate at a time.
+Two sources with different rates cannot be mixed into that stream while each retains its original samples.
+The first version manages one music source at a time; it must not silently mix concurrent applications and claim bit-perfect playback.
 
-两端标称都是 44.1 kHz，也不等于时钟完全同步。
-如果捕获端与输出端独立运行，环形缓冲最终可能溢出或欠载；自动重采样或丢补样本会违背严格目标。
-设计需要验证捕获能否跟随同一 DAC 时钟工作，而不是仅把漂移补偿开关关掉。
-Apple 明确把聚合设备的漂移补偿称为重采样。
-[Apple 聚合设备同步说明](https://support.apple.com/en-ng/guide/audio-midi-setup/ams094c7edb4/mac)
+Two endpoints nominally running at 44.1 kHz do not necessarily share a synchronized clock.
+If capture and output run independently, the ring buffer may eventually overflow or underrun; automatic resampling or dropping or inserting samples would violate the strict goal.
+The design must verify that capture can follow the same DAC clock, rather than merely disabling drift compensation.
+Apple explicitly describes aggregate-device drift compensation as resampling.
+[Apple's aggregate-device synchronization guide](https://support.apple.com/en-ng/guide/audio-midi-setup/ams094c7edb4/mac)
 
-位深增加与采样率改变不同。
-16/24-bit PCM 可以无损表示在合适的更宽容器中；正确缩放的 24-bit PCM 也可以精确表示为 Float32。
-但处理链中的增益、EQ、抖动、声道变换或采样率转换需要逐项排除，不能由容器格式推出整体一致。
+Increasing bit depth differs from changing sample rate.
+16-bit and 24-bit PCM can be represented losslessly in suitable wider containers; correctly scaled 24-bit PCM can also be represented exactly in Float32.
+Gain, EQ, dithering, channel transformations, and sample-rate conversion must nevertheless be ruled out individually; the container format alone cannot establish equality across the whole path.
 
-不同采样率曲目的硬件切换可能需要重新锁定时钟。
-如果只能在开播后获知新曲格式，就无法同时无条件保证首样本正确、零等待、零重播和自动匹配。
-产品应明确短暂等待或重新开始的行为，并单独测试同采样率专辑的无缝连续播放。
+Switching hardware between tracks with different sample rates may require the clock to relock.
+If the new track's format is only available after playback starts, correct first samples, no waiting, no replay, and automatic matching cannot all be guaranteed unconditionally.
+The product should make any brief wait or restart explicit and test gapless playback of albums with a consistent sample rate separately.
 
-3. 两种可独立交付的工作方式
+## 3. Two independently deliverable modes
 
-| 方式 | 音频路径 | 可以承诺什么 | 主要未知点 |
-|---|---|---|---|
-| 格式助手 | 音乐仍由原应用直接输出 | 按已获取的源格式调整 DAC，显示匹配状态 | 源格式检测的可靠性、开头和自然切歌时序 |
-| 音频中继 | 单应用 tap → 无 DSP 传输 → DAC 输出 | 对通过样本测试的中继部分保持样本一致；独占需实测 | 捕获点之前的处理、路由与独占兼容性、时钟同步 |
+| Mode | Audio path | What can be promised | Main unknowns |
+| --- | --- | --- | --- |
+| Format companion | The original player continues to output audio directly | Adjust the DAC to the observed source format and display the match status | Source-format detection reliability and timing at playback start and natural track transitions |
+| Audio relay | Single-application tap → transport without DSP → DAC output | Preserve samples within the relay segment that passes comparison tests; measure exclusivity separately | Processing before capture, routing and exclusive-access compatibility, and clock synchronization |
 
-格式助手能够独立提供价值，也是中继验证失败时有意义的产品范围。
-中继需要通过下面的实验，才能决定是否成为默认模式。
-第一版优先 Swift/SwiftUI 菜单栏界面、CoreAudio 设备控制和 C/C++ 实时音频核心。
-音频回调不进行内存分配、文件访问、日志写入或阻塞等待。
-暂不增加 EQ、音乐推荐、曲库管理或网络音频功能。
+The format companion offers value on its own and remains a useful product scope if relay validation fails.
+The relay must pass the experiments below before deciding whether it should become the default mode.
+The first version prioritizes a Swift/SwiftUI menu bar interface, CoreAudio device control, and a C/C++ real-time audio core.
+Audio callbacks must not allocate memory, access files, write logs, or block.
+EQ, music recommendations, library management, and network audio are outside the initial scope.
 
-4. 应先实现的验证程序
+## 4. Validation tools to build first
 
-准备已知的立体声 PCM 测试文件：44.1、48、96、192 kHz，各包含 16-bit 和 24-bit 版本。
-使用确定性测试序列、左右声道不同的标记、低位变化和边界值，避免只用正弦波而漏掉低位或声道错误。
+Prepare known stereo PCM files at 44.1, 48, 96, and 192 kHz, each in 16-bit and 24-bit versions.
+Use deterministic sequences, distinct left/right channel markers, low-bit changes, and boundary values; sine waves alone may miss low-bit or channel errors.
 
-先让可控测试播放器输出，再由 tap 捕获。
-分别测试源与目标采样率相同和不同的情况，比较捕获样本与参考样本。
-允许识别并报告固定启动延迟，不允许通过重采样、音量归一化或删掉中间错误来使比较通过。
-记录不同样本数、最大整数误差、缺失帧、重复帧、声道顺序和实际格式。
+Begin with a controllable test player and capture its output through a tap.
+Compare captured samples with reference samples when source and target rates match and when they differ.
+Identify and report fixed startup latency, but do not make a comparison pass by resampling, normalizing volume, or deleting errors in the middle.
+Record the number of differing samples, maximum integer error, missing frames, repeated frames, channel order, and actual formats.
 
-随后使用 Music.app 播放同一批本地文件，验证目标应用的已知内容路径。
-本地文件通过不等于 Apple Music 订阅流通过；这两个结论需要分开。
-Spotify 和 Apple Music 的订阅播放先验证实际可捕获性、格式变化、音量行为和生命周期，不把商业曲目与可能不同母带的本地文件当成同一个参考源。
+Then play the same local files in Music.app to test a known-content path through the target application.
+A passing local-file result does not establish a passing Apple Music subscription-stream result; keep those conclusions separate.
+For Spotify and Apple Music subscription playback, first test actual capture availability, format changes, volume behavior, and lifecycle events; do not treat a commercial track and a local file that may use a different master as the same reference source.
 
-捕获通过后才加入 DAC 输出，测试取得独占后捕获是否继续有效，以及是否出现循环、双重播放或静音。
-检查设备属性、设备时钟、输出帧数及长时间缓冲趋势。
-软件输出回调之前的样本比对只证明软件段；实际 USB/DAC 输入是否一致，需要覆盖最终输出的数字测量或 DAC bit-test。
+Only add DAC output after capture passes, then test whether capture remains valid after acquiring exclusive access and whether loops, duplicate playback, or silence occur.
+Inspect device properties, device clocks, output frame counts, and long-term buffer trends.
+Sample comparison before the software output callback proves only the software segment; equality at the actual USB/DAC input requires a digital measurement covering the final output or a DAC bit-test.
 
-| 实验 | 必须回答的问题 |
-|---|---|
-| 同率 16/24-bit | 捕获是否精确保留有效位？ |
-| 源与设备不同率 | 转换发生在哪个位置？能否在播放前避免？ |
-| 取得 DAC 独占 | 捕获和原应用是否仍正常工作？ |
-| 长时间播放 | 是否存在持续缓冲漂移或丢补帧？ |
-| 44.1 ↔ 192 自然切歌 | 格式识别是否迟到，是否丢失曲首？ |
-| 同率无缝专辑 | 是否错误地插入静音、重新开始或重复切换？ |
-| 睡眠、热插拔、崩溃 | 是否释放独占和 tap，恢复可用输出？ |
-| 其他应用开始发声 | 是否影响音乐源或被混入？ |
+| Experiment | Question it must answer |
+| --- | --- |
+| Matching rates at 16/24-bit | Does capture preserve every valid bit exactly? |
+| Different source and device rates | Where does conversion occur, and can it be avoided before playback? |
+| Acquiring exclusive DAC access | Do capture and the original application continue to work? |
+| Long playback | Is there persistent buffer drift or any frame loss or insertion? |
+| Natural 44.1 ↔ 192 kHz track transitions | Does format detection arrive late, and is the track opening lost? |
+| Gapless albums at one rate | Are silence, restarts, or repeated rate switches inserted incorrectly? |
+| Sleep, hot-plugging, and crashes | Are exclusive access and taps released, and usable output restored? |
+| Another application starts producing audio | Does it affect the music source or enter the mix? |
 
-5. 第一版产品行为
+## 5. Initial product behavior
 
-用户选择源应用和 DAC 后，菜单栏显示源格式与输出格式；高级详情显示格式信息的来源和测试范围。
-状态使用“格式已匹配”“源格式未知”“正在切换”“输出已断开”等可被实际观测支持的文案。
-仅仅检测到独占或格式一致，不显示“已验证 bit-perfect”。
-测试通过的结果绑定具体系统版本、应用版本、设备和测试路径，不成为对全部订阅内容的永久认证。
+After the user selects a source application and DAC, the menu bar interface shows source and output formats; advanced details explain the format evidence and test boundaries.
+Use observable states such as "Format matched," "Source format unknown," "Switching," and "Output disconnected."
+Exclusive access or matching formats alone must not produce a "Verified bit-perfect" claim.
+Passing results apply to specific system versions, application versions, devices, and tested paths, rather than permanently certifying all subscription content.
 
-切换格式使用明确的状态转换：停止当前传输、释放必要资源、协商格式、确认实际格式和设备恢复，再恢复传输。
-不能把一个固定等待时长当成所有 DAC 都已准备好的证明。
-需要恢复设置时，仅恢复本工具仍拥有的改动，避免覆盖用户在运行期间手动选择的新设备。
-独占失败、源格式未知或设备不支持时，公开显示状态；恢复普通播放时不悄悄保持“原样输出”标识。
+Format switching follows explicit state transitions: stop the current transport, release necessary resources, negotiate the format, confirm the actual format and device readiness, then resume transport.
+A fixed delay is not evidence that every DAC is ready.
+When restoring settings, restore only changes still owned by this tool so that the user's manual device selection during playback is preserved.
+If exclusivity fails, the source format is unknown, or the device is unsupported, show that state; do not quietly retain a sample-preservation label after falling back to normal playback.
 
-6. 开源实现的起点
+## 6. Starting points for an open-source implementation
 
-LosslessSwitcher 的采样率检测和设备控制可以作为研究参考，项目使用 GPL-3.0。
-Choritsu 使用 MIT 许可，并提供 process tap 中继实现，可参考其生命周期处理。
-如果复用代码，保留相应许可和署名；如果选择 GPL 项目作为派生基础，就按其许可发布。
+LosslessSwitcher's sample-rate detection and device control are useful research references; the project uses GPL-3.0.
+Choritsu uses the MIT license and implements a process-tap relay whose lifecycle handling can inform the research.
+Retain the applicable licenses and attribution when reusing code; a derivative based on a GPL project must follow that license.
 [LosslessSwitcher](https://github.com/vincentneo/LosslessSwitcher)
 [Choritsu](https://github.com/jcongaku/apple-music-lossless-eq)
 
-Choritsu 当前所检查的 EQ 实现开启了 sub-tap 漂移补偿，且服务于 DSP 播放目标。
-不能把删除 EQ 运算后的代码直接当作已验证的 bit-perfect 引擎。
-[所检查的实现](https://github.com/jcongaku/apple-music-lossless-eq/blob/main/Audio/ProcessTapEngine.swift)
+The Choritsu EQ implementation examined during this research enables sub-tap drift compensation and serves a DSP playback goal.
+Removing its EQ calculations would not by itself produce a verified bit-perfect engine.
+[Examined implementation](https://github.com/jcongaku/apple-music-lossless-eq/blob/main/Audio/ProcessTapEngine.swift)
 
-如果公开 tap 无法满足原样捕获和时钟约束，可以进一步评估虚拟音频设备。
-Apple 有 Audio Server Plug-in 示例，但虚拟驱动同样不能恢复到达它之前已经损失的信息，因此不把驱动作为默认起点。
-[Apple 虚拟音频设备示例](https://developer.apple.com/documentation/CoreAudio/creating-an-audio-server-driver-plug-in)
+If public taps cannot meet the capture and clock requirements for sample preservation, a virtual audio device can be evaluated next.
+Apple provides an Audio Server Plug-in example, but a virtual driver cannot recover information already lost before reaching it, so a driver is not the default starting point.
+[Apple's virtual audio device example](https://developer.apple.com/documentation/CoreAudio/creating-an-audio-server-driver-plug-in)
 
-本轮判断：插件式体验可行，格式助手可行，公开 API 的应用音频中继可开发。
-对 Apple Music 与 Spotify 的所有内容作出通用端到端 bit-perfect 承诺，当前证据不足。
-下一项工程任务是可复现的捕获与样本一致性实验；它的结果决定中继架构是否成立。
+Research conclusion: a plugin-like experience, a format companion, and an application-audio relay using public APIs are feasible.
+The evidence at this stage does not support a universal end-to-end bit-perfect promise for all Apple Music and Spotify content.
+The next engineering task is a reproducible capture and sample-equality experiment; its results determine whether the relay architecture holds.
