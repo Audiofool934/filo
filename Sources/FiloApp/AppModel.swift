@@ -254,7 +254,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var panel = MenuBarPanel(content: FiloView(model: model))
     private var observers: [NSObjectProtocol] = []
     func applicationDidFinishLaunching(_ notification: Notification) {
-        item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        // The narrow f needs less horizontal padding than a square status item.
+        item = NSStatusBar.system.statusItem(withLength: 20)
         item.button?.image = MenuBarIcon.make()
         item.button?.imagePosition = .imageOnly
         item.button?.toolTip = "filo"

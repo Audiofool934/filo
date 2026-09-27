@@ -141,3 +141,13 @@ The fixed menu-item width and the absence of state-driven positioning were check
 Outside-click, application-switch, screen-change, sleep, and Space-change dismissal are implemented but were not established end to end by this session's UI automation.
 Dark appearance, older macOS versions, fullscreen behavior, and Intel execution were not rechecked.
 The audio XCTest suite was not rerun for this UI-only patch; the release build and native interactions are the validation for this follow-up.
+
+### Spacing refinement, build 9
+
+The status item now has an explicit 20-point width instead of the system's square width, reducing horizontal padding around the unchanged 18-point f image.
+Its width remains constant across connection states.
+The refinement passes the warnings-as-errors and universal builds, and the updated local bundle passes strict signature verification.
+Before updating, the native card showed an active Apple Music to WALKMAN connection; after the update those selections were retained and the connection was re-enabled.
+The connection journal confirms the running delivered app owns the restored WALKMAN session.
+The native automation intermittently lost the open card after restart, so the final matched source label and desktop menu-bar spacing were not captured in this follow-up.
+The previous build 8 bundle and package are preserved in the ignored `work/menu-spacing` directory.
