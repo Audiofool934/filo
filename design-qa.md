@@ -173,3 +173,26 @@ The warnings-as-errors build and universal release build passed, as did deep str
 Local XCTest could not compile because this computer has Command Line Tools without the XCTest module or a full Xcode installation.
 This is a native pointer-interaction regression check on macOS 26 in light appearance, not a frame-time benchmark or a full accessibility audit.
 The previous app bundle is preserved at `work/menu-hit-fix/filo-before-hit-area.app`.
+
+## DMG distribution preparation
+
+Date: 2026-09-27.
+The 1.1.2 build 10 package now includes a DMG with the app, an Applications shortcut, and a light installation background containing a teal drag arrow.
+The final image was opened through Finder and visually inspected on macOS 26 at Retina scale.
+The two icons, their labels, the heading, and the drag instruction are visible and aligned.
+Finder retains this user's tab and path bar preferences; those global settings were not changed.
+The final native capture is `work/dmg-distribution/installer-final.jpg`.
+
+The first package exposed a strict-signature failure because hiding the app's extension added FinderInfo to the already-signed bundle.
+The packaging settings no longer modify the app's FinderInfo.
+A separate Retina background issue was fixed by setting bitmap display size after rendering, avoiding a second scale transform.
+
+Final packaging passed DMG checksums, ZIP checksums, app signature verification inside both artifacts, both CPU architecture checks, and byte comparisons of all bundled app files.
+The verification also checks the Applications symlink and the Finder layout assets, then detaches its own mount.
+Ad-hoc and Apple Development identities were rejected by the notarization preflight before building or uploading.
+The running `dist/filo.app` and its existing connection were not replaced or restarted by packaging.
+The preview mounts and temporary Finder windows were closed after inspection.
+
+Only an Apple Development identity was available locally, so Developer ID signing, submission to Apple, ticket stapling, Gatekeeper acceptance, and a fresh-Mac installation remain unverified.
+The new notarization workflow is opt-in, uses a named Keychain profile, and requires Apple's Accepted result before producing final release artifacts.
+Dark appearance and earlier macOS Finder versions were not visually checked.

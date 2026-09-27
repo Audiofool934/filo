@@ -17,12 +17,5 @@ jobs:
         run: swift test
       - name: Compile finite-reference laboratory without hardware
         run: bash scripts/verify-finite-reference.sh --check
-      - name: Package app
-        run: bash scripts/build.sh --universal
-      - name: Inspect bundle
-        run: |
-          plutil -lint dist/filo.app/Contents/Info.plist
-          codesign --verify --deep --strict dist/filo.app
-          lipo dist/filo.app/Contents/MacOS/filo -verify_arch arm64 x86_64
-          lipo dist/filo.app/Contents/MacOS/filo-lab -verify_arch arm64 x86_64
-          dist/filo.app/Contents/MacOS/filo-lab help
+      - name: Package and verify DMG and ZIP
+        run: bash scripts/package-release.sh

@@ -8,12 +8,14 @@
 同一个安装包同时支持 Apple Silicon 和 Intel Mac，无需选择芯片版本。
 原生 Liquid Glass 需要 macOS 26，较早版本会使用系统材质替代。
 
-1. [下载 filo Mac 版](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)。
-2. 解压，把 **filo.app** 拖进「应用程序」。
+1. [下载 filo Mac 版](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg)。
+2. 打开 DMG，把 **filo** 拖到 **Applications（应用程序）** 文件夹。
+   复制完成后，推出 filo 磁盘映像。
 3. 从「应用程序」启动 filo，然后点击菜单栏里的 **ƒ**。
 
 filo 没有 Dock 图标或独立主窗口。
-下载 ZIP 即可；GitHub 页面上的 **Source code** 是留给自行编译的开发者的。
+也可以选择 [ZIP 版本](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip)，解压后把 **filo.app** 拖进「应用程序」。
+GitHub 页面上的 **Source code** 是留给自行编译的开发者的。
 [更新记录与 SHA256SUMS 校验文件](https://github.com/Audiofool934/filo/releases/latest)与安装包放在同一个发布页面。
 
 ## 首次打开

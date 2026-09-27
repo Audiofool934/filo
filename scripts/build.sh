@@ -26,10 +26,14 @@ fi
 cp Resources/Info.plist "$app_dir/Contents/Info.plist"
 cp LICENSE "$app_dir/Contents/Resources/LICENSE"
 cp -R Resources/Scenes "$app_dir/Contents/Resources/"
-swift scripts/icon.swift dist/filo.iconset
-iconutil -c icns dist/filo.iconset -o "$app_dir/Contents/Resources/filo.icns"
+icon_work="$(mktemp -d "${TMPDIR:-/tmp}/filo-icons.XXXXXX")"
+trap 'rm -rf "$icon_work"' EXIT
+swift scripts/icon.swift "$icon_work/filo.iconset"
+iconutil -c icns "$icon_work/filo.iconset" -o "$app_dir/Contents/Resources/filo.icns"
 # Sign the nested laboratory executable before sealing the app bundle.
-codesign --force --sign "${SIGNING_IDENTITY:--}" --options runtime "$app_dir/Contents/MacOS/filo-lab"
-codesign --force --sign "${SIGNING_IDENTITY:--}" --options runtime --entitlements Resources/filo.entitlements "$app_dir"
+sign_options=(--force --sign "${SIGNING_IDENTITY:--}" --options runtime)
+if [[ "${SIGNING_IDENTITY:--}" != "-" ]]; then sign_options+=(--timestamp); fi
+codesign "${sign_options[@]}" "$app_dir/Contents/MacOS/filo-lab"
+codesign "${sign_options[@]}" --entitlements Resources/filo.entitlements "$app_dir"
 codesign --verify --deep --strict "$app_dir"
 echo "Built $app_dir"

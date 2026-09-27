@@ -8,12 +8,14 @@ Requires macOS 14.4 or later.
 One download supports both Apple Silicon and Intel Macs.
 Native Liquid Glass requires macOS 26; earlier versions use native material fallbacks.
 
-1. [Download filo for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip).
-2. Unzip the file and move **filo.app** to **Applications**.
+1. [Download filo for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg).
+2. Open the DMG and drag **filo** onto the **Applications** folder.
+   When copying finishes, eject the filo disk image.
 3. Open filo from Applications, then click **ƒ** in the menu bar.
 
 There is no Dock icon or separate main window.
-The release ZIP contains the app; GitHub's **Source code** downloads are for building it yourself.
+A [ZIP alternative](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip) is also available; unzip it and move **filo.app** to **Applications**.
+GitHub's **Source code** downloads are for building it yourself.
 [Release notes and SHA256SUMS](https://github.com/Audiofool934/filo/releases/latest) are available alongside the app download.
 
 ## First launch

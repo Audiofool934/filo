@@ -15,6 +15,13 @@ By default, packaging ad-hoc signs the app and its laboratory executable.
 Set `SIGNING_IDENTITY` only when you have an appropriate signing identity and intend to use it.
 Signing does not itself notarize the app.
 
+For the DMG and ZIP release artifacts, run `bash scripts/package-release.sh`.
+This needs Python 3.10 or later and installs hash-pinned packaging tools into `.build/dmg-tools`.
+The app has no Python runtime dependency.
+Packaging builds in a temporary directory and does not replace a running `dist/filo.app`.
+Run `python3 scripts/verify-release.py` to inspect both final payloads and their checksums.
+Developer ID signing, Keychain credentials, and the opt-in notarization command are documented in [Distribution](docs/DISTRIBUTION.md).
+
 For audio-path changes, install BlackHole 2ch separately and run the silent matrix:
 
 ```sh
