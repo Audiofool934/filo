@@ -7,7 +7,7 @@ For ordinary listening, use **Format matching** to follow supported source sampl
 ## First connection
 
 1. Connect your DAC and enable its USB DAC mode if needed.
-2. Open filo from its compact link icon in the menu bar.
+2. Open filo from its compact ƒ icon in the menu bar.
 3. Select Apple Music or Spotify and the DAC in the bottom row.
 4. Turn on Automatic for Apple Music, or Spotify profile for its fixed 44.1 kHz target.
 5. Start playback in the player; use **••• → Connection details** to inspect source and output separately.
@@ -18,7 +18,7 @@ Another application's explicitly selected output can override the system default
 
 The main panel shows the observed source rate when available, otherwise the selected output's current rate.
 Its status distinguishes Matched, Manual rate, Spotify profile, and unknown or unsupported formats.
-The menu bar always uses the actual connected output rate.
+The menu bar shows only a fixed-width ƒ icon; rates appear inside the card.
 The CD scene covers rates through 44.1 kHz, a home studio represents 48 kHz, a tube system covers 88.2/96 kHz, and a reference system covers higher rates.
 These scenes are decorative, not audio-quality grades.
 
@@ -31,7 +31,7 @@ The optional capture format describes the process tap, not the original recordin
 
 Use **••• → Settings** while disconnected to choose a manual sample rate or an experimental audio path.
 Details, settings, and the main panel share a fixed 340 × 300 point frame.
-Click outside the popover or press Escape to close it; closing the panel leaves an active connection running.
+Click outside the card or press Escape to close it; closing the card leaves an active connection running.
 
 ## Listening settings
 
