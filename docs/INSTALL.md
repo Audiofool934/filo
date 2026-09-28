@@ -1,62 +1,91 @@
 # Install filo
 
-[Back to filo](../README.md)
+[Back to filo](../README.md) · [User guide](USAGE.md)
 
-## Download
+## Requirements
 
-Requires macOS 14.4 or later.
-One download supports both Apple Silicon and Intel Macs.
-Native Liquid Glass requires macOS 26; earlier versions use native material fallbacks.
+- macOS 14.4 or later, on Apple Silicon or Intel.
+  One universal download covers both.
+- A USB DAC or other output device with one stereo output stream.
+- Apple Music or Spotify.
+
+Native Liquid Glass appears on macOS 26; earlier versions use the standard translucent materials.
+
+## Download and install
 
 1. [Download filo for Mac](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.dmg).
 2. Open the DMG and drag **filo** onto the **Applications** folder.
-   When copying finishes, eject the filo disk image.
-3. Open filo from Applications, then click **ƒ** in the menu bar.
+3. Eject the filo disk image.
+4. Open filo from Applications.
 
-There is no Dock icon or separate main window.
-A [ZIP alternative](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip) is also available; unzip it and move **filo.app** to **Applications**.
-GitHub's **Source code** downloads are for building it yourself.
-[Release notes and SHA256SUMS](https://github.com/Audiofool934/filo/releases/latest) are available alongside the app download.
+filo lives in the menu bar as a small **ƒ**.
+It has no Dock icon or main window; the card opens by itself the first time, and afterwards whenever you click **ƒ**.
+
+A [ZIP alternative](https://github.com/Audiofool934/filo/releases/latest/download/filo-macos-universal.zip) contains the same app; unzip it and move **filo.app** to Applications.
+GitHub's **Source code** archives are for building filo yourself.
+
+### Verify the download (optional)
+
+Each release lists SHA-256 checksums in `SHA256SUMS`.
+Download it into the same folder as the DMG or ZIP, then run:
+
+```sh
+shasum -a 256 --ignore-missing -c SHA256SUMS
+```
 
 ## First launch
 
-The 1.1.2 DMG and ZIP are signed with Developer ID and notarized by Apple.
-Both include the app's notarization ticket, and the DMG has its own ticket.
-macOS may still ask you to confirm opening an app downloaded from the internet; this is the normal first-launch confirmation described in [Apple's instructions](https://support.apple.com/en-us/102445).
+Releases from 1.1.2 on are signed with a Developer ID and notarized by Apple, and both the DMG and the app carry their notarization tickets.
+macOS may still ask you to confirm opening an app downloaded from the internet; that is the normal first-launch confirmation described in [Apple's guide](https://support.apple.com/en-us/102445).
 
-If macOS cannot verify the developer, first check that you downloaded version 1.1.2 or later from this repository's releases; older versions were not notarized.
-If a current release is blocked, or the message says the app is damaged or will harm your computer, stop and [report the exact message](https://github.com/Audiofool934/filo/issues/new/choose).
+If macOS says it cannot verify the developer, check that you downloaded version 1.1.2 or later from this repository's [releases](https://github.com/Audiofool934/filo/releases/latest); earlier versions were not notarized.
+If a current release is blocked, or macOS says the app is damaged or will harm your computer, do not open it, and [report the exact message](https://github.com/Audiofool934/filo/issues/new/choose).
 
-## Connect your music
+## Connect for the first time
 
-1. Connect your USB DAC and enable its USB DAC mode if needed.
-2. In filo, choose **Apple Music** and your DAC.
-3. Turn on **Automatic** and allow playback access if macOS asks.
-4. Start a lossless track in Music.
+1. Connect your USB DAC and turn on its USB DAC mode if it has one.
+2. Click **ƒ**, then choose **Music** and your DAC in the bottom row of the card.
+3. Turn on the switch.
+4. If macOS asks whether filo may control Music, click **Allow**.
+   filo only reads playback information; it does not change your library.
+5. Play a lossless track in Music.
 
-The default **Format matching** path needs Automation access to read the selected player's playback information.
-It does not require BlackHole, a new audio driver, system-audio capture, or microphone permission.
-Those additional dependencies belong to optional experimental paths in Settings.
+For Spotify, choose **Spotify** instead; filo applies its fixed 44.1 kHz profile.
 
-For Spotify, choose **Spotify profile** for its fixed 44.1 kHz target.
-Spotify's current track format is not detected automatically.
+The default **Format matching** path needs only the Automation permission from step 4.
+It does not need BlackHole, a new audio driver, audio recording, or microphone access; those belong to the experimental paths in Settings.
+filo also leaves your player's quality settings alone, so turn on lossless playback in the player yourself if you want it.
 
-Enable lossless audio in the player separately if you want lossless playback.
-filo does not change your player's quality, volume, or effects.
+Continue with the [user guide](USAGE.md) to learn what the card shows.
 
 ## If something looks wrong
 
-- **Source format unknown:** start another lossless Music track; if detection remains unavailable, choose a known rate manually in Settings while disconnected.
-- **No DAC listed:** check its USB connection and USB DAC mode.
-- **After sleep or unplugging:** turn the connection back on.
-- **Brief gap when the rate changes:** a DAC can pause while switching its hardware rate.
+| What you see | Try this |
+| --- | --- |
+| Your DAC is not in the output list | Check the cable and the DAC's USB DAC mode, then reopen the card. |
+| **Source unknown** | Play another lossless track, or disconnect and choose the track's rate manually in **••• → Settings**. |
+| **Connection stopped** after sleep or unplugging | Turn the switch on again. |
+| A short silence when the rate changes | This is normal; many DACs pause briefly while they switch rates. |
 
-[Full usage and troubleshooting](USAGE.md) covers formats, permissions, and recovery.
+The [user guide's troubleshooting section](USAGE.md#troubleshooting) covers more cases.
 
-## Update or remove
+## Update
 
-To update, disconnect and quit filo through **••• → Quit filo**, replace the app in Applications, reopen it, and reconnect.
-Quitting releases the active connection and restores settings still owned by filo.
+1. In the card, choose **••• → Quit filo**.
+   Quitting ends the connection and restores the output settings filo changed.
+2. Install the new version as above, replacing the old app.
+3. Open filo and turn the switch on again.
 
-To remove it, quit the same way and move filo.app to Trash.
-filo does not install a driver or administrator helper.
+Your player and output choices are remembered.
+
+## Remove
+
+1. Choose **••• → Quit filo**, then move filo from Applications to the Trash.
+2. Optionally, remove its remaining data:
+   - `~/Library/Application Support/filo` holds recovery records.
+     After a clean quit it contains at most an `exclusive-recovery` folder holding only a `session.lock` file.
+     If `connection.json` or other `.json` files remain, a restore is still pending: open filo once more, then quit again before deleting the folder.
+   - Remove saved preferences with `defaults delete blog.audiofool.filo`.
+   - Remove filo from **System Settings → Privacy & Security** under Automation, and under Microphone or Screen & System Audio Recording if you tried the experimental paths.
+
+filo installs no driver, background service, or administrator helper, so there is nothing else to remove.

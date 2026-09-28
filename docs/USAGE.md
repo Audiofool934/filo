@@ -1,156 +1,189 @@
 # Using filo
 
-filo requires macOS 14.4 or later and a device with one stereo output stream.
-The universal app contains Apple Silicon and Intel executables.
-For ordinary listening, use **Format matching** to follow supported source sample rates and known integer precision while the player handles playback.
+[Back to filo](../README.md) · [Install](INSTALL.md) · [Exclusive preview](EXCLUSIVE-PREVIEW.md)
 
-## First connection
+This guide covers everyday use of filo's default **Format matching** path.
+If filo is not installed yet, start with the [installation guide](INSTALL.md).
 
-1. Connect your DAC and enable its USB DAC mode if needed.
-2. Open filo from its compact ƒ icon in the menu bar.
-3. Select Apple Music or Spotify and the DAC in the bottom row.
-4. Turn on Automatic for Apple Music, or Spotify profile for its fixed 44.1 kHz target.
-5. Start playback in the player; use **••• → Connection details** to inspect source and output separately.
+## The card
 
-Turning the connection on changes the Mac's default media output to the chosen device.
-It does not change the separate system-alert output.
-Another application's explicitly selected output can override the system default for that application.
+Click **ƒ** in the menu bar to open filo's card.
 
-The main panel shows the observed source rate when available, otherwise the selected output's current rate.
-Its status distinguishes Matched, Manual rate, Spotify profile, and unknown or unsupported formats.
-The menu bar shows only a fixed-width ƒ icon; rates appear inside the card.
-The CD scene covers rates through 44.1 kHz, a home studio represents 48 kHz, a tube system covers 88.2/96 kHz, and a reference system covers higher rates.
-These scenes are decorative, not audio-quality grades.
+- **Top row:** the current mode (**Automatic**, **Spotify profile**, **Manual rate**, or an experimental path), the connection switch, and the **•••** menu.
+- **Middle:** the sample rate in kHz and a one-line status.
+  The rate is the source's rate when filo knows it, and otherwise your output's current rate.
+- **Bottom row:** your player on the left and your output on the right.
+  Click either one to change it.
 
-Connection details shows source evidence and actual output representation separately.
-A 32-bit float output can represent 24-bit integer PCM precision; its container size does not mean the recording contains 32 bits of detail.
-For known integer sources, filo prefers the exact advertised integer depth, then an advertised format with enough precision.
-If no adequate depth is available, the rate still matches and the panel reports **Rate matched · depth limited**.
-Unknown source depth, manual rates, Spotify's profile, and floating-point local files leave the current output depth unchanged.
-The optional capture format describes the process tap, not the original recording.
+The background scene follows the displayed rate: a CD player through 44.1 kHz, a home studio through 48 kHz, a tube amplifier through 96 kHz, and a reference system above that.
+The scenes are decoration, not quality grades.
 
-Use **••• → Settings** while disconnected to choose a manual sample rate or an experimental audio path.
-Details, settings, and the main panel share a fixed 340 × 300 point frame.
-Click outside the card or press Escape to close it; closing the card leaves an active connection running.
+The **•••** menu opens **Connection details**, **Settings**, and **About filo** inside the card, opens your player, and quits filo.
+Click outside the card or press Escape to close it; the connection keeps running while the card is closed.
 
-## Listening settings
+## Connecting
 
-Enable lossless quality in your player when your account and content support it.
-Review EQ, volume normalization, spatial processing, crossfade, and other effects in the player.
-filo neither reads every effect setting nor turns effects off automatically.
+1. Connect your DAC and turn on its USB DAC mode if it has one.
+2. Choose your player and your DAC in the bottom row.
+3. Turn on the switch.
+4. Play music.
 
-For unchanged samples, turn the DAC's listening level down before setting player volume to 100%, then adjust listening level on the DAC.
-A matching sample-rate display alone does not prove unchanged samples.
-Other apps can still mix into the shared output in Format matching and Direct relay.
-In Exclusive preview, only the selected application is forwarded from BlackHole to the DAC.
+Turning the connection on makes your DAC the Mac's default output.
+It does not change the separate output used for system alerts.
+An app that has its own output device selected keeps using it.
+
+You can change the player or output while connected; filo restores the previous output and connects the new one.
+Turning the switch off, or quitting filo, restores the settings filo changed.
+
+## Reading the status
+
+| Card shows | Meaning |
+| --- | --- |
+| Ready to match | Disconnected, with an output selected. |
+| Choose an output | No output is selected, or the selected one is unplugged. |
+| Waiting for music | Connected; the player is not playing. |
+| Matched · 24-bit | The DAC's rate matches the source rate filo observed. The bit depth appears when the source depth is known. |
+| Manual rate | The rate you chose in Settings is applied; automatic detection is off. |
+| Spotify profile | Spotify's fixed 44.1 kHz profile is applied; tracks are not detected individually. |
+| Rate matched · depth limited | The rate matches, but the DAC offers no format with enough precision for the source's bit depth. Playback continues. |
+| Rate not supported | The source rate is not available on this output. The output stays at its current rate, and matching resumes with the next supported track. |
+| Source unknown | filo has no usable format information for the current track, so the output rate is unchanged. Open **Connection details** for the reason. |
+| Check connection | filo cannot read the player's current playback information. |
+| Connection stopped | The connection ended, for example because the output was unplugged or changed outside filo. **Connection details** explains why. |
+
+While filo works, the status briefly shows **Connecting**, **Matching output**, or **Disconnecting**.
+
+**Connection details** shows the source format and its evidence (**Local file**, **Music decoder**, **Spotify music profile**, or **Manual selection**), the output's actual rate and format, and a sentence describing the current state.
+
+## Settings
+
+Open **••• → Settings** while disconnected.
+
+- **Sample rate:** **Automatic** for Apple Music, **Spotify · 44.1 kHz** for Spotify, or one of the sample rates your output reports.
+  Choosing a rate turns off automatic detection until you switch back.
+  Selecting a different player resets this to its default.
+- **Audio path:** **Format matching** (the default), or the experimental **Direct relay** and **Exclusive preview**.
+  See [Audio paths](#audio-paths).
+
+Settings are locked while connected; turn the switch off to change them.
+
+## How automatic detection works
+
+Apple Music does not offer a public way to read the format of the track it is playing.
+filo uses two indirect sources of evidence:
+
+1. **Local file.**
+   When the current track has a file on your Mac, filo reads the file's header for its rate and bit depth.
+   This takes priority, and a failed lookup is retried every five seconds while the format is unknown.
+2. **Music decoder.**
+   For streamed lossless tracks, Music writes Apple Lossless decoder diagnostics to the system log.
+   filo accepts only a fresh diagnostic that appears close to a track change, and treats conflicting rates as unknown.
+
+This works for most lossless listening, with some limits:
+
+- Detection can arrive shortly after a track starts, so its opening may play at the previous rate.
+- Rapid skipping and Music's prebuffering of the next track can leave the format unknown.
+- Streamed lossy (AAC) tracks produce no decoder evidence, so they stay unknown unless they are local files.
+- A short track can end before its format is detected.
+- Changing a DAC's hardware rate can briefly interrupt playback.
+
+filo follows rates both up and down; after a 192 kHz track, a 44.1 kHz track brings the DAC back to 44.1 kHz.
+While the format is unknown, the output stays at its current rate.
+If a track stays unknown, try another track, or disconnect, choose its rate manually, and reconnect.
+
+If the decoder observer itself fails, the details page says **Automatic detection unavailable** until you reconnect.
+Local files can still be matched in the meantime.
+
+## Spotify
+
+Spotify does not expose the format of the current track.
+filo's Spotify profile sets a fixed 44.1 kHz rate, which suits most music on Spotify.
+It is a policy, not detection: it does not show whether Spotify is actually delivering lossless audio.
+For podcasts, videos, or other content, choose a rate manually if needed.
+
+## Bit depth and output formats
+
+For a track whose integer bit depth is known, filo chooses among the formats your DAC advertises at the new rate.
+It prefers the exact integer depth, then the smallest format with enough precision.
+A 32-bit float format holds 24-bit integer audio exactly, so a 32-bit float output does not mean the recording has 32 bits of detail.
+
+If no advertised format has enough precision, the rate still matches and the card shows **Rate matched · depth limited**.
+Manual rates, Spotify's profile, floating-point local files, and tracks with unknown depth leave the output's bit depth unchanged.
+
+## Listening settings in your player
+
+filo does not change your player's settings.
+If you care about unaltered samples:
+
+- Turn on lossless playback in the player, if your account and content support it.
+- Turn off EQ, volume normalization (Sound Check), spatial audio, crossfade, and similar effects.
+- Set the player's volume to 100% and control loudness on your DAC or amplifier, lowering the listening level first.
+
+A matching rate on the card does not prove that samples reach your DAC unchanged; your player's processing and other apps' sounds still apply on the default path.
 
 ## Audio paths
 
-**Format matching** manages the output rate and known source precision and leaves playback on the player's ordinary path.
-It is the default, does not capture or relay audio, and requires neither BlackHole nor audio-recording permission.
-It follows supported rates both upward and downward; a 192 kHz track does not make 192 kHz the permanent setting for later 44.1 or 48 kHz tracks.
-It does not change the player's effects or certify source bit depth, unchanged samples, or what the DAC receives.
+| Path | What happens | Needs |
+| --- | --- | --- |
+| **Format matching** (default) | The player plays normally; filo only manages the output's rate and format. | Automation permission. |
+| **Direct relay** (experimental) | filo captures the selected player's audio and forwards it to the output without gain, EQ, or rate conversion. | Also system audio recording permission. |
+| **Exclusive preview** (experimental) | filo takes exclusive control of the DAC and forwards only the selected player, refusing any sample it cannot pass exactly. | Also BlackHole 2ch, microphone permission, and a compatible DAC. |
 
-**Direct relay**, under **••• → Settings → Audio path**, taps the selected player and suppresses its ordinary output while the tap is active.
-It forwards stereo samples without gain, EQ, or sample-rate conversion in filo.
-The output device is the aggregate clock, and the configuration requests no drift compensation.
-Unsupported formats or stopped callbacks cause the connection to stop.
-Disconnect before changing the audio path.
-
-**Exclusive preview** uses an installed BlackHole 2ch as the selected player’s source route and opens the DAC directly with Hog Mode and matching integer formats.
-It requires a compatible stereo DAC advertising non-mixable integer formats.
-Select a known rate and connect before playback to arm the fixed-rate path; automatic Music detection can still miss the opening of a track.
-Known non-unity volume, mute, EQ, or per-track gain prevents the preview from starting.
-Unknown settings remain unverified, and there is no end-to-end certification indicator.
-The tested Music path changed a known reference before the relay, so this preview currently stops on that path's unrepresentable samples even with the inspected effects disabled.
-Use Format matching for ordinary listening while this [source-path issue](research/music-reference-observation.md) remains unresolved.
-Read [the preview guide](VERIFIED-OUTPUT.md) for dependencies, verification boundaries, and recovery.
-
-## Automatic format limits
-
-Apple Music does not provide filo with a supported public per-track PCM format API for subscription playback.
-The decoder observer uses the timestamps of lossless input-format diagnostics near playback transitions, rather than treating delayed delivery as a new event.
-Already assigned observations are not reused for the next track, and conflicting recent rates leave the source unknown.
-These safeguards cannot prove that an untagged diagnostic belongs to the playing track rather than a prebuffered track.
-Rapid skipping, delayed observations, and prebuffering can still leave the source unknown or make detection arrive after playback begins.
-Local file format inspection takes precedence when a readable local file is available.
-File lookup takes priority over optional effect checks, and temporary lookup failures are retried at a five-second cadence while the format remains unknown.
-This does not guarantee that Music exposes a usable file location or that a short track is detected before it ends.
-Lossy formats and some playback paths may not generate a usable observation.
-
-filo keeps the current output rate while the source is unknown.
-If it stays unknown, try another track or disconnect, select its known rate manually, and reconnect.
-An **Automatic detection unavailable** message persists if the decoder observer fails; reconnect to restart that observer.
-Readable local Music files can still supply a rate while streaming detection is unavailable.
-If a detected rate is unsupported by the DAC, Format matching keeps playback on the current output rate and shows **Source rate not supported**.
-It remains connected and can match a later supported track automatically.
-Playback while rates differ may involve conversion in the player or macOS; it is not an exact-rate match.
-It cannot undo upstream resampling that already occurred before it detected a change.
-Switching the hardware rate can briefly interrupt playback.
-
-Spotify's 44.1 kHz option is a fixed music policy, not lossless detection or per-track verification.
-For podcasts, ads, videos, or other content, select a known rate manually if needed.
-
-| Status | Meaning |
-| --- | --- |
-| Matched | Hardware rate matches the available local-file or decoder evidence; this is not a fidelity certification. |
-| Rate matched · depth limited | The rate matches, but the available output format cannot preserve all known source bits. |
-| Source format unknown | No usable current evidence; the hardware rate is unchanged. |
-| Automatic detection unavailable | The Music decoder observer failed; readable local files remain an alternative. |
-| Source rate not supported | The observed rate is unavailable on this output; playback continues at its current rate. |
-| Your rate is set | The selected manual rate is applied; automatic detection is off. |
-| Spotify profile active | The fixed 44.1 kHz policy is applied; individual tracks are not being detected. |
-
-The [core matching contract and acceptance matrix](CORE-FORMAT-MATCHING.md) distinguish automated behavior checks from hardware and listening validation.
+Format matching is the path for everyday listening.
+In Direct relay, the player's ordinary output is muted while it is captured, and the connection stops if the audio format or callbacks become unusable.
+Read the [Exclusive preview guide](EXCLUSIVE-PREVIEW.md) before trying Exclusive preview; on the tested Apple Music path it currently stops rather than plays.
 
 ## Permissions
 
-Automation permission allows the playback helper to read the selected player's state, track identity, and volume.
-Direct relay and Exclusive preview additionally require macOS system-audio capture permission.
-macOS names that privacy section differently across releases, including Screen & System Audio Recording.
-Exclusive preview can also trigger a Microphone permission prompt when CoreAudio opens BlackHole's virtual input.
-This is a broader macOS permission, although filo selects the virtual device and does not select your physical microphone.
-Resolve the system permission prompt before expecting the connection to finish.
-If denied, review the relevant permission in System Settings and reconnect filo.
-filo does not request administrator access, install a driver, or upload audio.
+| Permission | Used for | When macOS asks |
+| --- | --- | --- |
+| Automation (control Music or Spotify) | Reading playback state, the current track, player volume, and for Music, the track's file location. | The first connection with each player. |
+| Screen & System Audio Recording | Capturing the player's audio. | Direct relay and Exclusive preview only. |
+| Microphone | Opening BlackHole's virtual input; filo never selects a physical microphone. | Exclusive preview only. |
 
-The download is ad-hoc signed and is not Developer ID notarized.
-After an initial blocked launch attempt, macOS may offer Open Anyway in Privacy & Security.
-You decide whether to allow it; the app does not change Gatekeeper or other security settings.
-Building from source is another option.
+filo reads your player's information without changing your library or playback.
+If you deny a permission, the details page explains which one is needed; enable it in **System Settings → Privacy & Security**, then reconnect.
+macOS names some of these sections differently across versions.
+filo never asks for administrator access and never installs a driver.
 
-## Disconnect, interruptions, and recovery
+## Sleep, unplugging, and outside changes
 
-Disconnect or Quit ends rate management and releases any active relay, then restores only settings filo changed that still match its recorded values.
-An already matching rate is not a new rate change that filo owns.
-If you or another app changes the output device, rate, or physical format, filo stops and preserves the intervening change.
-This protection also applies before filo's first rate change, and when a requested rate already matches the new external setting.
-Sleep releases the connection; reconnect explicitly after waking.
-An unplugged device also requires an explicit reconnect.
-Device selection and recovery use the device's persistent identity rather than assuming a reused system object number still belongs to the same DAC.
+- **Sleep** disconnects filo; turn the switch on again after waking.
+- **Unplugging the DAC** stops the connection; reconnect after plugging it back in.
+- **Changing the output elsewhere**, for example in Sound settings or Audio MIDI Setup, stops the connection and keeps your change.
+  filo never overwrites a device, rate, or format that you or another app changed while it was connected.
 
-Before modifying hardware settings, filo writes a small recovery record at `~/Library/Application Support/filo/connection.json`.
-After an unexpected process exit, reopening filo attempts to restore still-owned settings from that record.
-Exclusive preview also stores coupled DAC format and virtual-clock records under `~/Library/Application Support/filo/exclusive-recovery/`.
-Recovery coordinates filo processes with a file lock, resolves devices by persistent UID, and preserves external changes.
-These atomic records cover process interruption; they are not a power-loss durability guarantee.
-It does not automatically reconnect or start playback.
-Do not edit the record during an active connection.
+filo identifies devices by their persistent identity, so a reconnected DAC is never confused with another device.
+
+### Recovery after an unexpected exit
+
+Before changing any hardware setting, filo writes a small recovery record to `~/Library/Application Support/filo/connection.json`.
+If filo exits unexpectedly, reopening it restores the settings it still owns and removes the record.
+It does not reconnect or start playback on its own.
+Exclusive preview keeps additional records in `~/Library/Application Support/filo/exclusive-recovery/`; see the [Exclusive preview guide](EXCLUSIVE-PREVIEW.md#recovery).
+
+The records protect against a crash or forced quit, not against power loss.
+Do not edit them while filo is connected.
 
 ## Troubleshooting
 
-| Symptom | Next step |
+| Symptom | What to do |
 | --- | --- |
-| Source format unknown | Start another lossless Music track or select a known rate manually. |
-| Automatic detection unavailable | Reconnect to restart detection, use a readable local Music file, or select a known rate manually. |
-| Source rate not supported | Keep listening at the displayed output rate, or use a supported source; automatic matching resumes when supported evidence arrives. |
-| Playback access needed | Review Automation permission and confirm the player is running. |
-| No audio callbacks | Review audio-capture permission, start playback, or try Format matching. |
-| Output changed outside filo | Your change was preserved; reconnect to resume management. |
-| Unsupported format | Use a device exposing one stereo stream; relay requires matching Float32 capture/output. |
-| Captured samples cannot be represented exactly | Exclusive preview stopped because packing the incoming values would require rounding; use Format matching for ordinary listening. |
-| Brief gap during a rate change | This can occur while the DAC changes its hardware rate. |
+| Your DAC is not listed | Check the cable and the DAC's USB DAC mode, then reopen the card. |
+| Details say filo supports outputs with one stereo stream | filo currently needs an output with exactly one two-channel stream; choose another output. |
+| **Source unknown** | Play another lossless track, or disconnect, choose the track's rate in Settings, and reconnect. |
+| Details say **Automatic detection unavailable** | Reconnect to restart detection, play a local file, or choose a rate manually. |
+| **Rate not supported** | Keep listening at the current rate; matching resumes when a supported track plays. |
+| Details ask you to allow filo to read the player | Enable filo for that player in **System Settings → Privacy & Security → Automation**, make sure the player is running, and reconnect. |
+| Details say the output or rate changed outside filo | Your change was kept. Turn the switch on again to resume. |
+| Details say the output is using an exclusive format | Another app has exclusive control of the DAC; quit it or release the DAC, then reconnect. |
+| Details say another filo connection may be active | Quit the other copy of filo, then connect again. |
+| Details say a recovery record is retained | Reconnect the missing device; filo finishes restoring it when the device returns. |
+| A brief gap when the rate changes | Normal for many DACs while they switch rates. |
+| Direct relay reports no audio callbacks | Allow system audio recording for filo, start playback, or use Format matching. |
 
-Copy diagnostics in Connection details gives version, selected source/mode, format observations, and callback counters.
-It excludes track titles, file paths, and persistent device identifiers, but includes the output's display name.
-Review the text before posting it publicly.
+## Sharing diagnostics
+
+**••• → Connection details → Copy diagnostics** copies a plain-text summary: filo and macOS versions, the selected player and path, the observed formats, and audio callback counters.
+It leaves out track titles, file paths, and persistent device identifiers, but includes your output's display name.
+Read it before posting it publicly, then include it in a [feedback report](https://github.com/Audiofool934/filo/issues/new/choose).

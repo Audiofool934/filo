@@ -1,59 +1,89 @@
 # Contributing to filo
 
-Write documentation, comments, interface text, and GitHub templates in English.
-Maintain a single English documentation set for now.
+Thanks for helping improve filo.
+Bug reports, device reports, documentation fixes, and code are all welcome.
+To report a vulnerability, follow the [private security process](SECURITY.md) instead of opening an issue.
 
-Use Xcode 26 or later with the license accepted and the macOS 26 SDK.
-The native Liquid Glass APIs require that SDK at build time; runtime availability checks retain macOS 14.4 support.
-The minimum deployment target is macOS 14.4.
+## Requirements
+
+- macOS with Xcode 26 or later, with its license accepted, for the macOS 26 SDK and XCTest.
+  The Command Line Tools with the macOS 26 SDK can build the app but cannot run the tests.
+- Python 3.10 or later for packaging and the laboratory scripts.
+- [BlackHole 2ch](https://github.com/ExistentialAudio/BlackHole) for audio-path tests.
+
+The native Liquid Glass APIs need the macOS 26 SDK at build time, while runtime availability checks keep the deployment target at macOS 14.4.
+
+## Build, test, and run
 
 ```sh
 swift build -Xswiftc -warnings-as-errors
 swift test
 bash scripts/build.sh
+open dist/filo.app
 ```
 
-For a universal bundle, run `bash scripts/build.sh --universal`.
-By default, packaging ad-hoc signs the app and its laboratory executable.
-Set `SIGNING_IDENTITY` only when you have an appropriate signing identity and intend to use it.
-Signing does not itself notarize the app.
+`scripts/build.sh` assembles `dist/filo.app` for the current architecture; add `--universal` for an arm64 and x86_64 bundle.
+It signs ad hoc unless `SIGNING_IDENTITY` names a certificate you intend to use, and signing alone does not notarize the app.
+Quit any running copy of filo before replacing `dist/filo.app`.
 
-For the DMG and ZIP release artifacts, run `bash scripts/package-release.sh`.
-This needs Python 3.10 or later and installs hash-pinned packaging tools into `.build/dmg-tools`.
-The app has no Python runtime dependency.
-Packaging builds in a temporary directory and does not replace a running `dist/filo.app`.
-Run `python3 scripts/verify-release.py` to inspect both final payloads and their checksums.
-Developer ID signing, Keychain credentials, and the opt-in notarization command are documented in [Distribution](docs/DISTRIBUTION.md).
-Before publishing, run `python3 scripts/verify-release.py --require-notarization --tag vVERSION` with the intended version.
-Public releases use a verified draft and immutable assets; see the [release procedure](docs/DISTRIBUTION.md#publish-to-github).
+CI runs the strict build, the XCTest suite, a hardware-free compile of the laboratory harness, and universal DMG and ZIP packaging on every pull request.
+It has no DAC, music subscription, or audio-capture permission, so hardware behavior and the native UI need separate checks.
 
-For audio-path changes, install BlackHole 2ch separately and run the silent matrix:
+## Project layout
+
+| Path | Contents |
+| --- | --- |
+| `Sources/FiloApp` | Menu bar app and SwiftUI card. |
+| `Sources/FiloCore` | Connection state machine, device access, format detection, lease and recovery, relay sessions, and verification. |
+| `Sources/FiloPCM` | C realtime audio callbacks. |
+| `Sources/FiloLab` | The `filo-lab` command-line laboratory. |
+| `Tests/FiloCoreTests` | XCTest suites using fake devices and fixtures. |
+| `scripts/` | Build, packaging, release verification, and laboratory harnesses. |
+| `docs/` | User, technical, and release documentation; see the [index](docs/README.md). |
+
+[Architecture](docs/ARCHITECTURE.md) explains how the pieces fit together.
+
+## Changing audio behavior
+
+- Keep allocation, locks, file access, logging, and Swift runtime work out of the C audio callbacks.
+- Reject unsupported layouts and unrepresentable samples explicitly; never insert conversion silently.
+- Keep source format, observed tap format, physical output format, and verification evidence separate.
+- Restore only settings filo still owns, and resolve devices by persistent UID.
+- For format-matching changes, keep the [acceptance matrix](docs/CORE-FORMAT-MATCHING.md#acceptance-matrix) true and extend it for new cases.
+
+For changes to the relay or bridge, run the silent loopback matrix with BlackHole installed:
 
 ```sh
+swift build
 python3 scripts/verify-pcm.py --loopback
 ```
 
-Rendered BlackHole loopback also includes the virtual device's input/output gain and mute controls.
-Use unity gain and mute off for exact comparison, record the original settings, and restore them after testing.
-The script does not change those controls; it restores the virtual device's original rate if it still owns the last rate it set.
-Do not use a physical listening device for synthetic testing without reducing the listening level.
-Do not record or publish subscription audio as a test fixture.
+Set BlackHole's gain to unity and mute off, note the original settings, and restore them afterwards.
+Lower the listening level before any synthetic test on a physical device.
+Never record or publish subscription audio as a test fixture.
+The [laboratory guide](docs/LABORATORY.md) covers the exclusive-path and whole-reference tests.
 
-Keep allocation, locks, file access, logging, and Swift runtime work outside the C audio callback.
-Reject unsupported layouts explicitly rather than silently inserting conversion.
-Keep source format, observed tap format, physical output format, and verification evidence separate.
-Document the measurement boundary whenever describing exact PCM preservation.
+## Documentation and evidence
 
-Include the macOS version, filo version, source app, output model, selected path, reproduction steps, and a reviewed diagnostic summary with an issue.
-Do not include device serial numbers, private file paths, account details, or track titles unless necessary and intentionally disclosed.
+- Write documentation, comments, interface text, and GitHub templates in English; the project keeps a single English documentation set.
+- In Markdown, put each sentence on its own line.
+- Describe what was measured and where the measurement stopped.
+  Never describe a matching rate, a format label, or a clean callback as bit-perfect playback.
+- Record new hardware results in [VALIDATION.md](docs/VALIDATION.md) with the revision, versions, and hardware, and commit receipts under `docs/validation/`.
+  Receipts hold statistics and configuration, never recordings, device serial numbers, or private paths.
+- Put investigations in `docs/research/` and add them to the research index.
+- Keep captures, screenshots, and scratch output in the ignored `work/` directory.
 
-The automated CI covers builds, XCTest policies and PCM tests, and app packaging.
-It does not have a real DAC, a Music subscription, or audio-capture permission.
-Hardware and native UI validation therefore remain separate evidence.
+## Issues
 
-Submit changes through a pull request against `main`.
-The `test` check must pass on an up-to-date branch, and review conversations must be resolved before squash merging.
-Report suspected vulnerabilities through the [private security process](SECURITY.md).
+Include the macOS version, filo version, player, output model, selected audio path, reproduction steps, and a reviewed diagnostic summary from **••• → Connection details → Copy diagnostics**.
+Leave out device serial numbers, private file paths, account details, and track titles unless they are necessary and intentionally shared.
 
-Contributions are licensed under the project's MIT license.
-Keep source provenance clear and do not copy incompatible licensed implementations.
+## Pull requests
+
+Open pull requests against `main`.
+The `test` check must pass on an up-to-date branch, and review conversations must be resolved before a squash merge.
+Releases follow [Distribution](docs/DISTRIBUTION.md).
+
+Contributions are licensed under the project's [MIT License](LICENSE).
+Keep source provenance clear, and do not copy code from projects with incompatible licenses.

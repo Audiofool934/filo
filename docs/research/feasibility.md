@@ -3,7 +3,7 @@
 Research date: 2026-09-23.
 Target setup: Mac → USB → Sony NW-ZX706, with Apple Music and Spotify as source applications.
 This document records the research and design before implementation.
-See [ARCHITECTURE.md](ARCHITECTURE.md) and [VALIDATION.md](VALIDATION.md) for the subsequent 1.0 implementation and measurements; the open questions below remain as historical context.
+See [ARCHITECTURE.md](../ARCHITECTURE.md) and [VALIDATION.md](../VALIDATION.md) for the subsequent implementation and measurements; the open questions below remain as historical context.
 
 The product goal is to preserve the user's existing player and add a menu bar tool for selecting a source application and DAC, with automatic output-format management.
 Strict bit-perfect playback means that the decoded source's valid PCM samples reach the DAC input with the same sample rate, channel order, sample count, and sequence; lossless storage-representation changes and fixed transport latency are allowed.

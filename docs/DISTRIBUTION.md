@@ -1,10 +1,13 @@
-# Developer ID signing and notarization
+# Release and distribution
 
-Checked against Apple's documentation on 2026-09-27.
-The 1.1.1 release used ad-hoc signing and was not notarized.
-The 1.1.2 build 10 distribution packages have now passed Developer ID signing, Apple's notarization service, ticket stapling, and Gatekeeper assessment.
-The final ZIP was extracted again to confirm its app's ticket survived packaging.
+[Back to the documentation index](README.md) · [Contributing](../CONTRIBUTING.md)
+
+filo is distributed outside the Mac App Store as a universal DMG, with a ZIP alternative and a `SHA256SUMS` file.
+Public releases are signed with a Developer ID Application certificate and notarized by Apple.
+Releases up to 1.1.1 were ad-hoc signed and not notarized; 1.1.2, build 10, was the first to pass Developer ID signing, notarization, ticket stapling, and Gatekeeper assessment.
 Only describe a release as notarized after Apple accepts it and the verification steps below pass.
+
+These steps were checked against Apple's documentation on 2026-09-27.
 
 ## One-time account setup
 
@@ -94,32 +97,38 @@ Apple describes those distinct messages in [Safely open apps on your Mac](https:
 
 ## Publish to GitHub
 
-The release version in `Resources/Info.plist`, the `vMAJOR.MINOR.PATCH` tag, and the release notes must agree.
-Increase the bundle build number whenever the application changes.
+In the pull request that prepares a release, update `Resources/Info.plist` and add release notes:
+
+- `CFBundleShortVersionString` and `FiloReleaseLabel` hold the version, such as `1.1.2`.
+- `CFBundleVersion` is the build number; increase it whenever the application changes.
+- `docs/releases/VERSION.md` holds the release notes.
+
+The Info.plist version, the `vMAJOR.MINOR.PATCH` tag, and the release notes must agree.
 Merge through a pull request after the required `test` check passes, then wait for CI on the merged `main` commit.
-Build from that clean checkout with the signing command above; keep private keys and notarization credentials in the local Keychain.
+Build from that clean checkout with the signing command in [Make the release](#make-the-release); keep private keys and notarization credentials in the local Keychain.
 CI builds disposable ad-hoc packages for validation, never distribution packages.
 
-For example, to publish version 1.1.2:
+Then tag the tested commit and create a draft release:
 
 ```sh
+version=1.1.2
 git switch main
 git pull --ff-only
 test -z "$(git status --porcelain)"
-python3 scripts/verify-release.py --require-notarization --tag v1.1.2
-git tag -a v1.1.2 -m 'filo 1.1.2'
-git push origin v1.1.2
-gh release create v1.1.2 --verify-tag --draft --title 'filo 1.1.2' \
-  --notes-file docs/releases/1.1.2.md \
+python3 scripts/verify-release.py --require-notarization --tag "v$version"
+git tag -a "v$version" -m "filo $version"
+git push origin "v$version"
+gh release create "v$version" --verify-tag --draft --title "filo $version" \
+  --notes-file "docs/releases/$version.md" \
   dist/filo-macos-universal.dmg dist/filo-macos-universal.zip dist/SHA256SUMS
 ```
 
-Download the three assets from the draft into a temporary directory and run the same verifier against that directory.
+Download the three assets from the draft into a temporary directory and run the same verifier against that directory, for example `python3 scripts/verify-release.py --require-notarization --tag "v$version" /path/to/download`.
 Confirm that only the intended DMG, ZIP, and checksum file are attached, and that the notes and tag identify the tested source.
 Then publish the draft:
 
 ```sh
-gh release edit v1.1.2 --draft=false --latest
+gh release edit "v$version" --draft=false --latest
 ```
 
 Repository release immutability locks the assets and tag after publication and supplies GitHub's release attestation.
