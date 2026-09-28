@@ -1,4 +1,175 @@
-# filo validation record
+# Validation record
+
+[Back to the documentation index](README.md) · [Architecture](ARCHITECTURE.md) · [Laboratory](LABORATORY.md)
+
+This is filo's record of what has been tested, how, and with what result, newest first.
+Each result applies to the revision, software versions, and hardware it names; it does not validate later changes automatically.
+Machine-readable receipts are in [`validation/`](validation/), and detailed investigations are in [`research/`](research/).
+
+## Test setup
+
+Unless a record says otherwise, hardware checks used one Apple Silicon MacBook Pro on macOS 26.6.2 (25G83), [BlackHole 2ch](https://github.com/ExistentialAudio/BlackHole) for silent virtual output, and a Sony NW-ZX706 that the Mac enumerates as **WALKMAN**.
+Early records describe the NW-ZX706 as being in USB DAC mode; that was a setup assumption, later qualified by a [mode evidence correction](research/usb-dac-mode-correction.md).
+CI runs the XCTest suite and packaging on GitHub's macOS 15 ARM64 runners, which have no DAC, Music subscription, or audio-capture permission.
+
+## Summary
+
+### Established under the recorded conditions
+
+| Area | Result |
+| --- | --- |
+| Format matching | On the NW-ZX706, manual 44.1, 48, 96, and 192 kHz, the Spotify 44.1 kHz profile, and an automatic 48 kHz / 24-bit ALAC match reached their targets, with independent CoreAudio readback. Disconnect and quit restored the original rate and format, and outside rate changes were preserved. The 1.0 record includes a real Apple Music subscription transition from 192 to 44.1 kHz. |
+| Shared relay | Synthetic 16 and 24-bit patterns at 44.1 to 192 kHz passed exactly at the process tap and through rendered BlackHole loopback, including 60-second runs and the Intel slice under Rosetta. |
+| Exclusive transport | Synthetic 16 and 24-bit patterns at 44.1 to 192 kHz passed exactly at the WALKMAN output callback, including a 120-second run and a complete five-second reference, and a real process crash was recovered. |
+| Real players on the exclusive path | A neutral AVAudioPlayer passed a complete ALAC reference to the WALKMAN output callback. Spotify passed complete local FLAC, WAV, and ALAC references in some runs. |
+| Distribution | The 1.1.2 app and DMG were accepted by Apple's notary service, stapled, and accepted by Gatekeeper. |
+
+### Not established
+
+- Exact delivery of a known reference through Apple Music: the tested Music path changed the samples before they reached filo.
+- Reliable exact first-start playback through Spotify.
+- Identity with any subscription master.
+- Samples in the USB payload or inside the DAC.
+- Reliable detection for every track, including rapid skips, prebuffered transitions, and first plays of local files.
+- Other DACs, physical Intel Macs, macOS versions before 26 at runtime, physical hotplug, sleep and wake, and power loss.
+
+The [Exclusive preview guide](EXCLUSIVE-PREVIEW.md#what-has-been-measured) explains the evidence levels, from matching configuration to receiver-side measurement.
+
+## Research index
+
+| Date | Investigation | Finding |
+| --- | --- | --- |
+| 2026-09-23 | [Feasibility](research/feasibility.md) | Pre-implementation research: a format companion and a public-API relay are feasible; universal bit-perfect playback is not supported by the evidence. |
+| 2026-09-23 | [Source observability](research/source-observability.md) | Which source-format signals Music and Spotify expose, and which they do not. |
+| 2026-09-23 | [Exclusive paths](research/exclusive-paths.md) | The separate-source exclusive topology and sample-preserving bridge that became Exclusive preview. |
+| 2026-09-23 | [Endpoint verification](research/endpoint-verification.md) | No receiver-side readback or passive USB payload capture is available with the current hardware. |
+| 2026-09-23 | [Apple Music reference](research/music-reference-observation.md) | Music changed a known ALAC reference identically over HTTP and from a local file, before the tap. |
+| 2026-09-24 | [Player API reference](research/player-api-reference-observation.md) | AVAudioPlayer preserved the same reference exactly; enabling rate adjustment changed it. |
+| 2026-09-24 | [Spotify local reference](research/spotify-reference-observation.md) | Spotify preserved complete WAV, ALAC, and FLAC references at its BlackHole tap. |
+| 2026-09-24 | [Spotify connected exclusive](research/spotify-exclusive-observation.md) | Six runs passed to the WALKMAN output callback; seven stopped on unrepresentable samples. |
+| 2026-09-25 | [Spotify onset](research/spotify-onset-observation.md) | In one failed first start, a retained 512-frame window exactly matched the reference times an exponential gain onset. |
+| 2026-09-25 | [Spotify onset sources](research/spotify-onset-primary-sources.md) | No documented source or control for that onset was found. |
+| 2026-09-25 | [Spotify prewarm](research/spotify-prewarm-observation.md) | A silent file queued before the reference preserved it; a direct start still failed. |
+| 2026-09-25 | [Prewarm integration](research/spotify-prewarm-integration-feasibility.md) | Spotify's supported interfaces cannot turn prewarming into a reliable feature. |
+| 2026-09-25 | [AudioQueue control contracts](research/audioqueue-control-contracts.md) | Public AudioQueue, HAL, and tap contracts relevant to first-start behavior. |
+| 2026-09-26 | [AudioQueue first start](research/audioqueue-first-start-observation.md) | Fresh AudioQueue sources preserved the complete reference, including its opening, under an experimental tap configuration. |
+| 2026-09-26 | [Spotify tap autostart](research/spotify-tap-autostart-observation.md) | Disabling tap autostart did not prevent the Spotify onset. |
+| 2026-09-26 | [USB DAC mode correction](research/usb-dac-mode-correction.md) | Earlier "USB DAC mode" statements are setup assumptions, not observed receiver state. |
+| 2026-09-26 | [Spotify effects off](research/spotify-effects-off-observation.md) | Turning off Gapless and Automix did not prevent the onset. |
+
+Dates are local dates of the measurement or research; the linked documents give exact times and time zones.
+
+## 1.1.1 and 1.1.2
+
+These patch releases changed the menu bar item, the card's window, and packaging; the audio engine did not change.
+The native checks are recorded in the [menu bar design QA record](validation/menu-bar-design-qa.md).
+
+- **1.1.1, build 9:** a fixed-width ƒ status item and an arrowless card replaced the popover.
+  Native Apple Silicon checks covered the connection switch, details navigation, fixed card size, and Escape dismissal.
+  The universal bundle passed strict signature and architecture checks; Intel execution and other macOS versions were not rechecked.
+- **1.1.2, build 10:** the full visible area of the more button now responds to pointer clicks, verified at its center and four edges.
+  The new DMG was visually inspected in Finder.
+  Apple accepted both the app and DMG notarization submissions, both tickets were stapled and validated, and Gatekeeper reported `source=Notarized Developer ID` for each.
+  The final ZIP was extracted separately and its app passed ticket validation and Gatekeeper assessment again.
+  A fresh installation on a separate Mac or clean account was not verified.
+
+## 1.1.0: format matching, precision, and menu bar
+
+This release hardened automatic matching and device ownership, added bit-depth negotiation, and introduced the Liquid Glass menu bar card.
+The behavior contract and acceptance matrix are in [Core format matching](CORE-FORMAT-MATCHING.md).
+
+### Automated checks and live acceptance
+
+On 2026-09-26, [direct-head CI for `2100f7d`](https://github.com/Audiofool934/filo/actions/runs/36228822482/job/108367906394) passed all 118 XCTest tests with zero failures on an ARM64 macOS 15.7.9 runner, including nine controller tests and four local-header cache tests.
+The strict build, hardware-free finite-reference laboratory compile/help check, universal packaging, plist lint, and signature verification passed.
+Both `filo` and `filo-lab` contained arm64 and x86_64 executables; Intel execution was not tested by this CI run.
+The [PR merge check](https://github.com/Audiofool934/filo/actions/runs/36228825138/job/108367913968) also passed all 118 tests.
+Earlier local Command Line Tools adapters exercised 19 policy/parser, 12 lease, and 7 controller test bodies separately from XCTest.
+A later standalone check exercised eight new and existing test bodies for the local-header retry change.
+The final review follow-up reproduced four failed title/attention assertions for unsupported rates before the fix, then passed all nine controller test bodies in a standalone check.
+In `2100f7d`, the warning remains visible when Music pauses or Spotify's fixed target is applied before playback, with recovery text appropriate to automatic or fixed selection.
+These final warning states have software regression coverage but were not physically tested in the packaged UI; the live observations below retain their earlier build revisions.
+These results are pinned to their recorded revisions and do not validate subsequent changes automatically.
+
+Packaged-app UI observations and independent HAL readbacks on a Sony NW-ZX706 exposed as WALKMAN confirmed manual 44.1 and 96 kHz on `acaf1fe`, followed by manual 192 kHz and the labeled Spotify 44.1 kHz profile on `dcf8e66`.
+Changing the output to 48 kHz in Audio MIDI Setup ended management and preserved the external rate; the updated build also displayed the restored 48 kHz immediately after disconnect.
+The Spotify check validated its fixed target policy without establishing a playing track's source format.
+
+On `dcf8e66`, an owned five-second 44.1 kHz ALAC file in Music remained unknown on its first playback, leaving the output at 48 kHz.
+On replay, the UI identified Music decoder evidence at 44.1 kHz and the independent output readback matched 44.1 kHz.
+This replay is evidence for that decoder observation, not verification of local-file header fallback or reliable first-play detection.
+After the reference ended, unknown source state retained 44.1 kHz; disconnect restored the session's original 48 kHz.
+The imported library entry and its Music-managed copy were removed while the original fixture was preserved.
+The first-play miss prompted the bounded local-header retry change included in `c3204fa` and its passing software checks.
+
+Quitting the connected app restored an owned 96 kHz setting to the session's original 48 kHz, with an independent readback after exit.
+Audio MIDI Setup was then used to restore the task's 192 kHz baseline; WALKMAN remained the default output with no Hog Mode owner.
+The app and its helpers exited before a final acceptance sequence on `c3204fa`.
+
+The universal `c3204fa` build used for the last live sequence started from the 192 kHz baseline, with fresh imports of the owned five-second ALAC and WAV fixtures.
+Music Song Info confirmed the ALAC identity and its 44.1 kHz rate.
+Its first playback showed Music decoder evidence at 44.1 kHz and an independent output readback of 44.1 kHz.
+Both imported files played once as a list, but an explicit subsequent WAV selection remained unknown and no local-file header label was observed.
+The successful ALAC observation therefore does not establish that the header change caused it, that the earlier miss is universally fixed, or that local-file fallback works in this live configuration.
+Both imported entries and Music-managed copies were removed, the filtered library showed no items, and the original ALAC and WAV fixtures were preserved.
+Music was stopped with no current track and Play disabled, filo and its helpers exited, and the final independent readback confirmed WALKMAN at the 192 kHz baseline as default output with no Hog Mode owner.
+The scoped implementation and these bounded acceptance checks are complete; the limitations below remain explicit.
+Automatic matching across multiple local-file sample rates, local-file fallback, physical unplugging, sleep, unsupported-rate handling, unavailable detection, and operation with recording access denied or BlackHole absent have not been established by these live checks.
+Fake-device and fixture tests cover applicable policy and ownership cases, without converting unperformed hardware scenarios into live passes.
+No subscription stream, PCM comparison, or receiver capture was tested in this acceptance sequence.
+Matching device rates therefore establishes neither source sample identity nor zero-gap transitions or end-to-end bit-perfect playback.
+
+### Menu bar and precision follow-up
+
+The `feat/liquid-glass-menubar` implementation adds advertised physical-format negotiation, current-track local-file depth, external depth ownership, and retryable format restoration.
+It removes disconnected polling timers and enables the 100 ms clock timer only for an active exclusive relay.
+Hardware property listeners coalesce changes for 100 ms; connected format matching checks playback every two seconds with a ten-second hardware refresh fallback.
+Every requested match still checks fresh ownership, including repeated source metadata that requires no write.
+Visible snapshots ignore observation-only timestamp changes, and the closed panel does not request artwork.
+These are implementation properties, not measured energy or latency guarantees.
+
+On 2026-09-26, the local strict Swift build and hardware-free finite-reference compile/help check passed on macOS 26.6.2.
+A standalone assertion adapter executed all 133 current XCTest test bodies with zero assertion failures, including rate/depth transitions, external changes, partial restoration, source-header precision, and snapshot deduplication.
+The adapter linked the actual debug FiloCore and FiloPCM objects; it did not execute Apple's XCTest framework.
+Local `swift test` could not compile because this Command Line Tools installation does not include XCTest.
+CI is configured to select Xcode 26.3, listed in the [GitHub macOS 15 runner image](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode), for the macOS 26 SDK and full XCTest.
+No CI result for this follow-up is claimed here.
+The local beta.5 universal bundle passed strict signature verification, plist lint, both architecture checks for both executables, and byte-for-byte comparison of its four bundled scenes with the source assets.
+Intel execution was not tested.
+
+On 2026-09-27, the desktop and WALKMAN were available for native acceptance of the beta.5 menu bar implementation.
+Native testing exposed flattened menu labels, incomplete selector hit areas, duplicate accessibility controls, and a reopen event that reset secondary pages.
+The resulting fixes preserve glass menu labels, full-width click areas, one accessibility element per selector, and the current page while the popover remains open.
+The final strict Swift build and universal arm64/x86_64 packaging passed after those fixes.
+The final standalone adapter executed all 134 test bodies with zero assertion failures, including a new repeated-output-switch regression covering each device's rate and the original route.
+The local XCTest framework and follow-up CI limitations described above still apply.
+
+The recorded baseline was WALKMAN as default output at 192 kHz with stereo 32-bit signed integer physical format, eight bytes per frame, flags 12, and no Hog Mode owner.
+Manual 48 and 96 kHz selections reached those rates while retaining the unknown source's existing 32-bit representation.
+The explicitly labeled Spotify profile reached 44.1 kHz without claiming track-format detection or playing subscription audio.
+Independent CoreAudio readbacks after ordinary disconnects confirmed exact restoration of the original rate and representation.
+
+An owned five-second 48 kHz / 24-bit ALAC reference in Music matched on its first playback.
+The native panel showed Matched with 24-bit source evidence, and independent CoreAudio readback showed 48 kHz, stereo 24-bit signed integer, six bytes per frame, and flags 12.
+Disconnect restored the original 192 kHz / 32-bit integer representation.
+The particular source-evidence label was not captured during this brief playback, so this result does not establish whether decoder evidence or the local header caused the match.
+The library entry and Music-managed copy were removed, and the filtered library showed no remaining test item.
+The original generated WAV and ALAC fixtures were preserved locally.
+
+Changing the rate to 48 kHz outside filo while it managed a manual 96 kHz target stopped the connection and preserved 48 kHz.
+Connection details explicitly explained that the external rate was preserved.
+The test operator then restored the recorded 192 kHz baseline.
+Selecting MacBook Pro Speakers and then WALKMAN while connected changed the actual default output and retained the selected rate display without resizing the panel.
+
+All four scene families, the matched studio state, details, settings, About, long output names, and the connected/disconnected menu-bar item were inspected in native captures.
+The fixed 340 × 300 point content bounds were consistent across the captured pages and scenes.
+The approved mockup and native matched state were compared at a normalized panel width in the [menu bar design QA record](validation/menu-bar-design-qa.md).
+
+Short closed-panel idle samples showed the main process at 0.0% CPU in disconnected, Spotify-connected, and Music-connected states.
+Spotify's helper reported 0.1% CPU; Music's two metadata helpers together reported 0.2-0.3%, with a further 0.9-1.2% for its decoder log observer.
+These brief no-playback samples on a busy desktop are not sustained-performance or battery measurements.
+Raw local receipts, screenshots, and generated fixtures are retained under the ignored `work/liquid-glass` directory.
+The new checks verify host-side physical-format negotiation and restoration, not subscription source identity, gapless transitions, or samples received inside the Sony receiver.
 
 ## 1.1.0-beta.3 rejected-input diagnostics
 
@@ -180,6 +351,9 @@ Physical Intel, other DACs, other macOS versions, real unplug/replug, and sleep/
 
 ## 1.0 historical validation record
 
+The 1.0 goal was an installable open-source menu bar companion for Apple Music and Spotify that keeps the existing players, automates output sample-rate management, and implements and measures the proposed relay before deciding how to expose it.
+Its release gates required actual device readback, freshness checks on format evidence, lifecycle handling that restores only still-owned settings, no fabricated bit-perfect or bit-depth claims, deterministic PCM tests, real WALKMAN checks, and a reproducible public release.
+
 Validation date: 2026-09-23.
 Host: Apple Silicon MacBook Pro, macOS 26.6.2 (25G83), Swift 6.3.3, macOS 26.5 SDK.
 Physical output: Sony NW-ZX706 exposed to the host as WALKMAN.
@@ -206,7 +380,7 @@ The WALKMAN run measured process-tap samples while forwarding to the device, not
 Machine-readable synthetic reports are checked in under [validation/](validation/).
 They contain format and comparison statistics, not audio recordings or device serial numbers.
 The comparator allows a fixed startup offset, then compares all remaining frames without gain normalization, resampling, or midstream realignment.
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the exact boundaries.
+See the [laboratory guide](LABORATORY.md#how-comparison-works) for the exact comparison rules.
 
 The quiet synthetic patterns exercise many distinct sample values and channel positions.
 They are not a full-amplitude hardware linearity test or an exhaustive enumeration of all 24-bit values through a DAC.
@@ -271,4 +445,4 @@ The following are not certified by this release:
 
 Device disappearance and restoration ownership have unit-test coverage; that does not substitute for physical hotplug testing.
 Sleep cleanup and callback-stall handling are implemented but are not listed as completed physical-device experiments.
-Release builds are ad-hoc signed and are not Developer ID notarized.
+The 1.0 release builds were ad-hoc signed and not Developer ID notarized; notarization began with 1.1.2.

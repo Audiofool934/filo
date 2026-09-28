@@ -57,7 +57,7 @@ The menu bar crops are `menu-bar-connected-native.png` and `menu-bar-off-native.
 - Disconnect after the automatic and fixed-profile checks restores the exact original 192 kHz / 32-bit integer representation.
 - An external 48 kHz write while filo manages 96 kHz stops management and preserves 48 kHz; the test operator then restores the recorded 192 kHz baseline.
 
-The imported Music reference and its managed copy were removed after testing; the original generated fixture was subsequently moved to Trash during the [test-audio cleanup](docs/validation/test-audio-cleanup.md).
+The imported Music reference and its managed copy were removed after testing; the original generated fixture was subsequently moved to Trash during the [test-audio cleanup](test-audio-cleanup.md).
 These checks establish UI behavior and host device-format negotiation, not sample equality at the USB receiver.
 The first final-cleanup readback found speakers as default, while WALKMAN's rate and depth were restored.
 Its cause was not established.
@@ -79,7 +79,7 @@ Receipts are `disconnected-idle-top.txt`, `connected-idle-top.txt`, and `apple-m
 
 Dark appearance, Reduce Transparency, macOS versions before 26, and Intel execution were not visually exercised in this session.
 Keyboard menu activation and native cancellation were checked, but this is not a complete VoiceOver or keyboard-only accessibility audit.
-The source-detection limitations and XCTest toolchain limitation are recorded in `docs/CORE-FORMAT-MATCHING.md`.
+The source-detection limitations and XCTest toolchain limitation are recorded in the [validation record](../VALIDATION.md#110-format-matching-precision-and-menu-bar).
 
 ## Local delivery
 
