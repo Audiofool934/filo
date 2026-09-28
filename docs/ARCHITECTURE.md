@@ -187,6 +187,7 @@ On launch, orphaned exclusive records are recovered before the route lease, so t
 
 - No telemetry, accounts, or network access.
 - Player state, track titles, and decoder diagnostics stay in memory.
+- Preferences (`blog.audiofool.filo`) hold only the selected player, the selected output's UID, and whether the card has been opened.
 - The recovery records contain device identifiers and previous settings, and are removed after restoration or when an outside change ends ownership.
 - The only entitlements are Apple Events automation and audio input.
 - **Copy diagnostics** leaves out track titles, file paths, and persistent device identifiers, but includes the output's display name.

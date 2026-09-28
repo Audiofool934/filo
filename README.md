@@ -62,7 +62,7 @@ The [validation record](docs/VALIDATION.md) lists exactly what has and has not b
 
 filo has no accounts, analytics, or network features, and it never uploads or records your music.
 It reads playback state from your player through macOS Automation and keeps that information in memory.
-The only files it writes are small recovery records that let it restore your output settings after an unexpected exit.
+It saves only your player and output choices as app preferences, plus small recovery records that let it restore your output settings after an unexpected exit.
 
 ## Experimental audio paths
 
