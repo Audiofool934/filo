@@ -57,6 +57,17 @@ func selectedDevice() throws -> OutputDevice {
 func wait(_ seconds: Double) {
     RunLoop.current.run(until: Date().addingTimeInterval(seconds))
 }
+/// The first launches after boot can take seconds before the emitter's output runs.
+func emitterProcessIDs(_ emitter: Process) throws -> [UInt32] {
+    let deadline = Date().addingTimeInterval(15)
+    while true {
+        let ids = try HAL.processes().filter { $0.pid == emitter.processIdentifier && $0.running }.map(\.id)
+        if !ids.isEmpty { return ids }
+        guard emitter.isRunning else { throw AudioFailure("The test emitter exited before its audio output started.") }
+        guard Date() < deadline else { throw AudioFailure("The test emitter's audio output did not start within 15 seconds.") }
+        wait(0.05)
+    }
+}
 do {
     let command = args.first ?? "help"
     let valueOptions = ["--device", "--source", "--hz", "--bits", "--seconds", "--pid", "--file", "--reference", "--player"]
@@ -114,12 +125,7 @@ do {
             if !session.cleanupErrors.isEmpty { fputs(session.cleanupErrors.joined(separator: " ") + "\n", stderr) }
         }
         try emitter.run()
-        var ids: [UInt32] = []
-        for _ in 0..<40 {
-            ids = try HAL.processes().filter { $0.pid == emitter.processIdentifier && $0.running }.map(\.id)
-            if !ids.isEmpty { break }
-            wait(0.05)
-        }
+        let ids = try emitterProcessIDs(emitter)
         try session.start(processIDs: ids, source: source, output: output, sourceBits: bits,
                           captureFrames: UInt64(source.rate * (seconds + 1)), followClock: !args.contains("--fixed-clock"))
         let deadline = Date().addingTimeInterval(seconds)
@@ -255,12 +261,7 @@ do {
             try? pipe.fileHandleForReading.close()
         }
         try emitter.run()
-        var ids: [UInt32] = []
-        for _ in 0..<40 {
-            ids = try HAL.processes().filter { $0.pid == emitter.processIdentifier && $0.running }.map(\.id)
-            if !ids.isEmpty { break }
-            wait(0.05)
-        }
+        let ids = try emitterProcessIDs(emitter)
         try session.startCapture(processIDs: ids, output: device, relay: args.contains("--relay"),
                                  exclusive: args.contains("--exclusive"), captureFrames: UInt64(device.rate * (seconds + 1)))
         if args.contains("--loopback") {
